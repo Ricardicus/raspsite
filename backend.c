@@ -11,6 +11,48 @@ void error(const char *msg)
 
 static volatile bool run_this_server_please_mister = true;
 
+void write_current_coffe(int socket){
+
+	char date[10];
+	memset(date, '\0', sizeof(date));
+
+	time_t t = time(NULL);
+	struct tm tm = *localtime(&t);
+
+	sprintf(date, "%d%d%d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+
+	int i = 0;
+
+	char * c = date;
+	while (*c){
+		i += *c;
+		++c;
+	}
+
+	char * msg;
+
+	switch( i % NUMBER_OF_COFFEES) {
+	case ZOEGA:
+		msg = "zoega";
+   		write(socket,msg, strlen(msg));
+		break;
+	case CAFFE_MACCHIATO:
+		msg = "macchiato";
+   		write(socket,msg, strlen(msg));
+		break;
+	case ESPRESSO:
+		msg = "espresso";
+   		write(socket,msg, strlen(msg));
+		break;
+	case CAPPUCCINO:
+		msg = "cappuccino";
+   		write(socket,msg, strlen(msg));
+		break;
+	}
+
+	close(socket);
+}
+
 void * input_reader_callback(void * data)
 {
 	int c;
@@ -22,6 +64,33 @@ void * input_reader_callback(void * data)
 
 	run_this_server_please_mister = false;
 	return NULL;
+}
+
+void output_action(int socket, char * action){
+
+	char * msg = "HTTP/1.0 200 OK\r\n";
+   	write(socket,msg,strlen(msg));
+   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
+   	write(socket,msg, strlen(msg));
+   	msg = "Pragma: no-cache\r\n";
+	write(socket,msg, strlen(msg));
+	msg = "Expires: 0\r\n";
+	write(socket,msg, strlen(msg));
+   	msg = "Content-Type: text/plain; charset=utf-8\r\n\r\n";
+   	write(socket,msg, strlen(msg));
+
+	char * c = action;
+	while (*c){
+		if ( *c == '&' ){
+			*c = '\0';
+		}
+		++c;
+	}
+
+	if (!strcmp(action, "current_coffee")){
+		write_current_coffe(socket);
+	}
+
 }
 
 void output_index(int socket)
@@ -200,6 +269,15 @@ void interpret_and_output(int socket, char * first_line){
  			// Outputting the index file!
 			output_index(socket);
    			return;
+		}
+
+		if ( strstr(path, "coffe.cgi") != NULL ){
+			char * c = strstr(path, "action=");
+			if ( c != NULL){
+
+				output_action(socket, c+7);
+				return;
+			}
 		}
 
 		output_path(socket, &path[1]);

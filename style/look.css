@@ -17,6 +17,15 @@
 	resize: none;
 }
 
+.bgimg {
+	position: absolute;
+	background-image: url("cup-hot-coffee.jpg");
+	background-repeat: no-repeat;
+	width: 400px;
+	opacity: 0.2;
+	height: 800px;
+}
+
 .btn {
 	position:absolute;
 	left:30%;
@@ -31,9 +40,6 @@
 }
 
 img {
-	position: absolute;
-	top:20%;
-	left:16%;
 	opacity: 0.4;
 	border-radius: 20px;
 }

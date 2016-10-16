@@ -15,6 +15,15 @@ extern "C" {
 
 #define BACKEND_MAX_BUFFER_SIZE			600
 
+typedef enum coffee_types_t {
+	ZOEGA,
+	CAFFE_MACCHIATO,
+	ESPRESSO,
+	CAPPUCCINO,
+	NUMBER_OF_COFFEES
+} coffee_types_t;
+
+
 typedef struct http_data_s {
 	int * socket;
 	char * client_ip;
@@ -22,6 +31,8 @@ typedef struct http_data_s {
 } http_data_t;
 
 void error(const char*);
+void write_current_coffee(int);
+void output_action(int, char *);
 void free_http_data(http_data_t**);
 void output_index(int);
 void output_path(int,const char*);
