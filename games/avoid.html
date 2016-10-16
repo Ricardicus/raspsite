@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Messaround</title>
+</head>
+<body onload="init()">
+<center>
+<div id="cdiv">
+<canvas id ="tcanvas" style="font-family: "Hammersmith One", sans-serif" width = "600" height = "600">
+Your browser does not support the HTML5 canvas tag.</canvas>
+</div>
+<div style="position:relative;">
+<p id='points'></p>
+<button onclick="restart()">Restart</button>
+</div>
+</center>
+</body>
+<script>
+
+//Some global values for the colored dots
+var BLUEDOT = -1;
+var EMPTY = 0;
+var REDDOT = 2;
+
+//The matrix
+var blocks = [];
+
+//Id of the game loop.
+var timerId = 0;
+
+//The nxn-matrix number of columns and rows
+var nbrofblocks = 32;
+
+//Position of the player
+var playerR = 0;
+var playerC = 0;
+
+//Keeping track of the points
+var points = 0;
+
+//Whether or not the game is over
+var gmover = false;
+
+//For map rendering
+var spawnBottom;
+var spawnTop;
+
+//A nice opening state
+var wallstart = false;
+
+//Used to regenerate red dots on the matrix
+var redwentoutofbounds = false;
+
+//How fast the game loop will be reentered
+var gameloopInterval = 10;
+var minimalInterval = 3;
+
+//Old function written by John not used no more.. 
+function spawnrate() {
+	return 40 - (points > 10 ? 10 : points);
+}
+
+
+//Initialise the game!!!
+//A lot of variables are initialised
+function init(){
+
+	points = 0;
+
+	blocks = [];
+	for(var x = 0;x<nbrofblocks;x++){
+		blocks.push([]);
+		for(var i = 0;i<nbrofblocks;i++){
+			blocks[x].push(0)
+		}
+	}	
+	
+	playerR = Math.floor(Math.random() * (nbrofblocks+1))%nbrofblocks;
+	playerC = 4;
+
+	blocks[playerR][playerC] = 1;
+
+	spawnred();
+
+	setStartingModeWall();
+
+	gameloopTimer = 10;
+
+	gmover = false;
+	go();
+}
+
+//Sets the starting mode all in order
+function setStartingModeWall(){
+	wallstart = true;
+	spawnTop = 0;
+	spawnBottom = nbrofblocks-1;
+}
+
+//Determines how the walls will behave
+function updateWall(){
+	if(!wallstart){
+
+		switch(Math.floor(10*Math.random())){
+			case 0:
+				spawnBottom++;
+				break;
+			case 1: 
+				spawnBottom--;
+				break;
+		}	
+
+		switch(Math.floor(10*Math.random())){
+			case 0:
+				spawnTop++;
+				break;
+			case 1: 
+				spawnTop--;
+				break;
+		}
+
+		if(spawnBottom>=nbrofblocks){
+			spawnBottom=nbrofblocks-1;
+		}
+
+		if(spawnTop<0){
+			spawnTop=0;
+		}
+
+		if(spawnBottom<=(spawnTop)){
+			spawnBottom++;
+			spawnTop--;
+		}
+
+//Making things a little bit harder by adding some walls inside the gap
+		if(points>20){
+
+			var diff = spawnBottom - spawnTop;
+			if(diff>10){
+
+				var redwashere = false;
+				var spot;
+				for(var x = 0;x<diff/4;x++){
+					spot = blocks[spawnTop+diff/3+x][nbrofblocks-1];
+					blocks[spawnTop+diff/3+x][nbrofblocks-1] = BLUEDOT;
+					if(spot == REDDOT){
+						redwashere = true;
+					}
+				}
+				if(redwashere){
+					spawnred();
+				}
+			}
+		}
+
+	}
+
+	else{
+
+		if(spawnTop == nbrofblocks/4){
+			wallstart = false;
+		}else{
+			spawnTop++;
+			spawnBottom--;
+		}
+	}
+	
+}
+
+//The function that initialises the game loop!
+function go(){
+
+	var i = 0;
+
+	timerId = window.setInterval(function(){
+		if(++i%10==0){
+			moveterrain();
+			spawnstuff();
+			updateWall();
+			i = 0;
+		}
+		drawit();
+		collisions();
+	},gameloopInterval);
+
+}
+
+//A work in progress, the idea is to decrease the gameloopInterval in game
+function decreaseGameloopInterval(){
+
+	clearInterval(timerId);
+	if(gameloopInterval>minimalInterval){
+		gameloopInterval--;
+	}
+	go();
+
+}
+
+//Checks and takes action depending on the players interaction with the map
+function collisions(){
+	switch(blocks[playerR][playerC]){
+		case BLUEDOT:
+			gameover();
+			break;
+		case REDDOT:
+			points++;
+			spawnred();
+			blocks[playerR][playerC] = EMPTY;
+			break;
+	}
+}
+
+//Used to generate the walls
+//making sure the red dots aren't overwritten once regenerated
+function spawnstuff(){
+	var y = nbrofblocks-1;
+	for(var x = 0;x<=spawnTop;x++){
+		blocks[x][y] = BLUEDOT;
+	}
+
+	for(var x = nbrofblocks-1;x>=spawnBottom;x--){
+		blocks[x][y] = BLUEDOT;
+	}
+
+	if(redwentoutofbounds){
+		spawnred();
+		redwentoutofbounds = false;
+	}
+
+}
+
+// function for moving the player around!
+function move(dr, dc){
+
+	playerR = (nbrofblocks + playerR + dr)%nbrofblocks;
+
+	var newc = playerC + dc;	
+	if(newc < 0){
+		playerC = 0;
+	}else{
+		playerC = newc%nbrofblocks;	
+	}
+
+	collisions();
+
+}
+
+// global timer identier
+var timerId = 0;
+
+// spawn a point item (red dot)
+function spawnred(){
+	var tryX;
+	var tryY = nbrofblocks-1;
+
+	do{
+		tryX = Math.floor(Math.random() * nbrofblocks);
+	}
+	while(blocks[tryX][tryY] != EMPTY);
+
+	blocks[tryX][tryY] = REDDOT;
+
+}
+
+// when it is over!
+function gameover(){
+	clearInterval(timerId);
+	gmover = true;
+}
+
+var lastDownTarget, canvas;
+window.onload = function(e){
+	canvas = document.getElementById("tcanvas");
+
+	document.addEventListener('mousedown',function(event){
+		lastDownTarget = event.target;
+	},false);
+
+	document.addEventListener('keydown',function(event){
+		if(lastDownTarget == canvas){
+			keypressed(event);
+		}
+	},false);
+	init();
+}
+
+// moving everything one step to the left
+function moveterrain(){
+	for(var x = 0;x<nbrofblocks;x++){
+		for(var y = 0;y<nbrofblocks;y++){
+			switch(blocks[x][y]){
+				case BLUEDOT:
+					moveleft(x,y);
+					break;
+				case REDDOT:
+					moveleft(x,y, function() {
+						redwentoutofbounds = true;
+					});
+			}
+		}
+	}
+}
+
+// moving a specific item one step to the left
+function moveleft(x,y,outOfBounds){
+	if(y>0){
+		blocks[x][y-1] = blocks[x][y];
+	}
+	else{
+		if (typeof(outOfBounds) !== "undefined") {
+			outOfBounds();
+		}
+	}
+	blocks[x][y] = EMPTY;
+
+}
+
+// drawing everything onto the canvas
+function drawit(){
+
+	var ctx = canvas.getContext("2d");
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	ctx.globalAlpha = 0.1;
+	ctx.fillStyle = "black";
+	ctx.fillRect(0,0,canvas.width,canvas.height);
+	ctx.globalAlpha=1.0;
+
+	document.getElementById("points").innerHTML = "Points: " + String(points);
+
+	var blockwidth = canvas.width / nbrofblocks;
+	var blockheight = canvas.height / nbrofblocks;
+
+	for(var x = 0; x<nbrofblocks;x++){
+		for(var y=0;y<nbrofblocks;y++){
+			var fillStyle;
+			switch(blocks[x][y]){
+				case EMPTY:
+					fillStyle = "white";
+					break;
+				case REDDOT:
+					fillStyle = "red";
+					break;
+				case BLUEDOT:
+					ctx.globalAlpha = 0.4;
+					fillStyle = "blue";
+					break;
+			}
+			ctx.fillStyle = fillStyle;
+			ctx.fillRect(y*blockwidth,x*blockheight,blockwidth-1,blockheight-1);
+			ctx.globalAlpha = 1.0;
+		}
+	}
+	ctx.fillStyle = "black";
+	ctx.fillRect(playerC*blockwidth,playerR*blockheight,blockwidth-1,blockheight-1);
+}
+
+function keypressed(event){
+
+  // Use WASD or arrow-keys
+  switch(event.keyCode)
+  {
+  case 83:
+  case 40:
+    down();
+    break;
+  case 87:
+  case 38:
+    up();
+    break;
+  case 65:
+  case 37:
+    left();
+    break;
+  case 68:
+  case 39:
+    right();
+    break;
+  }
+}
+
+// Function for moving
+
+function up(){
+		move(-1,0);
+}
+
+function down(){
+		move(1,0);
+}
+
+
+function left(){
+		move(0,-1);
+}
+
+function right(){
+		move(0,1);
+}
+
+// restaring the game function can only be called after gmover = true (after a gameover call)
+function restart(){
+	if(gmover){
+		init();
+		gmover=false;
+	}
+}
+
+</script>
+</html>

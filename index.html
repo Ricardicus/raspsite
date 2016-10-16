@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="scripts/jquery-min.js"></script>
+		<script src="scripts/kryptering.js"></script>
+		<link rel="stylesheet" href="style/look.css"/>
+		<title>Messaround</title>
+	</head>
+	<meta charset="UTF-8">
+	<body charset="UTF-8" bgcolor="white">
+		<center>
+			<canvas id = "canvs" class="canvass"></canvas>
+			<div class="txt">
+				<img src="style/smallbluegoat.jpg">
+				<p style="position:absolute;top:90%;left:40%;text-align:center;"><p>
+			</div>
+			<div>
+				<textarea class="inpt" type="text" id="text"></textarea>
+				<input value="Kryptera" class="btn" type="button" style="top:60%;" id="krptbtn">
+				<input value="Avläs" class="btn" type="button" style="top:60%;" id="dekrptbtn">
+				<input value="Sätt Nyckel" class="btn" type="button" style="top:60%;" id="keybtn">
+			</div>
+			<div id="dispdiv">
+				<p class="msg"><font id="displaymsg" color="black"></font></p>
+			</div>
+		</center>
+	</body>
+<script>
+
+function move_elements(){
+
+	var width = window.innerWidth;
+	var btnWidth = document.getElementById("krptbtn").offsetWidth;
+
+	var top = parseInt(document.getElementById("text").style.top) + 20
+
+	var start = width/3.59
+	console.log("Btwndiw: " + btnWidth);
+	var nw = 100*(start + btnWidth+20)/width;
+	document.getElementById("krptbtn").style.left = nw + "%";
+	nw = 100*(start + (btnWidth+20)*2)/width;
+	document.getElementById("dekrptbtn").style.left = nw + "%";
+	nw = 100*(start + (btnWidth+20)*3)/width;
+	document.getElementById("keybtn").style.left = nw + "%";
+
+	document.getElementById("krptbtn").style.top = top + "%";
+	document.getElementById("dekrptbtn").style.top = top + "%";
+	document.getElementById("keybtn").style.top = top + "%";
+
+}
+
+function addClass(){
+	$(":input").addClass("overout");
+}
+
+function copyToClipboard(text){
+	// Copies content to the clipboard
+	$("#dispdiv").append("<textarea style=\"dipslay:none\" id=\"clpbrd\">" + text + "</textarea>");
+
+	var textarea = document.querySelector("#clpbrd");  
+	textarea.select();
+
+ 	try {  
+    	document.execCommand('copy');  
+  	} catch(err) {  
+  	//	console.log("nope");
+  	}  
+
+  	$("#clpbrd").remove();
+
+}
+
+function addHandlers(){
+	// JQuery event handling on pushing the buttons! 
+	// Reads and sends the input from the text field to the respective functions.
+	$("#krptbtn").click(function(){
+		crypt(document.getElementById("text").value);
+		copyToClipboard(document.getElementById("displaymsg").innerHTML);
+	});
+
+	$("#dekrptbtn").click(function(){
+		decrypt(document.getElementById("text").value);
+		copyToClipboard(document.getElementById("displaymsg").innerHTML);
+	});
+
+	$("#keybtn").click(function(){
+		setKey(document.getElementById("text").value);
+	});
+
+	$(".overout")
+	  .mouseover(function() {
+	  	$(this).fadeTo(100,1.0);
+	  })
+	  .mouseout(function() {
+	    $(this).fadeTo(100,0.5);
+	});
+}
+
+window.onresize = move_elements;
+
+// Just calls the init() function on load (default)!
+window.onload = function(){
+	init();
+	move_elements();
+	addClass();
+	addHandlers();
+}
+
+
+</script>
+</html>
