@@ -11,8 +11,8 @@ void error(const char *msg)
 
 static volatile bool run_this_server_please_mister = true;
 
-void * input_reader_callback(void * data){
-
+void * input_reader_callback(void * data)
+{
 	int c;
 	bool keep_going = true;
 	while ( ((c=fgetc(stdin)) != EOF) && keep_going){
@@ -24,7 +24,8 @@ void * input_reader_callback(void * data){
 	return NULL;
 }
 
-void output_index(int socket){
+void output_index(int socket)
+{
 	char * msg = "HTTP/1.0 200 OK\r\n";
    	write(socket,msg,strlen(msg));
    	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
@@ -46,7 +47,8 @@ void output_index(int socket){
    	close(socket);
 }
 
-void free_http_data(http_data_t ** http_data){
+void free_http_data(http_data_t ** http_data)
+{
 	free((*http_data)->client_ip);
 	free((*http_data)->accept_time);
 	free((*http_data)->socket);
@@ -54,8 +56,8 @@ void free_http_data(http_data_t ** http_data){
 	*http_data = NULL;
 }
 
-void output_path(int socket, const char * path){
-
+void output_path(int socket, const char * path)
+{
 	char * msg = "HTTP/1.0 200 OK\r\n";
    	write(socket,msg,strlen(msg));
    	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
@@ -210,7 +212,8 @@ void interpret_and_output(int socket, char * first_line){
 	
 }
 
-void * http_callback(void * http_data_ptr){
+void * http_callback(void * http_data_ptr)
+{
 
 	http_data_t * http_data = (http_data_t *) http_data_ptr;
 
@@ -325,7 +328,7 @@ int main(int argc, char *argv[])
 		char * time = asctime(time_info);
 		char * c_ptr = time;
 		/* the time contains a '\n'.. */
-		while(*c_ptr){
+		while (*c_ptr){
 			if ( *c_ptr == '\n')
 				*c_ptr = '\0';
 			c_ptr++;
@@ -353,10 +356,7 @@ int main(int argc, char *argv[])
 		free(first_line);*/
 
 		pthread_create(&callback_thread, NULL, http_callback, (void*)http_data);
-
 	}
-
-
 
 	close(sockfd);
 	return 0; 
