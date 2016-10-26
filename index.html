@@ -19,7 +19,7 @@
 						<h1>Coffe of the day:</h1>
 					</td>
 					<td>
-						<h1 id="coffe-of-the-day"></h1>
+						<img id="coffe-of-the-day" style="width:200px;height:200px;"></img>
 					</td>
 				</tr>
 				</tbody>
@@ -32,7 +32,7 @@ $(document).ready(function(){
 
 	$.ajax({type: "GET", url: "coffe.cgi?action=current_coffee", dataType: "text",
 		success: function(response) {
-			$("#coffe-of-the-day").html('<img src="style/' + response + '.jpg">');
+			$("#coffe-of-the-day").attr("src","style/" + response + ".jpg");
 			$("#coffe-tip-table").show();
 		},
 		error: function(){

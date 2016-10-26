@@ -42,7 +42,13 @@
 img {
 	opacity: 0.4;
 	border-radius: 20px;
+	position: absolute;
+	width: 900px;
+	height: 397px;
+	left: 17%;
+	top: 20%;
 }
+
 .canvass {
 	width:400;
 	height:400;

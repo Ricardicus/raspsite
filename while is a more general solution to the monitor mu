@@ -1,0 +1,100 @@
+while is a more general solution to the monitor mutual exclusion. with a signle if statement muntiple calls to 'notifyAll' may make the condition break even if the condition is not fulfilled. using a while forces the concurrent program to check that the condition is fulfilled before it continues its execution. 
+
+A counting semaphore does not need wait/notify and does not work like a monitor in that sense. 
+
+public interface Sempahore {
+	private int count = 0;
+	private int turn = 0;
+	private int ticket = 0;
+
+	public synchronized void give() {
+		++count;
+		notifyAll();
+	}
+
+	public synchronized void take(){
+		int myTicket = ticket++;
+		while ( myTicket > turn || count<1) wait();
+		++turn;
+		--count;
+		notifyAll();
+	}
+
+}
+
+7.a
+
+synchronized void awaitRed(){
+	while ( c != 'R' ){
+		try {
+		wait();
+		} catch ( InterruptedException e){e.printStackTrace();};
+	}
+}
+
+7.b
+
+synchronized State awaitStsteChange(State old, long until){
+	if ( state == STATE.EMPTY && old == STATE.EMPTY ){
+		while ( state == old ){
+			try {
+			wait();
+			} catch (InterruptedExcepion e){return NULL};
+		}
+	} else {
+		long time;
+		while ( state == old && (time=System.currentTimeMillis()) < until ){
+		try {
+			wait (until-time);
+		} catch (InterruptedException e){ return NULL;}; 
+		}
+	}
+	return state;
+}
+
+synchronized void registerSpeed(float spd){
+	recentlyAny = System.currentTimeMillis();
+	if ( state = STATE.EMPTY ){
+		state = STATE.TRAFFIC;
+	}
+	if ( maxspeed < spd ){
+		if ( state == state.TRAFFIC){
+			state = STATE.SPEED;
+		} 
+		recentlyFast = System.currentTimeMillis();
+	}
+	notifyAll();
+}
+
+synchronized char color() {
+	Signal signal = new Signal();
+	long timeRedShift; long time;
+	c = 'G';
+	signal.show(false,false,true);
+	trigger.awaitSpeed();
+	c = 'Y';
+	signal.show(false,true,false);
+	Thread.sleep(2000);
+	c = 'R';
+	signal.show(true,false,false);
+	timeRedShift = System.currenTimeMillis();
+
+	while ( ((time=System.currentTimeMillis) - timeRedShift) < 15000 ) {
+		if ( state == STATE.SPEEDING ){
+			timeRedShift = recentlyFast;
+		}
+		try {
+			wait(time-timeRedShift);
+		} catch (InterruptedException e){e.printStackTrace();}
+	}
+
+	signal.show(false,false,true);
+	if ( (System.currentTimeMillis - recentlyAny) > 30000 ){
+		state = STATE.EMPTY;
+		notifyAll();
+	}
+
+	}
+}
+
+

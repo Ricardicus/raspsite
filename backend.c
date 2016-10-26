@@ -58,7 +58,7 @@ void * input_reader_callback(void * data)
 	int c;
 	bool keep_going = true;
 	while ( ((c=fgetc(stdin)) != EOF) && keep_going){
-		if ( c == 'q' )
+		if ( c == (int) 'q' )
 			keep_going = false;
 	}
 
@@ -76,7 +76,7 @@ void output_action(int socket, char * action){
 	write(socket,msg, strlen(msg));
 	msg = "Expires: 0\r\n";
 	write(socket,msg, strlen(msg));
-   	msg = "Content-Type: text/plain; charset=utf-8\r\n\r\n";
+	msg = "Content-Type: text/plain; charset=utf-8\r\n\r\n";
    	write(socket,msg, strlen(msg));
 
 	char * c = action;
@@ -127,14 +127,8 @@ void free_http_data(http_data_t ** http_data)
 
 void output_path(int socket, const char * path)
 {
-	char * msg = "HTTP/1.0 200 OK\r\n";
+	char * msg = "HTTP/1.1 200 OK\r\n";
    	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-	write(socket,msg, strlen(msg));
 
 	FILE * fp = fopen(path, "r");
 	if ( ! fp ){
@@ -203,7 +197,14 @@ void output_path(int socket, const char * path)
 
 	if ( !strcmp(file_type, "jpg") || !strcmp(file_type, "jpeg") ){
 		// Image requested!
-		msg = "Content-Type: image/jpeg; charset=utf-8\r\n\r\n";
+		printf("outputtin jpg\n");
+		msg = "Content-Description: File Transfer\r\n";
+   		write(socket,msg, strlen(msg));	
+   		msg = "Content-Transfer-Encoding: binary\r\n";
+   		write(socket,msg, strlen(msg));	
+   		msg = "Content-Disposition: attachment; filename=\"image.jpg\"\r\n";
+   		write(socket,msg, strlen(msg));	
+		msg = "Content-Type: image/jpeg\r\n\r\n";
    		write(socket,msg, strlen(msg));
    		int c;
    		while ( (c = fgetc(fp)) != EOF ){

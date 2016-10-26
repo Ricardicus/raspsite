@@ -17,6 +17,7 @@ extern "C" {
 
 typedef enum coffee_types_t {
 	ZOEGA,
+	CAFFE_LATTE,
 	CAFFE_MACCHIATO,
 	ESPRESSO,
 	CAPPUCCINO,
