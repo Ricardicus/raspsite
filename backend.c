@@ -1,5 +1,5 @@
-/* A simple server in the internet domain using TCP
-   The port number is passed as an argument */
+/* Server in the internet domain using TCP
+   Port passed as an argument */
 #include "backend.h"
 #include <stdbool.h>
 
