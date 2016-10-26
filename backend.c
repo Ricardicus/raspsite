@@ -11,7 +11,8 @@ void error(const char *msg)
 
 static volatile bool run_this_server_please_mister = true;
 
-void write_current_coffe(int socket){
+void write_current_coffe(int socket)
+{
 
 	char date[10];
 	memset(date, '\0', sizeof(date));
@@ -244,7 +245,8 @@ void output_path(int socket, const char * path)
 	return;
 }
 
-void interpret_and_output(int socket, char * first_line){
+void interpret_and_output(int socket, char * first_line)
+{
 
 	char *c, *command, *path;
 
