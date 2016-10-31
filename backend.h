@@ -12,18 +12,13 @@ extern "C" {
 #include <arpa/inet.h>
 #include <pthread.h>
 #include <time.h>
+#include "src/hashtable.h"
+#include "src/snakegame.h"
+#include "src/coffee.h"
 
 #define BACKEND_MAX_BUFFER_SIZE			600
-
-typedef enum coffee_types_t {
-	ZOEGA,
-	CAFFE_LATTE,
-	CAFFE_MACCHIATO,
-	ESPRESSO,
-	CAPPUCCINO,
-	NUMBER_OF_COFFEES
-} coffee_types_t;
-
+#define BACKEND_MAX_NBR_OF_ARGS			20
+#define BACKEND_MAX_ARRAY_SIZE			100
 
 typedef struct http_data_s {
 	int * socket;

@@ -3,6 +3,11 @@
 #include "backend.h"
 #include <stdbool.h>
 
+#define xstr(a) 		#a
+#define str(a)			xstr(a)
+
+#define CGI_PATH		data.cgi
+
 void error(const char *msg)
 {
     perror(msg);
@@ -10,49 +15,7 @@ void error(const char *msg)
 }
 
 static volatile bool run_this_server_please_mister = true;
-
-void write_current_coffe(int socket)
-{
-
-	char date[10];
-	memset(date, '\0', sizeof(date));
-
-	time_t t = time(NULL);
-	struct tm tm = *localtime(&t);
-
-	sprintf(date, "%d%d%d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
-
-	int i = 0;
-
-	char * c = date;
-	while (*c){
-		i += *c;
-		++c;
-	}
-
-	char * msg;
-
-	switch( i % NUMBER_OF_COFFEES) {
-	case ZOEGA:
-		msg = "zoega";
-   		write(socket,msg, strlen(msg));
-		break;
-	case CAFFE_MACCHIATO:
-		msg = "macchiato";
-   		write(socket,msg, strlen(msg));
-		break;
-	case ESPRESSO:
-		msg = "espresso";
-   		write(socket,msg, strlen(msg));
-		break;
-	case CAPPUCCINO:
-		msg = "cappuccino";
-   		write(socket,msg, strlen(msg));
-		break;
-	}
-
-	close(socket);
-}
+static hashtable_t * dict;
 
 void * input_reader_callback(void * data)
 {
@@ -79,14 +42,6 @@ void output_action(int socket, char * action){
 	write(socket,msg, strlen(msg));
 	msg = "Content-Type: text/plain; charset=utf-8\r\n\r\n";
    	write(socket,msg, strlen(msg));
-
-	char * c = action;
-	while (*c){
-		if ( *c == '&' ){
-			*c = '\0';
-		}
-		++c;
-	}
 
 	if (!strcmp(action, "current_coffee")){
 		write_current_coffe(socket);
@@ -144,6 +99,14 @@ void output_path(int socket, const char * path)
 	}
 	// file existed!;
 
+	if ( ! memcmp(path, str(CGI_PATH), strlen(str(CGI_PATH))) ){
+		// cgi call
+
+		
+
+
+	}
+
 	const char * file_type = path;
 	while (*file_type && *file_type != '.'){
 		file_type++;
@@ -171,6 +134,7 @@ void output_path(int socket, const char * path)
 
 	if ( !strcmp(file_type, "css") ){
 		// CSS requested!
+		printf("output css..\n");
 		msg = "Content-Type: text/css; charset=utf-8\r\n\r\n";
    		write(socket,msg, strlen(msg));
    		int c;
@@ -196,9 +160,9 @@ void output_path(int socket, const char * path)
 	} 
 
 
-	if ( !strcmp(file_type, "jpg") || !strcmp(file_type, "jpeg") ){
+	if ( !strcmp(file_type, "jpg") || !strcmp(file_type, "jpeg") || !strcmp(file_type, "gif") ){
 		// Image requested!
-		printf("outputtin jpg\n");
+		printf("outputtin jpg/gif\n");
 		msg = "Content-Description: File Transfer\r\n";
    		write(socket,msg, strlen(msg));	
    		msg = "Content-Transfer-Encoding: binary\r\n";
@@ -248,7 +212,9 @@ void output_path(int socket, const char * path)
 void interpret_and_output(int socket, char * first_line)
 {
 
-	char *c, *command, *path;
+	char *c, *args, *command, *path, *cleaner;
+	int arg_count,i;
+	hashtable_t * params;
 
 	// Getting the HTTP command and path!
 	c = first_line;
@@ -275,21 +241,66 @@ void interpret_and_output(int socket, char * first_line)
 		}
 
 		if ( strstr(path, "coffe.cgi") != NULL ){
-			char * c = strstr(path, "action=");
-			if ( c != NULL){
+			/*
+			* the coffe.cgi. Args: action
+			*/ 
+			arg_count = 0;
+		 	params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
 
-				output_action(socket, c+7);
-				return;
+			args = strstr(path, "action=");
+			cleaner = path;
+			while ( *cleaner ){
+				if ( *cleaner == '&'){
+					*cleaner = '\0';
+				}
+				++cleaner;
 			}
-		}
 
-		output_path(socket, &path[1]);
+			output_action(socket, args + 7);
+
+			free_hashtable(params);
+		} else if ( strstr(path, "game.cgi") != NULL ){
+			/*
+			* the game.cgi, args: action=[post_score|get_highscore], name=[*], score=[*]
+			*/ 
+
+			printf("game.cgi call!\r\n");
+			arg_count = 0;
+			params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
+
+			args = strstr(path, "action=");
+			if ( args != NULL ) {
+				put(params, "action", args+7);
+			}
+
+			args = strstr(path, "name=");
+			if ( args != NULL ) {
+				put(params, "name", args + 5);
+			}
+
+			args = strstr(path, "score=");
+			if ( args != NULL ) {
+				put(params, "score", args + 6);
+			}
+
+			cleaner = path;
+			while ( *cleaner ){
+				if ( *cleaner == '&'){
+					*cleaner = '\0';
+				}
+				++cleaner;
+			}
+
+			snake_callback(socket, params);
+
+			free_hashtable(params);
+		} else {
+			output_path(socket, &path[1]);
+		}
 
 	} else if ( !strcmp(command, "POST") ){
 
 	}
-
-
 	
 }
 
@@ -301,7 +312,7 @@ void * http_callback(void * http_data_ptr)
 	int n, socket = (int) *http_data->socket;
 	char *client_ip = http_data->client_ip, *time = http_data->accept_time;
 
-	char *msg,first_line[100], *buffer = malloc(BACKEND_MAX_BUFFER_SIZE); 
+	char *msg,first_line[BACKEND_MAX_ARRAY_SIZE], *buffer = malloc(BACKEND_MAX_BUFFER_SIZE); 
 
 	memset(buffer, '\0', BACKEND_MAX_BUFFER_SIZE);
 	n = read(socket,buffer,BACKEND_MAX_BUFFER_SIZE);
@@ -310,7 +321,7 @@ void * http_callback(void * http_data_ptr)
 
 	char * c = buffer;
 	int found = 0;
-	unsigned long count=0;
+	unsigned long count = 0;
 	while (*c && !found){
 		if ( *c == '\n'){
 			found = 1;
@@ -323,8 +334,10 @@ void * http_callback(void * http_data_ptr)
 
 	c = first_line;
 	while (*c) {
-		if ( *c == '\n')
+		if ( *c == '\n'){
 			*c = '\0';
+			break;
+		}
 		++c;
 	}
 
@@ -363,10 +376,35 @@ void print_answer(const char * buffer, int socket)
    	fclose(fp);
 }
 
+void * test_func_o(int s, hashtable_t * params, char * path){
+	char * p = path;
+
+	if ( ! strcmp(p, "NAME") ){
+		return (void*)__func__;
+	}
+
+	return "none";
+
+}
+
+void * test_func_t(int s, hashtable_t * params, char * path){
+	char * p = path;
+
+	if ( ! strcmp(p, "NAME") ){
+		return (void*)__func__;
+	}
+
+	return "none";
+}
+
+
+
 int main(int argc, char *argv[])
 {
 	int sockfd, newsockfd, portno;
 	socklen_t clilen; 
+
+	scores_init();
 
 	run_this_server_please_mister = true;
 
@@ -439,6 +477,7 @@ int main(int argc, char *argv[])
 		pthread_create(&callback_thread, NULL, http_callback, (void*)http_data);
 	}
 
+	scores_quit();
 	close(sockfd);
 	return 0; 
 }
