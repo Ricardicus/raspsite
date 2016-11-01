@@ -1,4 +1,4 @@
 CC = gcc
 
 all: 
-	$(CC) -o backend backend.c src/snakegame.c src/hashtable.c src/coffee.c
+	$(CC) -o backend src/backend.c src/snakegame.c src/hashtable.c src/coffee.c

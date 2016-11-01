@@ -12,9 +12,9 @@ extern "C" {
 #include <arpa/inet.h>
 #include <pthread.h>
 #include <time.h>
-#include "src/hashtable.h"
-#include "src/snakegame.h"
-#include "src/coffee.h"
+#include "hashtable.h"
+#include "snakegame.h"
+#include "coffee.h"
 
 #define BACKEND_MAX_BUFFER_SIZE			600
 #define BACKEND_MAX_NBR_OF_ARGS			20
