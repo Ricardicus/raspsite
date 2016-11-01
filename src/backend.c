@@ -3,9 +3,6 @@
 #include "backend.h"
 #include <stdbool.h>
 
-#define xstr(a) 		#a
-#define str(a)			xstr(a)
-
 #define CGI_PATH		data.cgi
 
 void error(const char *msg)
