@@ -1,0 +1,17 @@
+
+
+tr {
+	text-align:center;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 20px;
+	color: blue;
+	resize: none;
+}
+
+td {
+	padding: 4px;
+}
+
+td p, h1 {
+	color: black;
+}

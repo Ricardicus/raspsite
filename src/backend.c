@@ -433,6 +433,7 @@ int main(int argc, char *argv[])
 	pthread_t input_reader_thread;
 	pthread_create(&input_reader_thread, NULL, input_reader_callback, NULL);
 
+	printf("Backend v.%s, c. %s %s\n",str(VERSION),__DATE__,__TIME__);
 	while ( run_this_server_please_mister ){
 		pthread_t callback_thread;
 		listen(sockfd,5); int newsockfd_stack;

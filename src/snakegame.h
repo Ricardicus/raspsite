@@ -9,6 +9,8 @@ extern "C" {
 #include <unistd.h>
 #define SCORES_MAX_NAME_LENGTH		30
 
+#define VERSION						1
+
 typedef struct score_t score_t;
 
 struct score_t {
