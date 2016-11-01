@@ -23,7 +23,7 @@ extern "C" {
 
 #define xstr(a) 		#a
 #define str(a)			xstr(a)
-#define error_log(...)	do { printf("error:%s.%s:%d", __FILE__, __func__, __LINE__); printf(__VA_ARGS__); } while(0)
+#define error_log(...)	do { printf("error:%s.%s:%d ", __FILE__, __func__, __LINE__); printf(__VA_ARGS__); } while(0)
 
 typedef struct http_data_s {
 	int * socket;
