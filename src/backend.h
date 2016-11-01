@@ -20,6 +20,9 @@ extern "C" {
 #define BACKEND_MAX_NBR_OF_ARGS			20
 #define BACKEND_MAX_ARRAY_SIZE			100
 
+#define xstr(a) 		#a
+#define str(a)			xstr(a)
+
 typedef struct http_data_s {
 	int * socket;
 	char * client_ip;
