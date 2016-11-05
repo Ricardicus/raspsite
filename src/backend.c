@@ -3,9 +3,6 @@
 #include "backend.h"
 #include <stdbool.h>
 
-#define CGI_PATH		data.cgi
-#define log(...)		do { FILE * fp_log = fopen("log/logg.txt", "a"); fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
-
 void error(const char *msg)
 {
     perror(msg);
