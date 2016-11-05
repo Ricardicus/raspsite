@@ -1,5 +1,5 @@
 # Website
-I wanted to become a better C programmer so I set up a server.
+I want to become a better programmer so I set up a server.
 
 The website includes different stuff. 
 
