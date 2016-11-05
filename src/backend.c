@@ -28,7 +28,8 @@ void * input_reader_callback(void * data)
 	return NULL;
 }
 
-void output_action(int socket, char * action){
+void output_action(int socket, char * action)
+{
 
 	char * msg = "HTTP/1.0 200 OK\r\n";
    	write(socket,msg,strlen(msg));
@@ -370,29 +371,6 @@ void print_answer(const char * buffer, int socket)
    	}
    	fclose(fp);
 }
-
-void * test_func_o(int s, hashtable_t * params, char * path){
-	char * p = path;
-
-	if ( ! strcmp(p, "NAME") ){
-		return (void*)__func__;
-	}
-
-	return "none";
-
-}
-
-void * test_func_t(int s, hashtable_t * params, char * path){
-	char * p = path;
-
-	if ( ! strcmp(p, "NAME") ){
-		return (void*)__func__;
-	}
-
-	return "none";
-}
-
-
 
 int main(int argc, char *argv[])
 {
