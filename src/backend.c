@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #define CGI_PATH		data.cgi
-#define log(...) 		do { FILE * fp_log = fopen("log/logg.txt", "a"); fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
+#define log(...)		do { FILE * fp_log = fopen("log/logg.txt", "a"); fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
 
 void error(const char *msg)
 {
@@ -374,21 +374,24 @@ void print_answer(const char * buffer, int socket)
 
 int main(int argc, char *argv[])
 {
-	int sockfd, newsockfd, portno;
+	int sockfd, newsockfd, portno, n, *newsockfd; 
 	socklen_t clilen; 
-
-	scores_init();
-
-	scores_print();
-
-	run_this_server_please_mister = true;
-
+	time_t raw_time;
+	struct tm * time_info;
+	char client_IP[INET_ADDRSTRLEN], *time, *c_ptr, *time_heap, *client_ip_heap;
+	pthread_t input_reader_thread;
 	struct sockaddr_in serv_addr, cli_addr;
-	int n;
+	http_data_t * http_data;
+
 	if (argc < 2) {
 	 fprintf(stderr,"ERROR, no port provided\n");
 	 exit(1);
 	}
+
+	scores_init();
+
+	run_this_server_please_mister = true;
+
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) 
 	error("ERROR opening socket");
@@ -403,12 +406,6 @@ int main(int argc, char *argv[])
 
 	clilen = sizeof(cli_addr);
 
-	time_t raw_time;
-	struct tm * time_info;
-
-	char client_IP[INET_ADDRSTRLEN];
-
-	pthread_t input_reader_thread;
 	pthread_create(&input_reader_thread, NULL, input_reader_callback, NULL);
 
 	log("Backend v.%s, c. %s %s\n",str(VERSION),__DATE__,__TIME__);
@@ -420,8 +417,8 @@ int main(int argc, char *argv[])
 		// Getting time info
 		time ( &raw_time);
 		time_info = localtime( &raw_time );
-		char * time = asctime(time_info);
-		char * c_ptr = time;
+		time = asctime(time_info);
+		c_ptr = time;
 		/* the time contains a '\n'.. */
 		while (*c_ptr){
 			if ( *c_ptr == '\n')
@@ -433,22 +430,19 @@ int main(int argc, char *argv[])
 		inet_ntop(AF_INET, &cli_addr.sin_addr ,client_IP, INET_ADDRSTRLEN);
 
 		// heap allocated time
-		char * time_heap = calloc(strlen(time)+1, 1);
+		time_heap = calloc(strlen(time)+1, 1);
 		strcpy(time_heap, time);
 		// heap allocated client ip
-		char * client_ip_heap = calloc(strlen(client_IP)+1, 1);
+		client_ip_heap = calloc(strlen(client_IP)+1, 1);
 		strcpy(client_ip_heap, client_IP);
 		// sending socket info to newsockfd;
-		int * newsockfd = malloc(sizeof(int));
+		newsockfd = malloc(sizeof(int));
 		*newsockfd = newsockfd_stack;
 
-		http_data_t * http_data = calloc(1, sizeof(http_data_t));
+		http_data = calloc(1, sizeof(http_data_t));
 		http_data->client_ip = client_ip_heap;
 		http_data->accept_time = time_heap;
 		http_data->socket = newsockfd;
-
-		/*printf("[%s] %s: %s\n", time, client_IP, first_line);
-		free(first_line);*/
 
 		pthread_create(&callback_thread, NULL, http_callback, (void*)http_data);
 	}
