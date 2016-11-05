@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 	if (sockfd < 0){ 
 		log_error("ERROR opening socket");
 		scores_quit();
+		return EXIT_FAILURE;
 	}
 
 	bzero((char *) &serv_addr, sizeof(serv_addr));
@@ -52,6 +53,7 @@ int main(int argc, char *argv[])
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
 		log_error("ERROR on binding");
 		scores_quit();
+		return EXIT_FAILURE;
 	}
 
 	clilen = sizeof(cli_addr);
@@ -99,5 +101,5 @@ int main(int argc, char *argv[])
 
 	scores_quit();
 	close(sockfd);
-	return 0; 
+	return EXIT_SUCCESS; 
 }
