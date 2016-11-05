@@ -1,13 +1,6 @@
 /* Server in the internet domain using TCP
    Port passed as an argument */
 #include "backend.h"
-#include <stdbool.h>
-
-void error(const char *msg)
-{
-    perror(msg);
-    exit(1);
-}
 
 static volatile bool run_this_server_please_mister = true;
 static hashtable_t * dict;
@@ -45,16 +38,21 @@ int main(int argc, char *argv[])
 	run_this_server_please_mister = true;
 
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockfd < 0) 
-	error("ERROR opening socket");
+	if (sockfd < 0){ 
+		log_error("ERROR opening socket");
+		scores_quit();
+	}
+
 	bzero((char *) &serv_addr, sizeof(serv_addr));
 	portno = atoi(argv[1]);
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
 	serv_addr.sin_port = htons(portno);
 
-	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) 
-		error("ERROR on binding");
+	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+		log_error("ERROR on binding");
+		scores_quit();
+	}
 
 	clilen = sizeof(cli_addr);
 

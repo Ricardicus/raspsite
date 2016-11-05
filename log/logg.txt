@@ -138,3 +138,14 @@ error: file type of requested resource favicon.ico was not found.
 [Sat Nov  5 22:51:23 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
 error: file type of requested resource favicon.ico was not found.
 [Sat Nov  5 22:51:25 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+Backend v.1, c. Nov  5 2016 22:59:32
+[Sat Nov  5 22:59:43 2016] 127.0.0.1: GET /snake.html HTTP/1.1
+[Sat Nov  5 22:59:43 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov  5 22:59:43 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sat Nov  5 22:59:43 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov  5 22:59:43 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sat Nov  5 22:59:43 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Sat Nov  5 22:59:44 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov  5 22:59:44 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+error: file type of requested resource favicon.ico was not found.
+[Sat Nov  5 22:59:45 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1

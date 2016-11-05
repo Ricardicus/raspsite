@@ -9,6 +9,7 @@ extern "C" {
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
 #include "snakegame.h"
 #include "coffee.h"
 
@@ -21,7 +22,7 @@ extern "C" {
 #define BACKEND_MAX_ARRAY_SIZE			100
 #define VERSION							1
 
-#define	log_error(...)	do { printf("error:%s.%s:%d ", __FILE__, __func__, __LINE__); FILE * fp_log = fopen("log/logg.txt", "a"); fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
+#define	log_error(...)	do { printf("error:%s.%s:%d %s", __FILE__, __func__, __LINE__, strerror(errno)); errno = 0; FILE * fp_log = fopen("log/logg.txt", "a"); fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
 #define log(...)		do { FILE * fp_log = fopen("log/logg.txt", "a"); fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
 
 typedef struct http_data_s {
