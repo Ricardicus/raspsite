@@ -16,3 +16,32 @@ outputtin jpg/gif
 game.cgi call!
 [Sat Nov  5 17:52:15 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
 error: file type of requested resource favicon.ico was not found.
+Backend v.1, c. Nov  5 2016 18:07:10
+[Sat Nov  5 18:07:36 2016] 127.0.0.1: GET / HTTP/1.1
+[Sat Nov  5 18:07:36 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov  5 18:07:36 2016] 127.0.0.1: GET /scripts/kryptering.js HTTP/1.1
+[Sat Nov  5 18:07:36 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov  5 18:07:36 2016] 127.0.0.1: GET /style/cup-hot-coffee.jpg HTTP/1.1
+[Sat Nov  5 18:07:36 2016] 127.0.0.1: GET /coffe.cgi?action=current_coffee HTTP/1.1
+[Sat Nov  5 18:07:37 2016] 127.0.0.1: GET /style/macchiato.jpg HTTP/1.1
+[Sat Nov  5 18:07:37 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+error: file type of requested resource favicon.ico was not found.
+[Sat Nov  5 18:07:39 2016] 127.0.0.1: GET /snake.html HTTP/1.1
+[Sat Nov  5 18:07:39 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov  5 18:07:39 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sat Nov  5 18:07:39 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov  5 18:07:39 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sat Nov  5 18:07:39 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Sat Nov  5 18:07:39 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov  5 18:07:39 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+error: file type of requested resource favicon.ico was not found.
+[Sat Nov  5 18:07:44 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov  5 18:07:57 2016] 127.0.0.1: GET /game.cgi?action=post_score&name=RickardN&score=3 HTTP/1.1
+[Sat Nov  5 18:07:57 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov  5 18:07:58 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov  5 18:08:09 2016] 127.0.0.1: GET /game.cgi?action=post_score&name=RickardN&score=2 HTTP/1.1
+[Sat Nov  5 18:08:09 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov  5 18:08:10 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov  5 18:08:31 2016] 127.0.0.1: GET /game.cgi?action=post_score&name=RickardN&score=4 HTTP/1.1
+[Sat Nov  5 18:08:31 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov  5 18:08:32 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
