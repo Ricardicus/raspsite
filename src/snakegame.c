@@ -2,42 +2,72 @@
 #include "hashtable.h"
 #include <limits.h>
 
-#define NBRINTOP	10 
+#define NBRINTOP		10 
+#define MAXLINELENGTH	50
 
 static score_t ** top10 = NULL;
 
 static unsigned long min = ULONG_MAX;
 
 void scores_init() {
-	int n;
-	top10 = malloc(sizeof(score_t*) * (NBRINTOP+1));
-	for(n = 0; n < NBRINTOP; ++n){
-		top10[n] = NULL; 
+	int n,q;
+	FILE * fp;
+	char line[MAXLINELENGTH+1], *c, *l;
+	memset(line,'\0', sizeof(line));
+
+	top10 = calloc(NBRINTOP+1,sizeof(score_t*));
+
+	fp = fopen("games/highscores/snake.txt", "r");
+	n = q = 0;
+	while ( fgets(line, MAXLINELENGTH, fp) != NULL ){
+		if (top10[q] == NULL ) top10[q] = calloc(1,sizeof(score_t));
+		c = l = line;
+		if ( *c == '\n')
+			l++;
+		c++;
+		while(*c){
+			if ( *c == '\n' ){
+				*c = '\0';
+			}
+			c++;
+		} 
+
+		if ( !(n % 2) ) {
+			snprintf(top10[q]->name, SCORES_MAX_NAME_LENGTH, "%s", l); 
+		} else {
+			top10[q]->score = (unsigned long) atol(line);
+			++q;
+		}
+
+		++n;
+		memset(line, '\0', sizeof(line));
 	}
+
+
+	for(n = q; n < NBRINTOP+1; ++n){
+		top10[n] = NULL;
+	}
+
 }
 
 
 int score_sort_comp(const void * d1, const void * d2){
-	score_t * s1, * s2;
+	const score_t * s1, * s2;
 
-	s1 = (score_t *) d1;
-	s2 = (score_t *) d2;
+	s1 = *(const score_t **) d1;
+	s2 = *(const score_t **) d2;
 
-	if ( d1 != NULL && d2 == NULL ){
-		return 1;	
-	}
-
-	if ( d1 == NULL && d2 != NULL ){
-		return -1;	
-	}
-
-	if ( d1 == NULL && d2 == NULL ){
-		return 0;	
-	}
-
-	if ( s1->score < s2->score ){
+	if ( s1 == NULL && s2 != NULL ){
+		return 1;
+	} else if ( s1 != NULL && s2 == NULL){
 		return -1;
-	} else if ( s1->score == s1->score ){
+	} else if ( s2 == NULL && s1 == NULL ){
+		return 0;
+	}
+
+	if ( s1->score > s2->score ){
+		return -1;
+	} else if ( s1->score == s2->score ){
 		return 0;
 	}
 
@@ -47,14 +77,12 @@ int score_sort_comp(const void * d1, const void * d2){
 
 void snake_callback(int socket, hashtable_t * params){
 	char * action, * name, * score, *msg;
-
-	printf("call\n");
+	int i, update = 0;
+	unsigned long new_score;
 
 	action = (char*) get(params, "action");
 	name = (char*) get(params, "name");
 	score = (char*) get(params, "score");
-
-	printf("action: %s\nname: %s\nscore: %s\n", action, name, score);
 
 	if ( action == NULL ){
 		return; // Nothing to do! Action MUST be specified
@@ -79,15 +107,32 @@ void snake_callback(int socket, hashtable_t * params){
    			write(socket,msg,strlen(msg));
 			return; // name and score MUST be specified
 		}
+		new_score = atol(score);
 
-		if ( top10[NBRINTOP] != NULL ) free(top10[NBRINTOP]);
-		score_t * new_score = calloc(1,sizeof(score_t));
+		update = i = 0;
+		for (; i < NBRINTOP && !update; i++){
+			if ( top10[i] == NULL)
+				continue;
+			if ( !strcmp(top10[i]->name, name) ){
+				if ( top10[i]->score < new_score ){
+					top10[i]->score = new_score;
+				}
+				update = 1;
+			}
+		}
 
-		snprintf(new_score->name, SCORES_MAX_NAME_LENGTH, "%s", name);
-		new_score->score = (unsigned long) atol(score);
-		top10[NBRINTOP] = new_score;
+		if ( ! update ){
+			if ( top10[NBRINTOP] != NULL ) free(top10[NBRINTOP]);
+			score_t * new_score_t = calloc(1,sizeof(score_t));
 
-		qsort(top10,NBRINTOP+1, sizeof(score_t*), score_sort_comp);
+			snprintf(new_score_t->name, SCORES_MAX_NAME_LENGTH, "%s", name);
+			new_score_t->score = new_score;
+			top10[NBRINTOP] = new_score_t;
+		}
+
+		qsort(top10,NBRINTOP+1, sizeof(score_t**), score_sort_comp);
+
+		scores_print();
 
 		scores_store("games/highscores/snake.txt");
 
@@ -112,6 +157,24 @@ void scores_output(int socket, const char * path) {
 	fclose(fp);
 }
 
+void scores_print(){
+	int i = 0;
+
+	if ( top10 == NULL )
+		return;
+
+	printf("%s\n",__func__);
+	for (; i<NBRINTOP; ++i){
+		if ( top10[i] == NULL ){
+			printf("p. %d : NULL\n",i);
+		} else {
+			printf("p. %d : %s (%lu)\n",i,top10[i]->name, top10[i]->score);
+		}
+	}
+
+
+}
+
 void scores_store(const char * path) {
 	FILE * fp;
 	int n = 0;
@@ -119,7 +182,7 @@ void scores_store(const char * path) {
 	fp = fopen(path, "w");
 
 	for(; n < NBRINTOP && top10[n] != NULL; ++n){
-		fprintf(fp, "%s\r\n%lu\r\n", top10[n]->name, top10[n]->score);
+		fprintf(fp, "%s\n%lu\n", top10[n]->name, top10[n]->score);
 	}
 
 	fclose(fp);

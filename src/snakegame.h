@@ -7,6 +7,8 @@ extern "C" {
 #endif
 
 #include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
 #define SCORES_MAX_NAME_LENGTH		30
 
 #define VERSION						1
@@ -18,10 +20,11 @@ struct score_t {
 	unsigned long score;
 };
 
-void scores_init();
+void scores_init(void);
+void scores_print(void);
 void scores_output(int, const char*);
-void scores_store();
-void scores_quit();
+void scores_store(const char*);
+void scores_quit(void);
 
 void snake_callback(int, hashtable_t *);
 

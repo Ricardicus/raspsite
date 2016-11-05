@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #define CGI_PATH		data.cgi
+#define log(...) 		do { FILE * fp_log = fopen("log/logg.txt", "a"); fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
 
 void error(const char *msg)
 {
@@ -86,7 +87,7 @@ void output_path(int socket, const char * path)
 	FILE * fp = fopen(path, "r");
 	if ( ! fp ){
 		// sending a signal that it is no file with that name present.
-		printf("error: file type of requested resource %s was not found.\n", path);
+		log("error: file type of requested resource %s was not found.\n", path);
 		msg = "Content-Type: application/json; charset=utf-8\r\n\r\n";
    		write(socket,msg, strlen(msg));
 
@@ -111,7 +112,7 @@ void output_path(int socket, const char * path)
 
 	if ( !*file_type ){
 		// if the file type_was not found.. 
-		printf("error: file type of requested resource %s was not found.\n", path);
+		log("error: file type of requested resource %s was not found.\n", path);
 		msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
    		write(socket,msg, strlen(msg));
 		msg = "<!DOCTYPE html><body><pre>";
@@ -131,7 +132,6 @@ void output_path(int socket, const char * path)
 
 	if ( !strcmp(file_type, "css") ){
 		// CSS requested!
-		printf("output css..\n");
 		msg = "Content-Type: text/css; charset=utf-8\r\n\r\n";
    		write(socket,msg, strlen(msg));
    		int c;
@@ -159,7 +159,6 @@ void output_path(int socket, const char * path)
 
 	if ( !strcmp(file_type, "jpg") || !strcmp(file_type, "jpeg") || !strcmp(file_type, "gif") ){
 		// Image requested!
-		printf("outputtin jpg/gif\n");
 		msg = "Content-Description: File Transfer\r\n";
    		write(socket,msg, strlen(msg));	
    		msg = "Content-Transfer-Encoding: binary\r\n";
@@ -261,7 +260,6 @@ void interpret_and_output(int socket, char * first_line)
 			* the game.cgi, args: action=[post_score|get_highscore], name=[*], score=[*]
 			*/ 
 
-			printf("game.cgi call!\r\n");
 			arg_count = 0;
 			params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
 
@@ -338,7 +336,7 @@ void * http_callback(void * http_data_ptr)
 		++c;
 	}
 
-	printf("[%s] %s: %s\n", time, client_ip, first_line);
+	log("[%s] %s: %s\n", time, client_ip, first_line);
 
 	// look at the first line of 'buffer' and do what you got to do..
 	interpret_and_output(socket, first_line);
@@ -403,6 +401,8 @@ int main(int argc, char *argv[])
 
 	scores_init();
 
+	scores_print();
+
 	run_this_server_please_mister = true;
 
 	struct sockaddr_in serv_addr, cli_addr;
@@ -433,7 +433,7 @@ int main(int argc, char *argv[])
 	pthread_t input_reader_thread;
 	pthread_create(&input_reader_thread, NULL, input_reader_callback, NULL);
 
-	printf("Backend v.%s, c. %s %s\n",str(VERSION),__DATE__,__TIME__);
+	log("Backend v.%s, c. %s %s\n",str(VERSION),__DATE__,__TIME__);
 	while ( run_this_server_please_mister ){
 		pthread_t callback_thread;
 		listen(sockfd,5); int newsockfd_stack;

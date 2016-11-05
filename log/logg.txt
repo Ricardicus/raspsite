@@ -1,0 +1,18 @@
+Backend v.1, c. Nov  5 2016 17:51:52
+[Sat Nov  5 17:51:57 2016] 127.0.0.1: GET /game.cgi?action=post_score&name=Rickardicus&score=14 HTTP/1.1
+game.cgi call!
+[Sat Nov  5 17:51:57 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+error: file type of requested resource favicon.ico was not found.
+[Sat Nov  5 17:52:15 2016] 127.0.0.1: GET /snake.html HTTP/1.1
+[Sat Nov  5 17:52:15 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov  5 17:52:15 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov  5 17:52:15 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sat Nov  5 17:52:15 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+output css..
+output css..
+[Sat Nov  5 17:52:15 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+outputtin jpg/gif
+[Sat Nov  5 17:52:15 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+game.cgi call!
+[Sat Nov  5 17:52:15 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+error: file type of requested resource favicon.ico was not found.
