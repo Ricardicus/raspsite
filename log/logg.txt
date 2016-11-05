@@ -45,3 +45,13 @@ error: file type of requested resource favicon.ico was not found.
 [Sat Nov  5 18:08:31 2016] 127.0.0.1: GET /game.cgi?action=post_score&name=RickardN&score=4 HTTP/1.1
 [Sat Nov  5 18:08:31 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
 [Sat Nov  5 18:08:32 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+Backend v.1, c. Nov  5 2016 18:10:59
+[Sat Nov  5 18:11:06 2016] 127.0.0.1: GET /snake.html HTTP/1.1
+[Sat Nov  5 18:11:06 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov  5 18:11:06 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sat Nov  5 18:11:06 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov  5 18:11:06 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sat Nov  5 18:11:06 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Sat Nov  5 18:11:07 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov  5 18:11:07 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+error: file type of requested resource favicon.ico was not found.
