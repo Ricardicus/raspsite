@@ -6,6 +6,9 @@ extern "C" {
 #include "hashtable.h"
 #endif
 
+#ifndef SNAKEGAME_H
+#define SNAKEGAME_H	
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,6 +31,7 @@ void scores_quit(void);
 
 void snake_callback(int, hashtable_t *);
 
+#endif
 
 #ifdef __cplusplus
 }

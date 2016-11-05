@@ -43,6 +43,7 @@ void write_current_coffe(int socket)
 	close(socket);
 }
 
+
 void output_coffee_action(int socket, char * action)
 {
 

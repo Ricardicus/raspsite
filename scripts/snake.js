@@ -75,7 +75,14 @@ function get_highscore(){
 
   $.ajax({type: "GET", url: "game.cgi?action=get_highscore", dataType: "text",
     success: function(response){
-      $("#highscore-row").html(response);
+
+      $("#highscore-row").html("<tbody>");
+      var data = response.split('\n');
+      for ( var i = 0; i < data.length -1; ){
+        $("#highscore-row").append("<tr><td>" + (parseInt(i/2) + 1) + ".</td><td> " + data[i] + "</td><td>" + data[i+1] + "</td></tr>");
+        i += 2;
+      }
+
       $("#ajax-loader").css("display", "none");
     }, 
     error: function(){

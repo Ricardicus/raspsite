@@ -12,6 +12,7 @@ extern "C" {
 #include <arpa/inet.h>
 #include <pthread.h>
 #include <time.h>
+#include "http.h"
 #include "hashtable.h"
 #include "snakegame.h"
 #include "coffee.h"
@@ -20,19 +21,6 @@ extern "C" {
 #define BACKEND_MAX_NBR_OF_ARGS			20
 #define BACKEND_MAX_ARRAY_SIZE			100
 #define VERSION							1
-
-#define xstr(a) 		#a
-#define str(a)			xstr(a)
-#define CGI_PATH		data.cgi
-
-#define	log_error(...)	do { printf("error:%s.%s:%d ", __FILE__, __func__, __LINE__); FILE * fp_log = fopen("log/logg.txt", "a"); fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
-#define log(...)		do { FILE * fp_log = fopen("log/logg.txt", "a"); fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
-
-typedef struct http_data_s {
-	int * socket;
-	char * client_ip;
-	char * accept_time;
-} http_data_t;
 
 void error(const char*);
 void write_current_coffee(int);
