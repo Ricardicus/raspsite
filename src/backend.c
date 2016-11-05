@@ -443,9 +443,6 @@ int main(int argc, char *argv[])
 		http_data->accept_time = time_heap;
 		http_data->socket = newsockfd;
 
-		/*printf("[%s] %s: %s\n", time, client_IP, first_line);
-		free(first_line);*/
-
 		pthread_create(&callback_thread, NULL, http_callback, (void*)http_data);
 	}
 
