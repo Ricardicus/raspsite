@@ -25,26 +25,6 @@ void * input_reader_callback(void * data)
 	return NULL;
 }
 
-void output_action(int socket, char * action)
-{
-
-	char * msg = "HTTP/1.0 200 OK\r\n";
-   	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Content-Type: text/plain; charset=utf-8\r\n\r\n";
-   	write(socket,msg, strlen(msg));
-
-	if (!strcmp(action, "current_coffee")){
-		write_current_coffe(socket);
-	}
-
-}
-
 void output_index(int socket)
 {
 	char * msg = "HTTP/1.0 200 OK\r\n";
@@ -345,28 +325,6 @@ void * http_callback(void * http_data_ptr)
    	free_http_data(&http_data);
 
    	return NULL;
-}
-
-void print_answer(const char * buffer, int socket) 
-{
-	char * msg;
-	msg = "HTTP/1.0 200 OK\r\n";
-   	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-	write(socket,msg, strlen(msg));
-   	msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
-   	write(socket,msg, strlen(msg));
-
-   	FILE * fp = fopen("games/avoid.html", "r");
-   	int c;
-   	while ( (c = fgetc(fp)) != EOF ){
-   		write(socket, &c, 1);
-   	}
-   	fclose(fp);
 }
 
 int main(int argc, char *argv[])

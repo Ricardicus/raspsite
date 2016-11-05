@@ -1,4 +1,5 @@
 #include "coffee.h"
+
 void write_current_coffe(int socket)
 {
 
@@ -40,4 +41,24 @@ void write_current_coffe(int socket)
 	}
 
 	close(socket);
+}
+
+void output_coffee_action(int socket, char * action)
+{
+
+	char * msg = "HTTP/1.0 200 OK\r\n";
+   	write(socket,msg,strlen(msg));
+   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
+   	write(socket,msg, strlen(msg));
+   	msg = "Pragma: no-cache\r\n";
+	write(socket,msg, strlen(msg));
+	msg = "Expires: 0\r\n";
+	write(socket,msg, strlen(msg));
+	msg = "Content-Type: text/plain; charset=utf-8\r\n\r\n";
+   	write(socket,msg, strlen(msg));
+
+	if (!strcmp(action, "current_coffee")){
+		write_current_coffe(socket);
+	}
+
 }

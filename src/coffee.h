@@ -21,6 +21,7 @@ typedef enum coffee_types_t {
 } coffee_types_t;
 
 void write_current_coffe(int);
+void output_coffee_action(int, char *);
 
 #endif
 

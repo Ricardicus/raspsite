@@ -25,9 +25,8 @@ extern "C" {
 #define str(a)			xstr(a)
 #define CGI_PATH		data.cgi
 
-#define error_log(...)	do { printf("error:%s.%s:%d ", __FILE__, __func__, __LINE__); printf(__VA_ARGS__); } while(0)
+#define	log_error(...)	do { printf("error:%s.%s:%d ", __FILE__, __func__, __LINE__); FILE * fp_log = fopen("log/logg.txt", "a"); fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
 #define log(...)		do { FILE * fp_log = fopen("log/logg.txt", "a"); fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
-
 
 typedef struct http_data_s {
 	int * socket;
