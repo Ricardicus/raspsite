@@ -149,3 +149,4 @@ Backend v.1, c. Nov  5 2016 22:59:32
 [Sat Nov  5 22:59:44 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
 error: file type of requested resource favicon.ico was not found.
 [Sat Nov  5 22:59:45 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+ERROR, no port provided
