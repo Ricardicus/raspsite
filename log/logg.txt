@@ -150,3 +150,27 @@ Backend v.1, c. Nov  5 2016 22:59:32
 error: file type of requested resource favicon.ico was not found.
 [Sat Nov  5 22:59:45 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
 ERROR, no port provided
+Backend v.1, c. Nov  6 2016 10:33:53
+[Thu Nov 10 22:10:05 2016] 192.168.1.143: GET / HTTP/1.1
+[Thu Nov 10 22:10:05 2016] 192.168.1.143: GET /scripts/jquery-min.js HTTP/1.1
+[Thu Nov 10 22:10:06 2016] 192.168.1.143: GET /style/look.css HTTP/1.1
+[Thu Nov 10 22:10:06 2016] 192.168.1.143: GET /scripts/kryptering.js HTTP/1.1
+[Thu Nov 10 22:10:06 2016] 192.168.1.143: GET /style/cup-hot-coffee.jpg HTTP/1.1
+[Thu Nov 10 22:10:06 2016] 192.168.1.143: GET /coffe.cgi?action=current_coffee HTTP/1.1
+[Thu Nov 10 22:10:06 2016] 192.168.1.143: GET /style/.jpg HTTP/1.1
+error: file type of requested resource style/.jpg was not found.
+[Thu Nov 10 22:10:06 2016] 192.168.1.143: GET /favicon.ico HTTP/1.1
+error: file type of requested resource favicon.ico was not found.
+[Thu Nov 10 22:10:20 2016] 192.168.1.143: GET /snake.html HTTP/1.1
+[Thu Nov 10 22:10:20 2016] 192.168.1.143: GET /scripts/jquery-min.js HTTP/1.1
+[Thu Nov 10 22:10:20 2016] 192.168.1.143: GET /scripts/snake.js HTTP/1.1
+[Thu Nov 10 22:10:20 2016] 192.168.1.143: GET /style/snakelook.css HTTP/1.1
+[Thu Nov 10 22:10:20 2016] 192.168.1.143: GET /style/look.css HTTP/1.1
+[Thu Nov 10 22:10:20 2016] 192.168.1.143: GET /style/ajax-loader.gif HTTP/1.1
+[Thu Nov 10 22:10:20 2016] 192.168.1.143: GET /game.cgi?action=get_highscore HTTP/1.1
+[Thu Nov 10 22:10:20 2016] 192.168.1.143: GET /favicon.ico HTTP/1.1
+error: file type of requested resource favicon.ico was not found.
+[Thu Nov 10 22:10:38 2016] 192.168.1.143: GET /game.cgi?action=get_highscore HTTP/1.1
+[Thu Nov 10 22:13:00 2016] 192.168.1.143: GET /game.cgi?action=post_score&name=Name&score=10 HTTP/1.1
+[Thu Nov 10 22:13:00 2016] 192.168.1.143: GET /game.cgi?action=get_highscore HTTP/1.1
+[Thu Nov 10 22:13:01 2016] 192.168.1.143: GET /game.cgi?action=get_highscore HTTP/1.1
