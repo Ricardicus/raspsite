@@ -110,7 +110,7 @@ void output_path(int socket, const char * path)
 	} 
 
 
-	if ( !strcmp(file_type, "jpg") || !strcmp(file_type, "jpeg") || !strcmp(file_type, "gif") ){
+	if ( !strcmp(file_type, "jpg") || !strcmp(file_type, "jpeg") || !strcmp(file_type, "gif") || !strcmp(file_type, "ico") ){
 		// Image requested!
 		msg = "Content-Description: File Transfer\r\n";
    		write(socket,msg, strlen(msg));	
