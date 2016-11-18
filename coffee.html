@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="scripts/jquery-min.js"></script>
+		<script src="scripts/kryptering.js"></script>
+		<link rel="stylesheet" href="style/look.css"/>
+		<title>Messaround</title>
+	</head>
+	<meta charset="UTF-8">
+	<body charset="UTF-8" bgcolor="white">
+		<center>
+			<div class="txt bgimg">
+			</div>
+			<div>
+			<table id="coffe-tip-table" style="display:none">
+				<tbody>
+				<tr>
+					<td>
+						<h1>Coffe of the day:</h1>
+					</td>
+					<td>
+						<img id="coffe-of-the-day" style="width:200px;height:200px;"></img>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			</div>
+		</center>
+	</body>
+<script>
+$(document).ready(function(){
+
+	$.ajax({type: "GET", url: "coffe.cgi?action=current_coffee", dataType: "text",
+		success: function(response) {
+			$("#coffe-of-the-day").attr("src","style/" + response + ".jpg");
+			$("#coffe-tip-table").show();
+		},
+		error: function(){
+			alert("Coffee of the day is not open. Try tomorrow.");
+		}
+	});
+
+});
+
+</script>
+</html>

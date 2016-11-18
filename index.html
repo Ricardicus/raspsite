@@ -1,46 +1,71 @@
+<!-- 
+  A snake game and a server system in place to log results.. 
+-->
+
 <!DOCTYPE html>
 <html>
-	<head>
-		<script src="scripts/jquery-min.js"></script>
-		<script src="scripts/kryptering.js"></script>
-		<link rel="stylesheet" href="style/look.css"/>
-		<title>Messaround</title>
-	</head>
-	<meta charset="UTF-8">
-	<body charset="UTF-8" bgcolor="white">
-		<center>
-			<div class="txt bgimg">
-			</div>
-			<div>
-			<table id="coffe-tip-table" style="display:none">
-				<tbody>
-				<tr>
-					<td>
-						<h1>Coffe of the day:</h1>
-					</td>
-					<td>
-						<img id="coffe-of-the-day" style="width:200px;height:200px;"></img>
-					</td>
-				</tr>
-				</tbody>
-			</table>
-			</div>
-		</center>
-	</body>
-<script>
-$(document).ready(function(){
-
-	$.ajax({type: "GET", url: "coffe.cgi?action=current_coffee", dataType: "text",
-		success: function(response) {
-			$("#coffe-of-the-day").attr("src","style/" + response + ".jpg");
-			$("#coffe-tip-table").show();
-		},
-		error: function(){
-			alert("Coffee of the day is not open. Try tomorrow.");
-		}
-	});
-
-});
-
-</script>
+<head>
+  <title>Messaround</title>
+  <script src="scripts/jquery-min.js"></script>
+  <script src="scripts/snake.js"></script>
+  <link rel="stylesheet" type="text/css" href="style/look.css"/>
+  <link rel="stylesheet" type="text/css" href="style/snakelook.css"/>
+</head>
+<body>
+  <div id="cdiv" style="">
+    <br>
+    <center>
+      <table>
+        <tbody>
+        <tr>
+          <td>
+            <div id="name-give-div">
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <input class="inpt-snake" id="name-give-input" value="Name"></input>
+                    </td>
+                    <td>
+                      <button class="btn-snake overout" id="name-give-btn">Enter</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+          <td>
+            <div id="canvas-div" style="display:none">
+              <canvas id="tcanvas" width = "640" height = "640">
+                Your browser does not support the HTML5 canvas tag.
+              </canvas>  
+            </div>
+          </td>
+          <td>
+            <div id="stuff-div" style="display:none;width:300px;height:640px">
+              <center>
+                <p class="player-info" id="player-name-p"></p>
+                <p class="player-info" id="points"></p>
+                <br>
+                <h1>Top 10</h1><img id="loader-gif" style="display:none" src="style/ajax-loader.gif"></img>
+                <table id="highscore-row">
+                </table>
+                <button class="btn-snake overout" id="restart-btn" style="visibility:hidden;position:relative;top:40px;" onclick="restart()">Restart</button>
+              </center>
+            </div>
+          </td>  
+        </tr>
+        </tbody>
+      </table>
+      <button id="need-help-btn" class="btn-snake" onclick="show_key_help_buttons()">No keys?</button>
+      <div id="aid-btns" style="display:none;border: 1px solid blue; border-radius: 20px; width:200px">
+        <button onclick="up()">UP</button>
+        <br>
+        <button onclick="left()">LEFT</button><button onclick="right()">RIGHT</button>
+        <br>
+        <button onclick="down()">DOWN</button>
+      </div>
+    </center>
+  </div>
+</body>
 </html>
