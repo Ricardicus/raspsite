@@ -144,9 +144,9 @@ void output_path(int socket, const char * path)
    		close(socket);
    		return;
 	} else {
-			// If nothing mapped... Default output!!!!!!
-		msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
-		write(socket,msg, strlen(msg));
+
+		((http_header_callback_t) get(headers_callback, "html"))(socket);
+		
 		msg = "<!DOCTYPE html><body><pre>";
 		write(socket,msg, strlen(msg));
 		int c;
