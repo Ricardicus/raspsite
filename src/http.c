@@ -1,5 +1,59 @@
 #include "http.h"
 
+static hashtable_t * headers_callback;
+
+static void output_js_headers(int socket)
+{
+	char * msg = "HTTP/1.1 200 OK\r\n";
+   	write(socket,msg,strlen(msg));
+   	msg = "Content-Type: application/javascript; charset=utf-8\r\n\r\n";
+   	write(socket,msg, strlen(msg));
+}
+
+static void output_json_headers(int socket)
+{
+	char * msg = "HTTP/1.1 200 OK\r\n";
+   	write(socket,msg,strlen(msg));
+   	msg = "Content-Type: application/json; charset=utf-8\r\n\r\n";
+   	write(socket,msg, strlen(msg));
+}
+
+static void output_jpg_headers(int socket)
+{
+	char * msg = "HTTP/1.1 200 OK\r\n";
+   	write(socket,msg,strlen(msg));
+	msg = "Content-Description: File Transfer\r\n";
+   	write(socket,msg, strlen(msg));	
+   	msg = "Content-Transfer-Encoding: binary\r\n";
+   	write(socket,msg, strlen(msg));	
+   	msg = "Content-Disposition: attachment; filename=\"image.jpg\"\r\n";
+   	write(socket,msg, strlen(msg));	
+	msg = "Content-Type: image/jpeg\r\n\r\n";
+  	write(socket,msg, strlen(msg));
+}
+
+static void output_css_headers(int socket)
+{
+	char * msg = "HTTP/1.1 200 OK\r\n";
+   	write(socket,msg,strlen(msg));
+	msg = "Content-Type: text/css; charset=utf-8\r\n\r\n";
+   	write(socket,msg, strlen(msg));
+}
+
+static void output_html_headers(int socket)
+{
+	char * msg = "HTTP/1.0 200 OK\r\n";
+   	write(socket,msg,strlen(msg));
+   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
+   	write(socket,msg, strlen(msg));
+   	msg = "Pragma: no-cache\r\n";
+	write(socket,msg, strlen(msg));
+	msg = "Expires: 0\r\n";
+	write(socket,msg, strlen(msg));
+   	msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
+   	write(socket,msg, strlen(msg));
+}
+
 void free_http_data(http_data_t ** http_data)
 {
 	free((*http_data)->client_ip);
@@ -34,15 +88,15 @@ void output_index(int socket)
 
 void output_path(int socket, const char * path)
 {
-	char * msg = "HTTP/1.1 200 OK\r\n";
-   	write(socket,msg,strlen(msg));
+	http_header_callback_t callback;
+
+	char * msg, c;
 
 	FILE * fp = fopen(path, "r");
 	if ( ! fp ){
 		// sending a signal that it is no file with that name present.
 		log("error: file type of requested resource %s was not found.\n", path);
-		msg = "Content-Type: application/json; charset=utf-8\r\n\r\n";
-   		write(socket,msg, strlen(msg));
+		((http_header_callback_t) get(headers_callback, "json"))(socket);
 
    		msg = "{ \"error\":\"could not find requested resource.\" } ";
    		write(socket,msg, strlen(msg));
@@ -52,10 +106,6 @@ void output_path(int socket, const char * path)
 
 	if ( ! memcmp(path, str(CGI_PATH), strlen(str(CGI_PATH))) ){
 		// cgi call
-
-		
-
-
 	}
 
 	const char * file_type = path;
@@ -66,8 +116,9 @@ void output_path(int socket, const char * path)
 	if ( !*file_type ){
 		// if the file type_was not found.. 
 		log("error: file type of requested resource %s was not found.\n", path);
-		msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
-   		write(socket,msg, strlen(msg));
+		
+		((http_header_callback_t) get(headers_callback, "html"))(socket);
+
 		msg = "<!DOCTYPE html><body><pre>";
    		write(socket,msg, strlen(msg));
    		int c;
@@ -83,79 +134,31 @@ void output_path(int socket, const char * path)
 
 	file_type++;
 
-	if ( !strcmp(file_type, "css") ){
-		// CSS requested!
-		msg = "Content-Type: text/css; charset=utf-8\r\n\r\n";
-   		write(socket,msg, strlen(msg));
-   		int c;
-   		while ( (c = fgetc(fp)) != EOF ){
+	callback = (http_header_callback_t) get(headers_callback, file_type);
+	if ( callback != NULL ){
+		callback(socket);
+		while ( (c = fgetc(fp)) != EOF ){
    			write(socket, &c, 1);
    		}
    		fclose(fp);
    		close(socket);
    		return;
-	}
-
-	if ( !strcmp(file_type, "html") ){
-		// CSS requested!
+	} else {
+			// If nothing mapped... Default output!!!!!!
 		msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
-   		write(socket,msg, strlen(msg));
-   		int c;
-   		while ( (c = fgetc(fp)) != EOF ){
-   			write(socket, &c, 1);
-   		}
-   		fclose(fp);
-   		close(socket);
-   		return;
-	} 
+		write(socket,msg, strlen(msg));
+		msg = "<!DOCTYPE html><body><pre>";
+		write(socket,msg, strlen(msg));
+		int c;
+		while ( (c = fgetc(fp)) != EOF ){
+			write(socket, &c, 1);
+		}
+		fclose(fp);
+		msg = "</pre></body></html>";
+		write(socket,msg, strlen(msg));
+		close(socket);
 
-
-	if ( !strcmp(file_type, "jpg") || !strcmp(file_type, "jpeg") || !strcmp(file_type, "gif") || !strcmp(file_type, "ico") ){
-		// Image requested!
-		msg = "Content-Description: File Transfer\r\n";
-   		write(socket,msg, strlen(msg));	
-   		msg = "Content-Transfer-Encoding: binary\r\n";
-   		write(socket,msg, strlen(msg));	
-   		msg = "Content-Disposition: attachment; filename=\"image.jpg\"\r\n";
-   		write(socket,msg, strlen(msg));	
-		msg = "Content-Type: image/jpeg\r\n\r\n";
-   		write(socket,msg, strlen(msg));
-   		int c;
-   		while ( (c = fgetc(fp)) != EOF ){
-   			write(socket, &c, 1);
-   		}
-   		fclose(fp);
-   		close(socket);
-   		return;
 	}
-
-	if ( !strcmp(file_type, "js") ){
-		// Script requested!!
-		msg = "Content-Type: application/javascript; charset=utf-8\r\n\r\n";
-   		write(socket,msg, strlen(msg));
-   		int c;
-   		while ( (c = fgetc(fp)) != EOF ){
-   			write(socket, &c, 1);
-   		}
-   		fclose(fp);
-   		close(socket);
-   		return;
-	}
-
-	// If nothing mapped... Default output!!!!!!
-	msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "<!DOCTYPE html><body><pre>";
-	write(socket,msg, strlen(msg));
-	int c;
-	while ( (c = fgetc(fp)) != EOF ){
-		write(socket, &c, 1);
-	}
-	fclose(fp);
-	msg = "</pre></body></html>";
-	write(socket,msg, strlen(msg));
-	close(socket);
-	return;
 }
 
 void interpret_and_output(int socket, char * first_line)
@@ -250,6 +253,24 @@ void interpret_and_output(int socket, char * first_line)
 
 	}
 	
+}
+
+void http_init()
+{
+	headers_callback = new_hashtable(15, 0.75);
+	put(headers_callback, "js", output_js_headers);
+	put(headers_callback, "css", output_css_headers);
+	put(headers_callback, "json", output_json_headers);
+	// Map all kinds of things to jpg for this server..
+	put(headers_callback, "jpg", output_jpg_headers);
+	put(headers_callback, "jpeg", output_jpg_headers);
+	put(headers_callback, "gif", output_jpg_headers);
+	put(headers_callback, "ico", output_jpg_headers);
+}
+
+void http_quit()
+{
+	free_hashtable(headers_callback);
 }
 
 void * http_callback(void * http_data_ptr)

@@ -37,8 +37,8 @@ hashtable_t * new_hashtable(int,float);
 void rehash(hashtable_t*);
 void free_hashtable(hashtable_t*);
 void free_hashtable_table(hashtable_t*);
-void* get(hashtable_t*,char*);
-int hash(hashtable_t*,char*);
+void* get(hashtable_t*,const char*);
+int hash(hashtable_t*,const char*);
 void put(hashtable_t*,char*,void*);
 void print_table_callbacks(hashtable_t*);
 

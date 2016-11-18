@@ -62,7 +62,7 @@ void free_hashtable_table(hashtable_t * hash)
 	free(hash->table);
 }
 
-int hash(hashtable_t * hashtable,char * str)
+int hash(hashtable_t * hashtable,const char * str)
 {	
 	int size = hashtable->size;
 	int hash = 0;
@@ -118,7 +118,7 @@ void put(hashtable_t * hashtable, char * key, void * val)
 	}
 }
 
-void * get(hashtable_t * hashtable, char * key)
+void * get(hashtable_t * hashtable, const char * key)
 {
 	int index = hash(hashtable,key);
 	if(hashtable->table[index] == NULL)

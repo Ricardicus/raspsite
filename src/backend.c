@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
 	}
 
 	scores_init();
+	http_init();
 
 	run_this_server_please_mister = true;
 
@@ -100,6 +101,7 @@ int main(int argc, char *argv[])
 	}
 
 	scores_quit();
+	http_quit();
 	close(sockfd);
 	return EXIT_SUCCESS; 
 }

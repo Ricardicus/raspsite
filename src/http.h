@@ -12,6 +12,7 @@ extern "C" {
 #include <errno.h>
 #include "snakegame.h"
 #include "coffee.h"
+#include "hashtable.h"
 
 #define xstr(a) 		#a
 #define str(a)			xstr(a)
@@ -31,6 +32,10 @@ typedef struct http_data_s {
 	char * accept_time;
 } http_data_t;
 
+typedef void (*http_header_callback_t) (int);
+
+void http_init(void);
+void http_quit(void);
 void output_index(int);
 void free_http_data(http_data_t **);
 void output_path(int, const char *);
