@@ -17,6 +17,7 @@ extern "C" {
 #include "hashtable.h"
 #include "snakegame.h"
 #include "coffee.h"
+#include "logger.h"
 
 #ifdef __cplusplus
 }

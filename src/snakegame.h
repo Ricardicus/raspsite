@@ -2,16 +2,15 @@
 extern "C" {
 #endif 
 
-#ifndef HASHTABLE_H
-#include "hashtable.h"
-#endif
-
 #ifndef SNAKEGAME_H
 #define SNAKEGAME_H	
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include "hashtable.h"
+#include "logger.h"	
+
 #define SCORES_MAX_NAME_LENGTH		30
 
 #define VERSION						1

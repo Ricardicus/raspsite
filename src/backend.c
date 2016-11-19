@@ -3,7 +3,6 @@
 #include "backend.h"
 
 static volatile bool run_this_server_please_mister = true;
-static hashtable_t * dict;
 
 void * input_reader_callback(void * data)
 {
@@ -20,7 +19,7 @@ void * input_reader_callback(void * data)
 
 int main(int argc, char *argv[])
 {
-	int sockfd, newsockfd, portno, n;
+	int sockfd, portno;
 	socklen_t clilen; 
 	time_t raw_time;
 	struct tm * time_info;

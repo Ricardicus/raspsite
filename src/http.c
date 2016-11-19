@@ -135,6 +135,7 @@ void output_path(int socket, const char * path)
 	file_type++;
 
 	callback = (http_header_callback_t) get(headers_callback, file_type);
+
 	if ( callback != NULL ){
 		callback(socket);
 		while ( (c = fgetc(fp)) != EOF ){
@@ -146,7 +147,7 @@ void output_path(int socket, const char * path)
 	} else {
 
 		((http_header_callback_t) get(headers_callback, "html"))(socket);
-		
+
 		msg = "<!DOCTYPE html><body><pre>";
 		write(socket,msg, strlen(msg));
 		int c;
@@ -165,7 +166,7 @@ void interpret_and_output(int socket, char * first_line)
 {
 
 	char *c, *args, *command, *path, *cleaner;
-	int arg_count,i;
+	int arg_count;
 	hashtable_t * params;
 
 	// Getting the HTTP command and path!
@@ -261,6 +262,7 @@ void http_init()
 	put(headers_callback, "js", output_js_headers);
 	put(headers_callback, "css", output_css_headers);
 	put(headers_callback, "json", output_json_headers);
+	put(headers_callback, "html", output_html_headers);
 	// Map all kinds of things to jpg for this server..
 	put(headers_callback, "jpg", output_jpg_headers);
 	put(headers_callback, "jpeg", output_jpg_headers);
@@ -281,7 +283,7 @@ void * http_callback(void * http_data_ptr)
 	int n, socket = (int) *http_data->socket;
 	char *client_ip = http_data->client_ip, *time = http_data->accept_time;
 
-	char *msg,first_line[BACKEND_MAX_ARRAY_SIZE], *buffer = malloc(BACKEND_MAX_BUFFER_SIZE); 
+	char first_line[BACKEND_MAX_ARRAY_SIZE], *buffer = malloc(BACKEND_MAX_BUFFER_SIZE); 
 
 	memset(buffer, '\0', BACKEND_MAX_BUFFER_SIZE);
 	n = read(socket,buffer,BACKEND_MAX_BUFFER_SIZE);

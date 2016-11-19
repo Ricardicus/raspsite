@@ -224,3 +224,53 @@ Backend v.1, c. Nov 18 2016 21:11:11
 [Fri Nov 18 21:11:19 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
 [Fri Nov 18 21:11:19 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
 [Fri Nov 18 21:11:25 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+Backend v.1, c. Nov 19 2016 00:40:00
+[Sat Nov 19 00:56:45 2016] 127.0.0.1: GET / HTTP/1.1
+[Sat Nov 19 00:56:45 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov 19 00:56:45 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sat Nov 19 00:56:45 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 00:56:45 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sat Nov 19 00:56:45 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Sat Nov 19 00:56:46 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov 19 00:56:46 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Sat Nov 19 00:56:48 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+Backend v.1, c. Nov 19 2016 01:29:59
+[Sat Nov 19 01:30:11 2016] 127.0.0.1: GET / HTTP/1.1
+[Sat Nov 19 01:30:11 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov 19 01:30:11 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sat Nov 19 01:30:11 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 01:30:11 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sat Nov 19 01:30:12 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Sat Nov 19 01:30:12 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov 19 01:30:12 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Sat Nov 19 01:30:14 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov 19 01:30:19 2016] 127.0.0.1: GET /krypt HTTP/1.1
+error: file type of requested resource krypt was not found.
+[Sat Nov 19 01:30:19 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Sat Nov 19 01:30:19 2016] 127.0.0.1: GET /krypt.html HTTP/1.1
+[Sat Nov 19 01:30:19 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov 19 01:30:19 2016] 127.0.0.1: GET /scripts/kryptering.js HTTP/1.1
+[Sat Nov 19 01:30:19 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 01:30:23 2016] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Nov 19 01:30:24 2016] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Nov 19 01:30:24 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Sat Nov 19 01:30:47 2016] 127.0.0.1: GET /krypt.html HTTP/1.1
+[Sat Nov 19 01:30:47 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov 19 01:30:47 2016] 127.0.0.1: GET /scripts/kryptering.js HTTP/1.1
+[Sat Nov 19 01:30:47 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 01:30:47 2016] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Nov 19 01:30:47 2016] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Nov 19 01:30:47 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Sat Nov 19 01:31:07 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 01:31:07 2016] 127.0.0.1: GET /scripts/jquery.min.map HTTP/1.1
+error: file type of requested resource scripts/jquery.min.map was not found.
+[Sat Nov 19 01:31:45 2016] 127.0.0.1: GET /coffee.html HTTP/1.1
+[Sat Nov 19 01:31:45 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov 19 01:31:45 2016] 127.0.0.1: GET /scripts/kryptering.js HTTP/1.1
+[Sat Nov 19 01:31:45 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 01:31:45 2016] 127.0.0.1: GET /style/cup-hot-coffee.jpg HTTP/1.1
+[Sat Nov 19 01:31:45 2016] 127.0.0.1: GET /coffe.cgi?action=current_coffee HTTP/1.1
+[Sat Nov 19 01:31:45 2016] 127.0.0.1: GET /style/zoega.jpg HTTP/1.1
+[Sat Nov 19 01:31:45 2016] 127.0.0.1: GET /scripts/jquery.min.map HTTP/1.1
+error: file type of requested resource scripts/jquery.min.map was not found.
+[Sat Nov 19 01:31:45 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1

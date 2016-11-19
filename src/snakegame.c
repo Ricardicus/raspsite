@@ -7,8 +7,6 @@
 
 static score_t ** top10 = NULL;
 
-static unsigned long min = ULONG_MAX;
-
 void scores_init() {
 	int n,q;
 	FILE * fp;

@@ -13,6 +13,7 @@ extern "C" {
 #include "snakegame.h"
 #include "coffee.h"
 #include "hashtable.h"
+#include "logger.h"
 
 #define xstr(a) 		#a
 #define str(a)			xstr(a)
@@ -22,9 +23,6 @@ extern "C" {
 #define BACKEND_MAX_NBR_OF_ARGS			20
 #define BACKEND_MAX_ARRAY_SIZE			100
 #define VERSION							1
-
-#define	log_error(...)	do { FILE * fp_log = fopen("log/logg.txt", "a"); if ( errno ) {printf("error:%s.%s:%d %s ", __FILE__, __func__, __LINE__, strerror(errno)); errno = 0;} fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
-#define log(...)		do { FILE * fp_log = fopen("log/logg.txt", "a"); fprintf(fp_log, __VA_ARGS__); printf(__VA_ARGS__); fclose(fp_log); } while(0)
 
 typedef struct http_data_s {
 	int * socket;
