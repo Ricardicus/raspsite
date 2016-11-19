@@ -90,7 +90,7 @@ void output_path(int socket, const char * path)
 {
 	http_header_callback_t callback;
 
-	char * msg, c;
+	char * msg;
 
 	FILE * fp = fopen(path, "r");
 	if ( ! fp ){
@@ -128,7 +128,6 @@ void output_path(int socket, const char * path)
    		fclose(fp);
    		msg = "</pre></body></html>";
    		write(socket,msg, strlen(msg));
-   		close(socket);
    		return;
 	}
 
@@ -138,11 +137,11 @@ void output_path(int socket, const char * path)
 
 	if ( callback != NULL ){
 		callback(socket);
+		int c;
 		while ( (c = fgetc(fp)) != EOF ){
    			write(socket, &c, 1);
    		}
    		fclose(fp);
-   		close(socket);
    		return;
 	} else {
 
@@ -157,7 +156,6 @@ void output_path(int socket, const char * path)
 		fclose(fp);
 		msg = "</pre></body></html>";
 		write(socket,msg, strlen(msg));
-		close(socket);
 
 	}
 }

@@ -274,3 +274,42 @@ error: file type of requested resource scripts/jquery.min.map was not found.
 [Sat Nov 19 01:31:45 2016] 127.0.0.1: GET /scripts/jquery.min.map HTTP/1.1
 error: file type of requested resource scripts/jquery.min.map was not found.
 [Sat Nov 19 01:31:45 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+Backend v.1, c. Nov 19 2016 01:29:59
+[Sat Nov 19 01:34:10 2016] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Nov 19 01:34:10 2016] 127.0.0.1: 
+[Sat Nov 19 01:34:10 2016] 127.0.0.1: 
+[Sat Nov 19 01:34:10 2016] 127.0.0.1: 
+[Sat Nov 19 01:34:10 2016] 127.0.0.1: 
+[Sat Nov 19 01:35:34 2016] 127.0.0.1: GET /style/smallbluegoat.jpg
+Backend v.1, c. Nov 19 2016 01:42:37
+[Sat Nov 19 01:42:53 2016] 127.0.0.1: GET /coffee.html HTTP/1.1
+[Sat Nov 19 01:42:53 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov 19 01:42:53 2016] 127.0.0.1: GET /scripts/kryptering.js HTTP/1.1
+[Sat Nov 19 01:42:53 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 01:42:53 2016] 127.0.0.1: GET /style/cup-hot-coffee.jpg HTTP/1.1
+[Sat Nov 19 01:42:53 2016] 127.0.0.1: GET /coffe.cgi?action=current_coffee HTTP/1.1
+[Sat Nov 19 01:42:53 2016] 127.0.0.1: GET /style/zoega.jpg HTTP/1.1
+[Sat Nov 19 01:42:53 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Sat Nov 19 01:43:09 2016] 127.0.0.1: GET /krypt.html HTTP/1.1
+[Sat Nov 19 01:43:09 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov 19 01:43:09 2016] 127.0.0.1: GET /scripts/kryptering.js HTTP/1.1
+[Sat Nov 19 01:43:09 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 01:43:09 2016] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Nov 19 01:43:09 2016] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Nov 19 01:43:10 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Sat Nov 19 01:43:21 2016] 127.0.0.1: GET /style/smallbluegoat.jpg
+[Sat Nov 19 01:43:59 2016] 127.0.0.1: GET /favicon.ico
+Backend v.1, c. Nov 19 2016 01:48:38
+[Sat Nov 19 01:48:58 2016] 127.0.0.1: GET / HTTP/1.1
+[Sat Nov 19 01:48:58 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov 19 01:48:58 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sat Nov 19 01:48:58 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 01:48:58 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sat Nov 19 01:48:58 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Sat Nov 19 01:48:59 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov 19 01:48:59 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Sat Nov 19 01:49:07 2016] 127.0.0.1: GET /krypt.html HTTP/1.1
+[Sat Nov 19 01:49:07 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov 19 01:49:07 2016] 127.0.0.1: GET /scripts/kryptering.js HTTP/1.1
+[Sat Nov 19 01:49:07 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 01:49:07 2016] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
