@@ -117,17 +117,41 @@ void output_file_not_found(int socket)
 void output_path(int socket, const char * path)
 {
 	http_header_callback_t callback;
+	char * msg; 
+	FILE * fp;
 
-	char * msg;
+	/*
+	* Exceptions to the file output
+	*/  
 
-	FILE * fp = fopen(path, "r");
+	// hiding some sensisitve information
+	if ( (!strstr(path, "/etc/")) ||!strstr(path, "/src/")||!strstr(path, "/log/")){
+		output_file_not_found(socket);
+		return;
+	} 
+
+	// if google chrome asks for icon
+	if ( !strstr(path, "favicon.ico")){
+		output_jpg_headers();
+	   	 fp = fopen("etc/favicon.ico", "r");
+	   	int c;
+	   	while ( (c = fgetc(fp)) != EOF ){
+	   		write(socket, &c, 1);
+	   	}
+	   	fclose(fp);
+		return;
+	}
+
+	/*
+	* Output file if it exists
+	*/
+
+	fp = fopen(path, "r");
 	if ( ! fp ){
 		// sending a signal that it is no file with that name present.
 		output_file_not_found(socket);
 		return;
 	}
-
-	// hiding some sensisitve information
 
 	const char * file_type = path;
 	while (*file_type && *file_type != '.'){
