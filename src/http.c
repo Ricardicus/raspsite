@@ -132,7 +132,7 @@ void output_path(int socket, const char * path)
 
 	// if google chrome asks for icon
 	if ( !strstr(path, "favicon.ico")){
-		output_jpg_headers();
+		output_jpg_headers(socket);
 	   	 fp = fopen("etc/favicon.ico", "r");
 	   	int c;
 	   	while ( (c = fgetc(fp)) != EOF ){
