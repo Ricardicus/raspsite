@@ -34,11 +34,19 @@ typedef void (*http_header_callback_t) (int);
 
 void http_init(void);
 void http_quit(void);
-void output_index(int);
 void free_http_data(http_data_t **);
-void output_path(int, const char *);
 void interpret_and_output(int, char *);
 void * http_callback(void *);
+void output_path(int, const char *);
+void output_index(int);
+
+/* HTTP-Headers */
+void output_file_not_found(int);
+void output_html_headers(int);
+void output_css_headers(int);
+void output_jpg_headers(int);
+void output_json_headers(int);
+void output_js_headers(int);
 
 #endif
 

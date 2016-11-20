@@ -2,7 +2,7 @@
 
 static hashtable_t * headers_callback;
 
-static void output_js_headers(int socket)
+void output_js_headers(int socket)
 {
 	char * msg = "HTTP/1.1 200 OK\r\n";
    	write(socket,msg,strlen(msg));
@@ -10,7 +10,7 @@ static void output_js_headers(int socket)
    	write(socket,msg, strlen(msg));
 }
 
-static void output_json_headers(int socket)
+void output_json_headers(int socket)
 {
 	char * msg = "HTTP/1.1 200 OK\r\n";
    	write(socket,msg,strlen(msg));
@@ -18,7 +18,7 @@ static void output_json_headers(int socket)
    	write(socket,msg, strlen(msg));
 }
 
-static void output_jpg_headers(int socket)
+void output_jpg_headers(int socket)
 {
 	char * msg = "HTTP/1.1 200 OK\r\n";
    	write(socket,msg,strlen(msg));
@@ -32,7 +32,7 @@ static void output_jpg_headers(int socket)
   	write(socket,msg, strlen(msg));
 }
 
-static void output_css_headers(int socket)
+void output_css_headers(int socket)
 {
 	char * msg = "HTTP/1.1 200 OK\r\n";
    	write(socket,msg,strlen(msg));
@@ -40,9 +40,9 @@ static void output_css_headers(int socket)
    	write(socket,msg, strlen(msg));
 }
 
-static void output_html_headers(int socket)
+void output_html_headers(int socket)
 {
-	char * msg = "HTTP/1.0 200 OK\r\n";
+	char * msg = "HTTP/1.1 200 OK\r\n";
    	write(socket,msg,strlen(msg));
    	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
    	write(socket,msg, strlen(msg));
@@ -65,7 +65,7 @@ void free_http_data(http_data_t ** http_data)
 
 void output_index(int socket)
 {
-	char * msg = "HTTP/1.0 200 OK\r\n";
+	char * msg = "HTTP/1.1 200 OK\r\n";
    	write(socket,msg,strlen(msg));
    	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
    	write(socket,msg, strlen(msg));
@@ -86,6 +86,34 @@ void output_index(int socket)
    	close(socket);
 }
 
+void output_file_not_found(int socket)
+{
+	char * msg = "HTTP/1.1 404 Not Found\r\n";
+   	write(socket,msg,strlen(msg));
+   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
+   	write(socket,msg, strlen(msg));
+   	msg = "Pragma: no-cache\r\n";
+	write(socket,msg, strlen(msg));
+	msg = "Expires: 0\r\n";
+	write(socket,msg, strlen(msg));
+   	msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
+   	write(socket,msg, strlen(msg));
+
+   	msg = "<!DOCTYPE html><body><pre>";
+   	write(socket,msg, strlen(msg));
+   	
+   	FILE * fp = fopen("etc/404.txt", "r");
+   	int c;
+   	while ( (c = fgetc(fp)) != EOF ){
+   		write(socket, &c, 1);
+   	}
+   	fclose(fp);
+
+   	msg = "</pre></body></html>";
+   	write(socket,msg, strlen(msg));
+
+}
+
 void output_path(int socket, const char * path)
 {
 	http_header_callback_t callback;
@@ -95,18 +123,11 @@ void output_path(int socket, const char * path)
 	FILE * fp = fopen(path, "r");
 	if ( ! fp ){
 		// sending a signal that it is no file with that name present.
-		log("error: file type of requested resource %s was not found.\n", path);
-		((http_header_callback_t) get(headers_callback, "json"))(socket);
-
-   		msg = "{ \"error\":\"could not find requested resource.\" } ";
-   		write(socket,msg, strlen(msg));
+		output_file_not_found(socket);
 		return;
 	}
-	// file existed!;
 
-	if ( ! memcmp(path, str(CGI_PATH), strlen(str(CGI_PATH))) ){
-		// cgi call
-	}
+	// hiding some sensisitve information
 
 	const char * file_type = path;
 	while (*file_type && *file_type != '.'){
@@ -117,17 +138,8 @@ void output_path(int socket, const char * path)
 		// if the file type_was not found.. 
 		log("error: file type of requested resource %s was not found.\n", path);
 		
-		((http_header_callback_t) get(headers_callback, "html"))(socket);
-
-		msg = "<!DOCTYPE html><body><pre>";
-   		write(socket,msg, strlen(msg));
-   		int c;
-   		while ( (c = fgetc(fp)) != EOF ){
-   			write(socket, &c, 1);
-   		}
-   		fclose(fp);
-   		msg = "</pre></body></html>";
-   		write(socket,msg, strlen(msg));
+		output_file_not_found(socket);
+		fclose(fp);
    		return;
 	}
 

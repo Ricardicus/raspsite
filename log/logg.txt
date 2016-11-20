@@ -313,3 +313,88 @@ Backend v.1, c. Nov 19 2016 01:48:38
 [Sat Nov 19 01:49:07 2016] 127.0.0.1: GET /scripts/kryptering.js HTTP/1.1
 [Sat Nov 19 01:49:07 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
 [Sat Nov 19 01:49:07 2016] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+Backend v.1, c. Nov 19 2016 01:48:38
+[Sat Nov 19 09:56:23 2016] 127.0.0.1: GET / HTTP/1.1
+[Sat Nov 19 09:56:23 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov 19 09:56:23 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sat Nov 19 09:56:23 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 09:56:23 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sat Nov 19 09:56:23 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Sat Nov 19 09:56:24 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Nov 19 09:56:27 2016] 127.0.0.1: GET /krypt HTTP/1.1
+error: file type of requested resource krypt was not found.
+[Sat Nov 19 09:56:27 2016] 127.0.0.1: GET /krypt.html HTTP/1.1
+[Sat Nov 19 09:56:27 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov 19 09:56:27 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 09:56:27 2016] 127.0.0.1: GET /scripts/kryptering.js HTTP/1.1
+[Sat Nov 19 09:56:27 2016] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Nov 19 09:56:43 2016] 127.0.0.1: GET /coffee.html HTTP/1.1
+[Sat Nov 19 09:56:43 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Nov 19 09:56:43 2016] 127.0.0.1: GET /scripts/kryptering.js HTTP/1.1
+[Sat Nov 19 09:56:43 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sat Nov 19 09:56:43 2016] 127.0.0.1: GET /style/cup-hot-coffee.jpg HTTP/1.1
+[Sat Nov 19 09:56:44 2016] 127.0.0.1: GET /coffe.cgi?action=current_coffee HTTP/1.1
+[Sat Nov 19 09:56:44 2016] 127.0.0.1: GET /style/zoega.jpg HTTP/1.1
+Backend v.1, c. Nov 19 2016 01:48:38
+[Sun Nov 20 17:15:47 2016] 127.0.0.1: GET / HTTP/1.1
+[Sun Nov 20 17:15:47 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sun Nov 20 17:15:47 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sun Nov 20 17:15:47 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sun Nov 20 17:15:47 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sun Nov 20 17:15:47 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Sun Nov 20 17:15:48 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sun Nov 20 17:15:51 2016] 127.0.0.1: GET /snake.html HTTP/1.1
+error: file type of requested resource snake.html was not found.
+[Sun Nov 20 17:15:51 2016] 127.0.0.1: GET /src/coffee.c HTTP/1.1
+[Sun Nov 20 17:15:51 2016] 127.0.0.1: 
+[Sun Nov 20 17:15:51 2016] 127.0.0.1: 
+[Sun Nov 20 17:15:51 2016] 127.0.0.1: 
+[Sun Nov 20 17:15:51 2016] 127.0.0.1: 
+[Sun Nov 20 17:16:02 2016] 127.0.0.1: GET /src/coffee.h HTTP/1.1
+[Sun Nov 20 17:16:02 2016] 127.0.0.1: 
+[Sun Nov 20 17:16:02 2016] 127.0.0.1: 
+[Sun Nov 20 17:16:02 2016] 127.0.0.1: 
+[Sun Nov 20 17:16:19 2016] 127.0.0.1: GET /src/hashtable.c HTTP/1.1
+[Sun Nov 20 17:16:19 2016] 127.0.0.1: 
+[Sun Nov 20 17:16:19 2016] 127.0.0.1: 
+[Sun Nov 20 17:16:58 2016] 127.0.0.1: GET /static_scheduling.c HTTP/1.1
+error: file type of requested resource static_scheduling.c was not found.
+[Sun Nov 20 17:16:58 2016] 127.0.0.1: GET /snake.html HTTP/1.1
+error: file type of requested resource snake.html was not found.
+[Sun Nov 20 17:17:09 2016] 127.0.0.1: GET /src/snakegame.h HTTP/1.1
+Backend v.1, c. Nov 20 2016 21:56:17
+[Sun Nov 20 21:56:29 2016] 127.0.0.1: GET / HTTP/1.1
+ERROR on bindingERROR on bindingBackend v.1, c. Nov 20 2016 21:57:23
+[Sun Nov 20 21:57:27 2016] 127.0.0.1: GET / HTTP/1.1
+ERROR on bindingBackend v.1, c. Nov 20 2016 21:58:00
+[Sun Nov 20 21:58:04 2016] 127.0.0.1: GET / HTTP/1.1
+ERROR on bindingBackend v.1, c. Nov 20 2016 21:58:49
+[Sun Nov 20 21:59:13 2016] 127.0.0.1: GET / HTTP/1.1
+Backend v.1, c. Nov 20 2016 21:59:55
+[Sun Nov 20 21:59:58 2016] 127.0.0.1: GET / HTTP/1.1
+ERROR on bindingBackend v.1, c. Nov 20 2016 22:00:46
+[Sun Nov 20 22:00:49 2016] 127.0.0.1: GET / HTTP/1.1
+[Sun Nov 20 22:00:49 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sun Nov 20 22:00:49 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sun Nov 20 22:00:49 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sun Nov 20 22:00:49 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sun Nov 20 22:00:49 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Sun Nov 20 22:00:49 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sun Nov 20 22:00:49 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Sun Nov 20 22:01:05 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sun Nov 20 22:01:11 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sun Nov 20 22:01:11 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sun Nov 20 22:01:11 2016] 127.0.0.1: GET /scripts/jquery.min.map HTTP/1.1
+[Sun Nov 20 22:01:24 2016] 127.0.0.1: GET /dsa HTTP/1.1
+[Sun Nov 20 22:01:24 2016] 127.0.0.1: GET /scripts/jquery.min.map HTTP/1.1
+ERROR on bindingBackend v.1, c. Nov 20 2016 22:01:58
+[Sun Nov 20 22:02:08 2016] 127.0.0.1: GET /dsa HTTP/1.1
+[Sun Nov 20 22:02:24 2016] 127.0.0.1: GET /dsadsadsa HTTP/1.1
+[Sun Nov 20 22:02:24 2016] 127.0.0.1: GET / HTTP/1.1
+[Sun Nov 20 22:02:24 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sun Nov 20 22:02:28 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sun Nov 20 22:02:28 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sun Nov 20 22:02:28 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sun Nov 20 22:02:28 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Sun Nov 20 22:02:28 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sun Nov 20 22:02:30 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
