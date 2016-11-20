@@ -125,15 +125,15 @@ void output_path(int socket, const char * path)
 	*/  
 
 	// hiding some sensisitve information
-	if ( (!strstr(path, "/etc/")) ||!strstr(path, "/src/")||!strstr(path, "/log/")){
+	if ( (strstr(path, "/etc/") != NULL) ||( strstr(path, "/src/") != NULL )||(strstr(path, "/log/") != NULL)){
 		output_file_not_found(socket);
 		return;
 	} 
 
 	// if google chrome asks for icon
-	if ( !strstr(path, "favicon.ico")){
+	if ( strstr(path, "favicon.ico") != NULL ){
 		output_jpg_headers(socket);
-	   	 fp = fopen("etc/favicon.ico", "r");
+	   	fp = fopen("etc/favicon.ico", "r");
 	   	int c;
 	   	while ( (c = fgetc(fp)) != EOF ){
 	   		write(socket, &c, 1);

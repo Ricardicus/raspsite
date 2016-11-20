@@ -398,3 +398,26 @@ ERROR on bindingBackend v.1, c. Nov 20 2016 22:01:58
 [Sun Nov 20 22:02:28 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
 [Sun Nov 20 22:02:28 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
 [Sun Nov 20 22:02:30 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+Backend v.1, c. Nov 20 2016 22:35:06
+[Sun Nov 20 22:35:13 2016] 127.0.0.1: GET / HTTP/1.1
+[Sun Nov 20 22:35:13 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sun Nov 20 22:35:13 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sun Nov 20 22:35:13 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sun Nov 20 22:35:13 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sun Nov 20 22:35:13 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Sun Nov 20 22:35:13 2016] 127.0.0.1: GET /favicon.ico HTTP/1.1
+ERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingBackend v.1, c. Nov 20 2016 22:36:30
+[Sun Nov 20 22:36:37 2016] 127.0.0.1: GET / HTTP/1.1
+[Sun Nov 20 22:36:37 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sun Nov 20 22:36:37 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sun Nov 20 22:36:37 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sun Nov 20 22:36:38 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sun Nov 20 22:36:38 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+ERROR on bindingERROR on bindingBackend v.1, c. Nov 20 2016 22:38:09
+[Sun Nov 20 22:38:13 2016] 127.0.0.1: GET / HTTP/1.1
+[Sun Nov 20 22:38:13 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Sun Nov 20 22:38:13 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Sun Nov 20 22:38:13 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Sun Nov 20 22:38:13 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Sun Nov 20 22:38:13 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Sun Nov 20 22:38:13 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
