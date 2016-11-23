@@ -10,3 +10,7 @@ snakegame.o: snakegame.c snakegame.h logger.h
 http.o: http.c http.h snakegame.h coffee.h hashtable.h logger.h
 coffee.o: coffee.c coffee.h
 hashtable.o: hashtable.c hashtable.h
+
+.PHONY : clean
+clean : 
+	-rm *.o $(OBJS) backend
