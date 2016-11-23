@@ -421,3 +421,13 @@ ERROR on bindingERROR on bindingBackend v.1, c. Nov 20 2016 22:38:09
 [Sun Nov 20 22:38:13 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
 [Sun Nov 20 22:38:13 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
 [Sun Nov 20 22:38:13 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+Backend v.1, c. Nov 23 2016 19:00:22
+[Wed Nov 23 19:00:49 2016] 127.0.0.1: GET / HTTP/1.1
+[Wed Nov 23 19:00:49 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Wed Nov 23 19:00:50 2016] 127.0.0.1: GET /scripts/snake.js HTTP/1.1
+[Wed Nov 23 19:00:50 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
+[Wed Nov 23 19:00:50 2016] 127.0.0.1: GET /style/snakelook.css HTTP/1.1
+[Wed Nov 23 19:00:50 2016] 127.0.0.1: GET /style/ajax-loader.gif HTTP/1.1
+[Wed Nov 23 19:00:50 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Nov 23 19:00:53 2016] 127.0.0.1: GET /game.cgi?action=get_highscore HTTP/1.1
+Backend v.1, c. Nov 23 2016 19:00:22
