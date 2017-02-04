@@ -35,7 +35,7 @@ typedef void (*http_header_callback_t) (int);
 void http_init(void);
 void http_quit(void);
 void free_http_data(http_data_t **);
-void interpret_and_output(int, char *);
+void interpret_and_output(int, char*, char*);
 void * http_callback(void *);
 void output_path(int, const char *);
 void output_index(int);

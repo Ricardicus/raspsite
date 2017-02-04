@@ -196,12 +196,40 @@ void output_path(int socket, const char * path)
 	}
 }
 
-void interpret_and_output(int socket, char * first_line)
+void interpret_and_output(int socket, char * client_ip, char * time)
 {
 
 	char *c, *args, *command, *path, *cleaner;
-	int arg_count;
+	int arg_count, found, n;
+	unsigned long count;
 	hashtable_t * params;
+
+	char first_line[BACKEND_MAX_ARRAY_SIZE], *buffer = malloc(BACKEND_MAX_BUFFER_SIZE); 
+
+	memset(buffer, '\0', BACKEND_MAX_BUFFER_SIZE);
+	n = read(socket,buffer,BACKEND_MAX_BUFFER_SIZE);
+
+	// Getting the first line of the input
+
+	c = buffer;
+	found = 0;
+	count = 0;
+	while (*c && !found){ if ( *c == '\n'){ found = 1; } ++c; ++count;}
+	memset(first_line, '\0', sizeof(first_line));
+	strncpy(first_line, buffer, count);
+
+	first_line[sizeof(first_line) - 1] = '\0';
+
+	c = first_line;
+	while (*c) {
+		if ( *c == '\n'){
+			*c = '\0';
+			break;
+		}
+		++c;
+	}
+
+	log("[%s] %s: %s\n", time, client_ip, first_line);
 
 	// Getting the HTTP command and path!
 	c = first_line;
@@ -287,6 +315,8 @@ void interpret_and_output(int socket, char * first_line)
 	} else if ( !strcmp(command, "POST") ){
 
 	}
+
+	free(buffer);
 	
 }
 
@@ -314,45 +344,13 @@ void * http_callback(void * http_data_ptr)
 
 	http_data_t * http_data = (http_data_t *) http_data_ptr;
 
-	int n, socket = (int) *http_data->socket;
+	int socket = (int) *http_data->socket;
 	char *client_ip = http_data->client_ip, *time = http_data->accept_time;
 
-	char first_line[BACKEND_MAX_ARRAY_SIZE], *buffer = malloc(BACKEND_MAX_BUFFER_SIZE); 
-
-	memset(buffer, '\0', BACKEND_MAX_BUFFER_SIZE);
-	n = read(socket,buffer,BACKEND_MAX_BUFFER_SIZE);
-
-	// Getting the first line of the input
-
-	char * c = buffer;
-	int found = 0;
-	unsigned long count = 0;
-	while (*c && !found){
-		if ( *c == '\n'){
-			found = 1;
-		}
-		++c; ++count;
-	}
-	memset(first_line, '\0', sizeof(first_line));
-	strncpy(first_line, buffer, count);
-	first_line[sizeof(first_line) - 1] = '\0';
-
-	c = first_line;
-	while (*c) {
-		if ( *c == '\n'){
-			*c = '\0';
-			break;
-		}
-		++c;
-	}
-
-	log("[%s] %s: %s\n", time, client_ip, first_line);
-
 	// look at the first line of 'buffer' and do what you got to do..
-	interpret_and_output(socket, first_line);
+	interpret_and_output(socket, client_ip, time);
    
    	close(socket);
-   	free(buffer);
 
    	free_http_data(&http_data);
 
