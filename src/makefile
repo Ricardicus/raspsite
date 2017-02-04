@@ -5,7 +5,7 @@ OBJS = backend.o snakegame.o http.o coffee.o hashtable.o
 all : backend
 
 backend: $(OBJS)
-	$(CC) $(OBJS) $(CFLAGS)
+	$(CC) $(OBJS) $(CFLAGS) -o backend
 
 backend.o: backend.c backend.h http.h hashtable.h snakegame.h coffee.h logger.h
 snakegame.o: snakegame.c snakegame.h logger.h
