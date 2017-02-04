@@ -9,4 +9,4 @@
 *.elf
 
 # For building on my laptop, I use another makefile
-src/makefile
+
