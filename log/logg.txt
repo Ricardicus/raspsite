@@ -444,3 +444,450 @@ Backend v.1, c. Nov 23 2016 19:53:08
 [Wed Nov 23 19:54:33 2016] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
 [Wed Nov 23 19:54:33 2016] 127.0.0.1: GET /style/look.css HTTP/1.1
 [Wed Nov 23 19:54:33 2016] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+Backend v.1, c. Jan 31 2017 21:09:39
+[Tue Jan 31 21:10:13 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 21:10:13 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 21:10:14 2017] 192.168.1.133: GET /style/look.css HTTP/1.1
+[Tue Jan 31 21:10:14 2017] 192.168.1.133: GET /style/snakelook.css HTTP/1.1
+[Tue Jan 31 21:10:14 2017] 192.168.1.133: GET /scripts/snake.js HTTP/1.1
+[Tue Jan 31 21:10:14 2017] 192.168.1.133: GET /style/ajax-loader.gif HTTP/1.1
+[Tue Jan 31 21:10:14 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 21:10:14 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Tue Jan 31 21:10:23 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+Backend v.1, c. Jan 31 2017 21:09:39
+[Tue Jan 31 21:13:57 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 21:13:57 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Tue Jan 31 21:13:57 2017] 192.168.1.133: 
+[Tue Jan 31 21:13:57 2017] 192.168.1.133: 
+[Tue Jan 31 21:13:57 2017] 192.168.1.133: 
+Backend v.1, c. Jan 31 2017 21:09:39
+[Tue Jan 31 21:16:58 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 21:16:58 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Tue Jan 31 21:16:58 2017] 192.168.1.133: 
+[Tue Jan 31 21:17:17 2017] 192.168.1.133: GET /snake.html HTTP/1.1
+[Tue Jan 31 21:17:17 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 21:17:17 2017] 192.168.1.133: GET /scripts/snake.js HTTP/1.1
+[Tue Jan 31 21:17:17 2017] 192.168.1.133: GET /style/look.css HTTP/1.1
+[Tue Jan 31 21:17:17 2017] 192.168.1.133: GET /style/snakelook.css HTTP/1.1
+[Tue Jan 31 21:17:17 2017] 192.168.1.133: GET /style/ajax-loader.gif HTTP/1.1
+[Tue Jan 31 21:17:18 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 21:17:19 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 21:17:19 2017] 192.168.1.133: 
+[Tue Jan 31 21:17:19 2017] 192.168.1.133: 
+[Tue Jan 31 21:17:19 2017] 192.168.1.133: 
+[Tue Jan 31 21:26:03 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 21:26:03 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:26:03 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Tue Jan 31 21:26:50 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 21:26:50 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:26:50 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Tue Jan 31 21:28:13 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 21:28:13 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:28:13 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Tue Jan 31 21:28:14 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 21:28:14 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:28:14 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Tue Jan 31 21:28:17 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 21:28:17 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:28:17 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Tue Jan 31 21:28:29 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 21:28:29 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:28:29 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Tue Jan 31 21:30:05 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 21:30:05 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:30:05 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Tue Jan 31 21:30:59 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 21:30:59 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:34:05 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 21:34:05 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:37:40 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 21:37:40 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:37:50 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 21:37:50 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:37:54 2017] 192.168.1.128: GET /snake.html HTTP/1.1
+[Tue Jan 31 21:37:54 2017] 192.168.1.128: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 21:37:54 2017] 192.168.1.128: GET /scripts/snake.js HTTP/1.1
+[Tue Jan 31 21:37:54 2017] 192.168.1.128: GET /style/look.css HTTP/1.1
+[Tue Jan 31 21:37:54 2017] 192.168.1.128: GET /style/snakelook.css HTTP/1.1
+[Tue Jan 31 21:37:54 2017] 192.168.1.128: GET /style/ajax-loader.gif HTTP/1.1
+[Tue Jan 31 21:37:54 2017] 192.168.1.128: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 21:37:56 2017] 192.168.1.128: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 21:38:31 2017] 192.168.1.128: GET /snake.html HTTP/1.1
+[Tue Jan 31 21:38:31 2017] 192.168.1.128: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 21:38:31 2017] 192.168.1.128: GET /scripts/snake.js HTTP/1.1
+[Tue Jan 31 21:38:31 2017] 192.168.1.128: GET /style/look.css HTTP/1.1
+[Tue Jan 31 21:38:31 2017] 192.168.1.128: GET /style/snakelook.css HTTP/1.1
+[Tue Jan 31 21:38:31 2017] 192.168.1.128: GET /style/ajax-loader.gif HTTP/1.1
+[Tue Jan 31 21:38:31 2017] 192.168.1.128: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 21:38:33 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 21:38:33 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:38:37 2017] 192.168.1.128: GET /coffe.html HTTP/1.1
+[Tue Jan 31 21:38:47 2017] 192.168.1.128: GET /coffee.html HTTP/1.1
+[Tue Jan 31 21:38:47 2017] 192.168.1.128: GET /style/look.css HTTP/1.1
+[Tue Jan 31 21:38:47 2017] 192.168.1.128: GET /scripts/kryptering.js HTTP/1.1
+[Tue Jan 31 21:38:47 2017] 192.168.1.128: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 21:38:48 2017] 192.168.1.128: GET /coffe.cgi?action=current_coffee HTTP/1.1
+[Tue Jan 31 21:38:48 2017] 192.168.1.128: GET /style/cup-hot-coffee.jpg HTTP/1.1
+[Tue Jan 31 21:38:48 2017] 192.168.1.128: GET /style/.jpg HTTP/1.1
+[Tue Jan 31 21:38:52 2017] 192.168.1.128: GET /coffee.html HTTP/1.1
+[Tue Jan 31 21:38:52 2017] 192.168.1.128: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 21:38:52 2017] 192.168.1.128: GET /style/look.css HTTP/1.1
+[Tue Jan 31 21:38:52 2017] 192.168.1.128: GET /scripts/kryptering.js HTTP/1.1
+[Tue Jan 31 21:38:53 2017] 192.168.1.128: GET /style/cup-hot-coffee.jpg HTTP/1.1
+[Tue Jan 31 21:38:53 2017] 192.168.1.128: GET /coffe.cgi?action=current_coffee HTTP/1.1
+[Tue Jan 31 21:38:53 2017] 192.168.1.128: GET /style/.jpg HTTP/1.1
+[Tue Jan 31 21:38:59 2017] 192.168.1.128: GET /coffee.html HTTP/1.1
+[Tue Jan 31 21:38:59 2017] 192.168.1.128: GET /style/look.css HTTP/1.1
+[Tue Jan 31 21:39:00 2017] 192.168.1.128: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 21:39:00 2017] 192.168.1.128: GET /scripts/kryptering.js HTTP/1.1
+[Tue Jan 31 21:39:00 2017] 192.168.1.128: GET /style/cup-hot-coffee.jpg HTTP/1.1
+[Tue Jan 31 21:39:00 2017] 192.168.1.128: GET /coffe.cgi?action=current_coffee HTTP/1.1
+[Tue Jan 31 21:39:00 2017] 192.168.1.128: GET /style/.jpg HTTP/1.1
+[Tue Jan 31 21:39:01 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 21:39:01 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:39:02 2017] 192.168.1.128: GET /snake.html HTTP/1.1
+[Tue Jan 31 21:39:02 2017] 192.168.1.128: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 21:39:02 2017] 192.168.1.128: GET /scripts/snake.js HTTP/1.1
+[Tue Jan 31 21:39:02 2017] 192.168.1.128: GET /style/look.css HTTP/1.1
+[Tue Jan 31 21:39:02 2017] 192.168.1.128: GET /style/snakelook.css HTTP/1.1
+[Tue Jan 31 21:39:02 2017] 192.168.1.128: GET /style/ajax-loader.gif HTTP/1.1
+[Tue Jan 31 21:39:02 2017] 192.168.1.128: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 21:39:07 2017] 192.168.1.128: GET /snake.html HTTP/1.1
+[Tue Jan 31 21:39:07 2017] 192.168.1.128: GET /scripts/snake.js HTTP/1.1
+[Tue Jan 31 21:39:07 2017] 192.168.1.128: GET /style/look.css HTTP/1.1
+[Tue Jan 31 21:39:07 2017] 192.168.1.128: GET /style/snakelook.css HTTP/1.1
+[Tue Jan 31 21:39:07 2017] 192.168.1.128: GET /style/ajax-loader.gif HTTP/1.1
+[Tue Jan 31 21:39:07 2017] 192.168.1.128: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 21:39:08 2017] 192.168.1.128: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 21:39:09 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 21:39:09 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:39:09 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 21:39:10 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:39:18 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 21:39:18 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:47:42 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 21:47:42 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 21:47:48 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 21:47:48 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+Backend v.1, c. Jan 31 2017 21:09:39
+Backend v.1, c. Jan 31 2017 21:09:39
+Backend v.1, c. Jan 31 2017 21:09:39
+Backend v.1, c. Jan 31 2017 21:09:39
+[Tue Jan 31 22:05:50 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 22:05:50 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:05:50 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Tue Jan 31 22:06:58 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 22:06:58 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:08:19 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 22:08:19 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:08:23 2017] 192.168.1.133: GET /snake.html HTTP/1.1
+[Tue Jan 31 22:08:23 2017] 192.168.1.133: GET /style/look.css HTTP/1.1
+[Tue Jan 31 22:08:23 2017] 192.168.1.133: GET /style/snakelook.css HTTP/1.1
+[Tue Jan 31 22:08:23 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 22:08:23 2017] 192.168.1.133: GET /scripts/snake.js HTTP/1.1
+[Tue Jan 31 22:08:24 2017] 192.168.1.133: GET /style/ajax-loader.gif HTTP/1.1
+[Tue Jan 31 22:08:24 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 22:08:30 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 22:08:40 2017] 192.168.1.133: GET /game.cgi?action=post_score&name=Name&score=3 HTTP/1.1
+[Tue Jan 31 22:08:40 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 22:08:41 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 22:09:00 2017] 192.168.1.133: GET /snake.html HTTP/1.1
+[Tue Jan 31 22:09:00 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 22:09:00 2017] 192.168.1.133: GET /scripts/snake.js HTTP/1.1
+[Tue Jan 31 22:09:00 2017] 192.168.1.133: GET /style/look.css HTTP/1.1
+[Tue Jan 31 22:09:00 2017] 192.168.1.133: GET /style/snakelook.css HTTP/1.1
+[Tue Jan 31 22:09:00 2017] 192.168.1.133: GET /style/ajax-loader.gif HTTP/1.1
+[Tue Jan 31 22:09:01 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 22:10:48 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 22:10:48 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:10:54 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 22:10:54 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:11:29 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 22:11:29 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:13:54 2017] 77.218.230.41: GET / HTTP/1.1
+[Tue Jan 31 22:13:54 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:15:36 2017] 77.218.230.41: GET / HTTP/1.1
+[Tue Jan 31 22:15:37 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:15:41 2017] 77.218.230.41: GET / HTTP/1.1
+[Tue Jan 31 22:15:41 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:15:46 2017] 77.218.230.41: GET /snake.html HTTP/1.1
+[Tue Jan 31 22:15:46 2017] 77.218.230.41: GET /style/look.css HTTP/1.1
+[Tue Jan 31 22:15:46 2017] 77.218.230.41: GET /scripts/snake.js HTTP/1.1
+[Tue Jan 31 22:15:46 2017] 77.218.230.41: GET /style/snakelook.css HTTP/1.1
+[Tue Jan 31 22:15:46 2017] 77.218.230.41: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 22:15:47 2017] 77.218.230.41: GET /style/ajax-loader.gif HTTP/1.1
+[Tue Jan 31 22:15:47 2017] 77.218.230.41: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 22:15:51 2017] 77.218.230.41: GET /snake.html HTTP/1.1
+[Tue Jan 31 22:15:51 2017] 77.218.230.41: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 22:15:51 2017] 77.218.230.41: GET /scripts/snake.js HTTP/1.1
+[Tue Jan 31 22:15:51 2017] 77.218.230.41: GET /style/look.css HTTP/1.1
+[Tue Jan 31 22:15:51 2017] 77.218.230.41: GET /style/snakelook.css HTTP/1.1
+[Tue Jan 31 22:15:51 2017] 77.218.230.41: GET /style/ajax-loader.gif HTTP/1.1
+[Tue Jan 31 22:15:52 2017] 77.218.230.41: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 22:15:52 2017] 77.218.230.41: GET / HTTP/1.1
+[Tue Jan 31 22:15:53 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+Backend v.1, c. Jan 31 2017 21:09:39
+Backend v.1, c. Jan 31 2017 21:09:39
+[Tue Jan 31 22:23:59 2017] 192.168.1.133: GET /snake.html HTTP/1.1
+[Tue Jan 31 22:23:59 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Tue Jan 31 22:23:59 2017] 192.168.1.133: GET /scripts/snake.js HTTP/1.1
+[Tue Jan 31 22:23:59 2017] 192.168.1.133: GET /style/look.css HTTP/1.1
+[Tue Jan 31 22:23:59 2017] 192.168.1.133: GET /style/snakelook.css HTTP/1.1
+[Tue Jan 31 22:23:59 2017] 192.168.1.133: GET /style/ajax-loader.gif HTTP/1.1
+[Tue Jan 31 22:24:00 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Tue Jan 31 22:24:00 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Tue Jan 31 22:24:09 2017] 77.218.230.41: GET / HTTP/1.1
+[Tue Jan 31 22:24:09 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:24:17 2017] 77.218.230.41: GET / HTTP/1.1
+[Tue Jan 31 22:24:17 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:25:15 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 22:25:15 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:25:15 2017] 192.168.1.133: 
+[Tue Jan 31 22:25:15 2017] 192.168.1.133: 
+[Tue Jan 31 22:25:15 2017] 192.168.1.133: 
+[Tue Jan 31 22:25:15 2017] 192.168.1.133: 
+[Tue Jan 31 22:26:36 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 22:26:36 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:26:36 2017] 192.168.1.133: 
+[Tue Jan 31 22:26:36 2017] 192.168.1.133: 
+[Tue Jan 31 22:26:36 2017] 192.168.1.133: 
+[Tue Jan 31 22:28:22 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 22:28:22 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:28:22 2017] 192.168.1.133: 
+[Tue Jan 31 22:28:22 2017] 192.168.1.133: 
+[Tue Jan 31 22:29:19 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 22:29:19 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:29:19 2017] 192.168.1.133: 
+[Tue Jan 31 22:29:19 2017] 192.168.1.133: 
+[Tue Jan 31 22:39:47 2017] 192.168.1.133: GET / HTTP/1.1
+[Tue Jan 31 22:39:47 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:39:47 2017] 192.168.1.133: 
+[Tue Jan 31 22:46:48 2017] 186.134.145.50: GET / HTTP/1.0
+[Tue Jan 31 22:49:41 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 22:49:41 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 22:58:13 2017] 77.218.230.41: GET / HTTP/1.1
+[Tue Jan 31 22:58:13 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 23:03:51 2017] 77.218.230.41: GET / HTTP/1.1
+[Tue Jan 31 23:03:51 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 23:03:59 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 23:03:59 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Tue Jan 31 23:14:32 2017] 192.168.1.128: GET / HTTP/1.1
+[Tue Jan 31 23:14:32 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 00:47:42 2017] 83.213.79.56: GET / HTTP/1.0
+[Wed Feb  1 04:56:17 2017] 79.94.197.195: GET / HTTP/1.1
+[Wed Feb  1 06:17:41 2017] 192.168.1.128: GET / HTTP/1.1
+[Wed Feb  1 06:17:41 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 06:17:43 2017] 192.168.1.128: GET / HTTP/1.1
+[Wed Feb  1 06:17:43 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 06:46:14 2017] 103.37.145.235: GET http://www.baidu.com/favicon.ico HTTP/1.1
+[Wed Feb  1 06:50:31 2017] 192.168.1.128: GET / HTTP/1.1
+[Wed Feb  1 06:50:31 2017] 192.168.1.128: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 07:25:26 2017] 130.235.136.19: GET / HTTP/1.1
+[Wed Feb  1 07:25:26 2017] 130.235.136.19: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 08:07:28 2017] 130.235.136.19: GET / HTTP/1.1
+[Wed Feb  1 08:07:28 2017] 130.235.136.19: GET /apple-touch-icon-precomposed.png HTTP/1.1
+[Wed Feb  1 08:07:28 2017] 130.235.136.19: GET /apple-touch-icon.png HTTP/1.1
+[Wed Feb  1 08:07:28 2017] 130.235.136.19: GET /favicon.ico HTTP/1.1
+[Wed Feb  1 08:07:35 2017] 130.235.136.16: GET / HTTP/1.1
+[Wed Feb  1 08:07:35 2017] 130.235.136.16: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 08:10:49 2017] 130.235.136.19: GET / HTTP/1.1
+[Wed Feb  1 08:10:49 2017] 130.235.136.19: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 09:59:05 2017] 169.54.233.119: GET / HTTP/1.1
+[Wed Feb  1 10:19:18 2017] 179.36.157.150: GET / HTTP/1.0
+[Wed Feb  1 10:34:40 2017] 77.218.230.41: GET / HTTP/1.1
+[Wed Feb  1 10:34:40 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 10:49:08 2017] 77.218.230.41: GET / HTTP/1.1
+[Wed Feb  1 10:49:08 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 11:07:52 2017] 77.218.230.41: GET / HTTP/1.1
+[Wed Feb  1 11:07:52 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 11:08:52 2017] 77.218.230.41: GET / HTTP/1.1
+[Wed Feb  1 11:08:52 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 11:08:57 2017] 77.218.230.41: GET / HTTP/1.1
+[Wed Feb  1 11:08:58 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 11:08:58 2017] 77.218.230.41: GET /snake.html HTTP/1.1
+[Wed Feb  1 11:08:58 2017] 77.218.230.41: GET /scripts/jquery-min.js HTTP/1.1
+[Wed Feb  1 11:08:58 2017] 77.218.230.41: GET /scripts/snake.js HTTP/1.1
+[Wed Feb  1 11:08:58 2017] 77.218.230.41: GET /style/snakelook.css HTTP/1.1
+[Wed Feb  1 11:08:58 2017] 77.218.230.41: GET /style/look.css HTTP/1.1
+[Wed Feb  1 11:08:58 2017] 77.218.230.41: GET /style/ajax-loader.gif HTTP/1.1
+[Wed Feb  1 11:08:59 2017] 77.218.230.41: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 11:09:02 2017] 77.218.230.41: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 11:36:52 2017] 77.218.230.41: GET / HTTP/1.1
+[Wed Feb  1 11:36:52 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 12:17:13 2017] 77.218.230.41: GET / HTTP/1.1
+[Wed Feb  1 12:17:13 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 12:17:18 2017] 77.218.230.41: GET / HTTP/1.1
+[Wed Feb  1 12:17:18 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 12:17:24 2017] 77.218.230.41: GET /coffee.html HTTP/1.1
+[Wed Feb  1 12:17:24 2017] 77.218.230.41: GET /scripts/jquery-min.js HTTP/1.1
+[Wed Feb  1 12:17:24 2017] 77.218.230.41: GET /scripts/kryptering.js HTTP/1.1
+[Wed Feb  1 12:17:24 2017] 77.218.230.41: GET /style/look.css HTTP/1.1
+[Wed Feb  1 12:17:24 2017] 77.218.230.41: GET /coffe.cgi?action=current_coffee HTTP/1.1
+[Wed Feb  1 12:17:24 2017] 77.218.230.41: GET /style/cup-hot-coffee.jpg HTTP/1.1
+[Wed Feb  1 12:17:24 2017] 77.218.230.41: GET /style/.jpg HTTP/1.1
+[Wed Feb  1 12:17:36 2017] 77.218.230.41: GET /coffee.html HTTP/1.1
+[Wed Feb  1 12:17:37 2017] 77.218.230.41: GET /scripts/kryptering.js HTTP/1.1
+[Wed Feb  1 12:17:37 2017] 77.218.230.41: GET /scripts/jquery-min.js HTTP/1.1
+[Wed Feb  1 12:17:37 2017] 77.218.230.41: GET /style/look.css HTTP/1.1
+[Wed Feb  1 12:17:37 2017] 77.218.230.41: GET /style/cup-hot-coffee.jpg HTTP/1.1
+[Wed Feb  1 12:17:37 2017] 77.218.230.41: GET /coffe.cgi?action=current_coffee HTTP/1.1
+[Wed Feb  1 12:17:37 2017] 77.218.230.41: GET /style/.jpg HTTP/1.1
+[Wed Feb  1 12:17:38 2017] 77.218.230.41: GET / HTTP/1.1
+[Wed Feb  1 12:17:38 2017] 77.218.230.41: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 12:17:39 2017] 77.218.230.41: GET /snake.html HTTP/1.1
+[Wed Feb  1 12:17:39 2017] 77.218.230.41: GET /scripts/jquery-min.js HTTP/1.1
+[Wed Feb  1 12:17:39 2017] 77.218.230.41: GET /style/snakelook.css HTTP/1.1
+[Wed Feb  1 12:17:39 2017] 77.218.230.41: GET /scripts/snake.js HTTP/1.1
+[Wed Feb  1 12:17:39 2017] 77.218.230.41: GET /style/look.css HTTP/1.1
+[Wed Feb  1 12:17:39 2017] 77.218.230.41: GET /style/ajax-loader.gif HTTP/1.1
+[Wed Feb  1 12:17:40 2017] 77.218.230.41: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 13:27:05 2017] 130.235.200.169: GET /snake.html HTTP/1.1
+[Wed Feb  1 13:27:05 2017] 130.235.200.169: GET /scripts/jquery-min.js HTTP/1.1
+[Wed Feb  1 13:27:05 2017] 130.235.200.169: GET /scripts/snake.js HTTP/1.1
+[Wed Feb  1 13:27:05 2017] 130.235.200.169: GET /style/snakelook.css HTTP/1.1
+[Wed Feb  1 13:27:05 2017] 130.235.200.169: GET /style/ajax-loader.gif HTTP/1.1
+[Wed Feb  1 13:27:05 2017] 130.235.200.169: GET /style/look.css HTTP/1.1
+[Wed Feb  1 13:27:06 2017] 130.235.200.169: GET /favicon.ico HTTP/1.1
+[Wed Feb  1 13:27:06 2017] 130.235.200.169: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 13:27:06 2017] 130.235.200.169: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 13:27:35 2017] 130.235.200.169: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 13:27:35 2017] 130.235.200.169: GET /game.cgi?action=post_score&name=Rickard&Bjoern&score=6 HTTP/1.1
+[Wed Feb  1 13:27:36 2017] 130.235.200.169: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 13:27:36 2017] 130.235.200.169: 
+[Wed Feb  1 13:27:54 2017] 130.235.200.169: GET /game.cgi?action=post_score&name=Rickard&Bjoern&score=2 HTTP/1.1
+[Wed Feb  1 13:27:54 2017] 130.235.200.169: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 13:27:55 2017] 130.235.200.169: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 13:27:55 2017] 130.235.200.169: GET /snake.html HTTP/1.1
+[Wed Feb  1 13:27:58 2017] 130.235.200.169: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 13:27:58 2017] 130.235.200.169: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 13:27:06 2017] 130.235.200.169: 
+[Wed Feb  1 13:51:21 2017] 130.235.200.169: GET / HTTP/1.1
+[Wed Feb  1 13:51:21 2017] 130.235.200.169: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 13:51:30 2017] 130.235.200.169: GET /snake.html HTTP/1.1
+[Wed Feb  1 13:51:30 2017] 130.235.200.169: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 13:51:30 2017] 130.235.200.169: GET /krypt.html HTTP/1.1
+[Wed Feb  1 13:51:36 2017] 130.235.200.169: GET /scripts/kryptering.js HTTP/1.1
+[Wed Feb  1 13:51:36 2017] 130.235.200.169: GET /style/smallbluegoat.jpg HTTP/1.1
+[Wed Feb  1 13:54:35 2017] 130.235.200.169: GET / HTTP/1.1
+[Wed Feb  1 13:54:47 2017] 130.235.200.169: GET /krypt.html HTTP/1.1
+[Wed Feb  1 13:54:47 2017] 130.235.200.169: GET /snake.html HTTP/1.1
+[Wed Feb  1 13:54:47 2017] 130.235.200.169: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 13:54:55 2017] 130.235.200.169: GET /coffee.html HTTP/1.1
+[Wed Feb  1 13:54:55 2017] 130.235.200.169: GET /coffe.cgi?action=current_coffee HTTP/1.1
+[Wed Feb  1 13:54:55 2017] 130.235.200.169: GET /style/cup-hot-coffee.jpg HTTP/1.1
+[Wed Feb  1 13:54:55 2017] 130.235.200.169: GET /style/.jpg HTTP/1.1
+[Wed Feb  1 13:56:24 2017] 130.235.200.169: GET /krypt.html HTTP/1.1
+[Wed Feb  1 15:22:20 2017] 192.168.1.133: GET / HTTP/1.1
+[Wed Feb  1 15:22:20 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 15:22:20 2017] 192.168.1.133: 
+[Wed Feb  1 15:22:36 2017] 192.168.1.133: GET /krypt.html HTTP/1.1
+[Wed Feb  1 15:22:36 2017] 192.168.1.133: GET /scripts/kryptering.js HTTP/1.1
+[Wed Feb  1 15:22:36 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Wed Feb  1 15:22:37 2017] 192.168.1.133: GET /style/look.css HTTP/1.1
+[Wed Feb  1 15:22:37 2017] 192.168.1.133: GET /style/smallbluegoat.jpg HTTP/1.1
+[Wed Feb  1 15:22:47 2017] 192.168.1.133: GET /log/logg.txt HTTP/1.1
+[Wed Feb  1 15:22:47 2017] 192.168.1.133: 
+[Wed Feb  1 15:22:47 2017] 192.168.1.133: 
+[Wed Feb  1 15:22:47 2017] 192.168.1.133: 
+[Wed Feb  1 15:23:28 2017] 192.168.1.133: GET /snake.html HTTP/1.1
+[Wed Feb  1 15:23:28 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Wed Feb  1 15:23:28 2017] 192.168.1.133: GET /scripts/snake.js HTTP/1.1
+[Wed Feb  1 15:23:28 2017] 192.168.1.133: GET /style/look.css HTTP/1.1
+[Wed Feb  1 15:23:28 2017] 192.168.1.133: GET /style/snakelook.css HTTP/1.1
+[Wed Feb  1 15:23:28 2017] 192.168.1.133: GET /style/ajax-loader.gif HTTP/1.1
+[Wed Feb  1 15:23:28 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 15:23:30 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 15:23:40 2017] 192.168.1.133: GET /game.cgi?action=post_score&name=Name&score=3 HTTP/1.1
+[Wed Feb  1 15:23:40 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 15:23:41 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 15:23:44 2017] 192.168.1.133: GET /snake.html HTTP/1.1
+[Wed Feb  1 15:23:44 2017] 192.168.1.133: GET /scripts/snake.js HTTP/1.1
+[Wed Feb  1 15:23:44 2017] 192.168.1.133: GET /style/look.css HTTP/1.1
+[Wed Feb  1 15:23:44 2017] 192.168.1.133: GET /style/snakelook.css HTTP/1.1
+[Wed Feb  1 15:23:44 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Wed Feb  1 15:23:44 2017] 192.168.1.133: GET /style/ajax-loader.gif HTTP/1.1
+[Wed Feb  1 15:23:44 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 15:23:44 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Wed Feb  1 15:23:48 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 15:23:59 2017] 192.168.1.133: GET /game.cgi?action=post_score&name=Philip&score=3 HTTP/1.1
+[Wed Feb  1 15:23:59 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 15:24:00 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 15:24:16 2017] 192.168.1.133: GET / HTTP/1.1
+[Wed Feb  1 15:24:16 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 15:24:16 2017] 192.168.1.133: 
+[Wed Feb  1 15:24:16 2017] 192.168.1.133: 
+[Wed Feb  1 15:24:16 2017] 192.168.1.133: 
+[Wed Feb  1 15:24:16 2017] 192.168.1.133: 
+[Wed Feb  1 15:27:22 2017] 91.236.75.4: GET http://www.google.com/ HTTP/1.1
+[Wed Feb  1 15:42:15 2017] 77.218.230.41: GET /snake.html HTTP/1.1
+[Wed Feb  1 15:42:15 2017] 77.218.230.41: GET /scripts/jquery-min.js HTTP/1.1
+[Wed Feb  1 15:42:15 2017] 77.218.230.41: GET /style/look.css HTTP/1.1
+[Wed Feb  1 15:42:15 2017] 77.218.230.41: GET /style/snakelook.css HTTP/1.1
+[Wed Feb  1 15:42:15 2017] 77.218.230.41: GET /scripts/snake.js HTTP/1.1
+[Wed Feb  1 15:42:15 2017] 77.218.230.41: GET /style/ajax-loader.gif HTTP/1.1
+[Wed Feb  1 15:42:16 2017] 77.218.230.41: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 16:06:03 2017] 192.168.1.133: GET / HTTP/1.1
+[Wed Feb  1 16:06:03 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 16:06:03 2017] 192.168.1.133: 
+[Wed Feb  1 16:06:03 2017] 192.168.1.133: 
+[Wed Feb  1 16:06:03 2017] 192.168.1.133: 
+[Wed Feb  1 19:13:57 2017] 218.93.207.189: GET / HTTP/1.1
+[Wed Feb  1 21:01:17 2017] 37.59.253.230: GET / HTTP/1.1
+[Wed Feb  1 21:55:44 2017] 192.168.1.133: GET / HTTP/1.1
+[Wed Feb  1 21:55:44 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 21:55:44 2017] 192.168.1.133: 
+[Wed Feb  1 21:55:44 2017] 192.168.1.133: 
+[Wed Feb  1 21:59:22 2017] 192.168.1.133: GET / HTTP/1.1
+[Wed Feb  1 21:59:22 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 21:59:22 2017] 192.168.1.133: GET /snake.html HTTP/1.1
+[Wed Feb  1 21:59:27 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Wed Feb  1 21:59:27 2017] 192.168.1.133: GET /style/snakelook.css HTTP/1.1
+[Wed Feb  1 21:59:22 2017] 192.168.1.133: GET /scripts/snake.js HTTP/1.1
+[Wed Feb  1 21:59:27 2017] 192.168.1.133: GET /style/look.css HTTP/1.1
+[Wed Feb  1 21:59:27 2017] 192.168.1.133: GET /style/ajax-loader.gif HTTP/1.1
+[Wed Feb  1 21:59:27 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 21:59:29 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 22:01:03 2017] 192.168.1.133: GET /game.cgi?action=post_score&name=Name&score=4 HTTP/1.1
+[Wed Feb  1 22:01:03 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 22:01:04 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 22:15:57 2017] 192.168.1.133: GET /game.cgi?action=post_score&name=Name&score=24 HTTP/1.1
+[Wed Feb  1 22:15:58 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 22:15:59 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 22:18:25 2017] 192.168.1.133: GET /snake.html HTTP/1.1
+[Wed Feb  1 22:18:25 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Wed Feb  1 22:18:25 2017] 192.168.1.133: GET /style/look.css HTTP/1.1
+[Wed Feb  1 22:18:25 2017] 192.168.1.133: GET /style/snakelook.css HTTP/1.1
+[Wed Feb  1 22:18:25 2017] 192.168.1.133: GET /scripts/snake.js HTTP/1.1
+[Wed Feb  1 22:18:26 2017] 192.168.1.133: GET /style/ajax-loader.gif HTTP/1.1
+[Wed Feb  1 22:18:26 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 22:18:26 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Wed Feb  1 22:18:28 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Wed Feb  1 22:22:49 2017] 192.168.1.133: GET / HTTP/1.1
+[Wed Feb  1 22:22:49 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Wed Feb  1 22:22:49 2017] 192.168.1.133: 
+[Wed Feb  1 22:22:49 2017] 192.168.1.133: 
+[Wed Feb  1 22:22:49 2017] 192.168.1.133: 
+[Wed Feb  1 22:22:49 2017] 192.168.1.133: 
+[Wed Feb  1 22:24:12 2017] 213.45.190.136: GET / HTTP/1.0
+[Wed Feb  1 22:43:30 2017] 139.162.111.98: GET / HTTP/1.1
+[Wed Feb  1 22:52:33 2017] 90.73.212.17: GET / HTTP/1.0
+Backend v.1, c. Jan 31 2017 21:09:39
+[Sat Feb  4 19:36:25 2017] 83.185.92.166: GET / HTTP/1.1
+[Sat Feb  4 19:36:25 2017] 83.185.92.166: GET /style/bopsomn.gif HTTP/1.1
+[Sat Feb  4 19:36:57 2017] 83.185.92.166: GET / HTTP/1.1
+[Sat Feb  4 19:36:57 2017] 83.185.92.166: GET /style/bopsomn.gif HTTP/1.1
+[Sat Feb  4 19:37:02 2017] 83.185.92.166: GET /snake.html HTTP/1.1
+[Sat Feb  4 19:37:02 2017] 83.185.92.166: GET /style/look.css HTTP/1.1
+[Sat Feb  4 19:37:02 2017] 83.185.92.166: GET /scripts/snake.js HTTP/1.1
+[Sat Feb  4 19:37:02 2017] 83.185.92.166: GET /style/snakelook.css HTTP/1.1
+[Sat Feb  4 19:37:02 2017] 83.185.92.166: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Feb  4 19:37:02 2017] 83.185.92.166: GET /style/ajax-loader.gif HTTP/1.1
+[Sat Feb  4 19:37:02 2017] 83.185.92.166: GET /game.cgi?action=get_highscore HTTP/1.1
+ERROR on bindingBackend v.1, c. Jan 31 2017 21:09:39
+[Sat Feb  4 20:00:41 2017] 192.168.1.133: GET / HTTP/1.1
+[Sat Feb  4 20:00:41 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Sat Feb  4 20:00:57 2017] 192.168.1.133: GET /krypt.html HTTP/1.1
+[Sat Feb  4 20:00:57 2017] 192.168.1.133: GET /scripts/kryptering.js HTTP/1.1
+[Sat Feb  4 20:00:57 2017] 192.168.1.133: GET /style/look.css HTTP/1.1
+[Sat Feb  4 20:00:57 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Feb  4 20:00:57 2017] 192.168.1.133: GET /style/smallbluegoat.jpg HTTP/1.1

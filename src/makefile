@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -pthread
+CFLAGS = -Wall -lpthread
 OBJS = backend.o snakegame.o http.o coffee.o hashtable.o
 
 all : backend
