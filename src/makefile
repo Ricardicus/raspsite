@@ -6,7 +6,6 @@ all : backend
 
 backend: $(OBJS)
 	$(CC) $(OBJS) $(CFLAGS) -o backend
-
 backend.o: backend.c backend.h http.h hashtable.h snakegame.h coffee.h logger.h
 snakegame.o: snakegame.c snakegame.h logger.h
 http.o: http.c http.h snakegame.h coffee.h hashtable.h logger.h
