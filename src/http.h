@@ -19,7 +19,7 @@ extern "C" {
 #define str(a)			xstr(a)
 #define CGI_PATH		data.cgi
 
-#define BACKEND_MAX_BUFFER_SIZE			600
+#define BACKEND_MAX_BUFFER_SIZE			300
 #define BACKEND_MAX_NBR_OF_ARGS			20
 #define BACKEND_MAX_ARRAY_SIZE			100
 #define VERSION							1
@@ -39,6 +39,7 @@ void interpret_and_output(int, char*, char*);
 void * http_callback(void *);
 void output_path(int, const char *);
 void output_index(int);
+int get_next_line(char *, int, int);
 
 /* HTTP-Headers */
 void output_file_not_found(int);

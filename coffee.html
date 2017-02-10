@@ -30,14 +30,24 @@
 <script>
 $(document).ready(function(){
 
-	$.ajax({type: "GET", url: "coffe.cgi?action=current_coffee", dataType: "text",
+	$.ajax({
+		type: "GET", 
+		url: "coffee.cgi?action=current_coffee", 
+		dataType: "text",
+
 		success: function(response) {
+
 			$("#coffe-of-the-day").attr("src","style/" + response + ".jpg");
 			$("#coffe-tip-table").show();
+
 		},
+
 		error: function(){
+
 			alert("Coffee of the day is not open. Try tomorrow.");
+			
 		}
+
 	});
 
 });
