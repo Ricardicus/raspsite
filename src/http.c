@@ -301,7 +301,7 @@ void interpret_and_output(int socket, char * first_line)
 
 	char *c, *args, *command, *path, 
 		*cleaner, *buffer;
-	int arg_count, cc;
+	int cc;
 	hashtable_t * params;
 
 	// Getting the HTTP command and path!
@@ -318,6 +318,10 @@ void interpret_and_output(int socket, char * first_line)
 		++c;
 	}
 
+
+	char temp_dump[1024];
+	read(socket, temp_dump, 1024);
+
 	command = first_line;
 
 	if ( !strcmp(command, "GET") ){
@@ -325,6 +329,8 @@ void interpret_and_output(int socket, char * first_line)
 
 		if ( !strcmp(path, "/") ){
  			// Outputting the index file!
+
+			printf("output index..\n");
 			output_index(socket);
    			return;
 		}
@@ -333,7 +339,7 @@ void interpret_and_output(int socket, char * first_line)
 			/*
 			* the coffe.cgi. Args: action
 			*/ 
-			arg_count = 0;
+
 		 	params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
 
 			args = strstr(path, "action=");
@@ -353,7 +359,6 @@ void interpret_and_output(int socket, char * first_line)
 			* the game.cgi, args: action=[post_score|get_highscore], name=[*], score=[*]
 			*/ 
 
-			arg_count = 0;
 			params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
 
 			args = strstr(path, "action=");
