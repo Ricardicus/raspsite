@@ -14,7 +14,22 @@ void output_js_headers(int socket)
    	msg = "Pragma: no-cache\r\n";
 	write(socket,msg, strlen(msg));
 	msg = "Expires: 0\r\n";
+	write(socket,msg, strlen(msg));
    	msg = "Content-Type: application/javascript; charset=utf-8\r\n\r\n";
+   	write(socket,msg, strlen(msg));
+}
+
+void output_txt_headers(int socket)
+{
+	char * msg = "HTTP/1.1 200 OK\r\n";
+   	write(socket,msg,strlen(msg));
+   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
+   	write(socket,msg, strlen(msg));
+   	msg = "Pragma: no-cache\r\n";
+	write(socket,msg, strlen(msg));
+	msg = "Expires: 0\r\n";
+	write(socket,msg, strlen(msg));
+   	msg = "Content-Type: text/plain; charset=utf-8\r\n\r\n";
    	write(socket,msg, strlen(msg));
 }
 
@@ -49,6 +64,12 @@ void output_css_headers(int socket)
 {
 	char * msg = "HTTP/1.1 200 OK\r\n";
    	write(socket,msg,strlen(msg));
+   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
+   	write(socket,msg, strlen(msg));
+   	msg = "Pragma: no-cache\r\n";
+	write(socket,msg, strlen(msg));
+	msg = "Expires: 0\r\n";
+	write(socket,msg, strlen(msg));
 	msg = "Content-Type: text/css; charset=utf-8\r\n\r\n";
    	write(socket,msg, strlen(msg));
 }
@@ -247,7 +268,7 @@ int get_next_line(char * buffer, int buffer_size, int socket)
 
 		while ( count < buffer_size && !found && r > 0) {
 			r = read(socket, &buffer[count], 1);
-			if ( buffer[count] == '\n' || buffer[count] == '\r' ){
+			if ( buffer[count] == '\n' ||buffer[count] == '\r' ){
 				// end of first line (in time)
 				found = 1;
 				buffer[count] = '\0';
@@ -280,7 +301,7 @@ void interpret_and_output(int socket, char * first_line)
 
 	char *c, *args, *command, *path, 
 		*cleaner, *buffer;
-	int arg_count, count, cc;
+	int arg_count, cc;
 	hashtable_t * params;
 
 	// Getting the HTTP command and path!
@@ -361,68 +382,53 @@ void interpret_and_output(int socket, char * first_line)
 			snake_callback(socket, params);
 
 			free_hashtable(params,0);
-		} else {
-			output_path(socket, path);
-		}
+		} else if ( strstr(path, "index.cgi") != NULL ) {
 
-	} else if ( strstr(command, "index.cgi") != NULL ) {
+			char *msg, *c;
+			FILE *fp;
 
-		char *action, *msg, *c;
-		FILE *fp;
+			if ( strstr(path, "action=set") != NULL ){
+				msg = strstr(path, "message=");
 
-		if ( strstr(path, "action=set") != NULL ){
-			msg = strstr(path, "message=");
-
-			if ( msg == NULL ){
-				output_path(socket, path);
-				return;
-			}
-
-			fp == fopen("etc/index.txt", "w");
-
-			c = msg + 8;
-			while ( *c ) {
-				if ( c == '@' ) 
-					*c = ' ';
-				++c;
-			}
-
-			fprintf(fp, "%s", msg);
-			fclose(fp);
-		} else if ( strstr(path, "action=set") != NULL ){
-			msg = strstr(path, "message=");
-
-			if ( msg == NULL ){
-				output_path(socket, path);
-				return;
-			}
-
-			fp == fopen("etc/index.txt", "w");
-
-			c = msg + 8;
-			while ( *c ) {
-				if ( *c == '@' ) 
-					*c = ' ';
-				++c;
-			}
-
-			fprintf(fp, "%s", msg);
-			fclose(fp);
-		} else if ( strstr(path, "action=get") != NULL ){
-
-			fp == fopen("etc/index.txt", "r");
-
-			if ( fp == NULL ){
-				write(socket,"Lilla boppen, lilla lilla boppen", strlen("Lilla boppen, lilla lilla boppen"));
-			} else {
-				while( (cc=fgetc(fp)) != EOF ){
-					write(socket, &cc, 1);
+				if ( msg == NULL ){
+					output_path(socket, path+1);
+					return;
 				}
+
+				fp = fopen("etc/index.txt", "w");
+
+				c = msg;
+				
+				while ( *c ) {
+					if ( *c == '@' ) 
+						*c = ' ';
+					++c;
+				}
+
+				fprintf(fp, "%s", msg+8);
+				fclose(fp);
+
+				output_path(socket, path+1);
+
+			} else if ( strstr(path, "action=get") != NULL ){
+
+				output_txt_headers(socket);
+
+				fp = fopen("etc/index.txt", "r");
+
+				if ( fp == NULL ){
+					write(socket,"Lilla boppen, lilla lilla boppen", strlen("Lilla boppen, lilla lilla boppen"));
+				} else {
+					while( (cc=fgetc(fp)) != EOF ){
+						write(socket, &cc, 1);
+					}
+				}
+
+				fclose(fp);
 			}
-
-			fclose(fp);
-
-		} 
+		} else {
+			output_path(socket, path+1);
+		}
 
 	} else if ( !strcmp(command, "POST") ){
 		// This is interesting. Now i will read all arguments and parameters
@@ -464,17 +470,17 @@ void * http_callback(void * http_data_ptr)
 {
 
 	http_data_t * http_data = (http_data_t *) http_data_ptr;
-	int n, socket = (int) *http_data->socket;
+	int socket = (int) *http_data->socket, found = 0;
 	unsigned long count = 0;
-	char *client_ip = http_data->client_ip, *time = http_data->accept_time, *c;
+	char *client_ip = http_data->client_ip, *time = http_data->accept_time;
 
-	char first_line[BACKEND_MAX_ARRAY_SIZE], buffer[BACKEND_MAX_ARRAY_SIZE]; 
+	char first_line[BACKEND_MAX_BUFFER_SIZE], buffer[BACKEND_MAX_BUFFER_SIZE]; 
 
 	memset(first_line, '\0', BACKEND_MAX_BUFFER_SIZE); memset(buffer, '\0', BACKEND_MAX_BUFFER_SIZE);
 
 	while ( count < BACKEND_MAX_BUFFER_SIZE && !found ) {
 		read(socket, &buffer[count], 1);
-		if ( buffer[count] == '\n' || buffer[count] == '\r' ){
+		if ( buffer[count] == '\n' ||buffer[count] == '\r' ){
 			// end of first line (in time)
 			found = 1;
 		} else {
@@ -487,7 +493,8 @@ void * http_callback(void * http_data_ptr)
 	if ( found == 0 ){
 		// disregard this.
 		log("[%s] %s: %s [DISREGARDED]\n", time, client_ip, first_line);
-		return;
+   		free_http_data(&http_data);
+		return NULL;
 	}
 
 	log("[%s] %s: %s\n", time, client_ip, first_line);
@@ -496,7 +503,6 @@ void * http_callback(void * http_data_ptr)
 	interpret_and_output(socket, first_line);
    
    	close(socket);
-   	free(buffer);
 
    	free_http_data(&http_data);
 

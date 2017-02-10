@@ -31,18 +31,18 @@ void rehash(hashtable_t * hashtable)
 		}
 		i++;
 	}
-	free_hashtable_table(hashtable);
+	free_hashtable_table(hashtable,0);
 	hashtable->table = hashtable_new->table;
 	hashtable->size = newsize;
 }
 
-void free_hashtable(hashtable_t * hash)
+void free_hashtable(hashtable_t * hash, int data_also)
 {
-	free_hashtable_table(hash);
+	free_hashtable_table(hash,data_also);
 	free(hash);
 }
 
-void free_hashtable_table(hashtable_t * hash)
+void free_hashtable_table(hashtable_t * hash, int data_also)
 {
 	int size = hash->size;
 	int i = 0;
@@ -55,6 +55,8 @@ void free_hashtable_table(hashtable_t * hash)
 		{
 			ptr2 = ptr1;
 			ptr1 = ptr1->next;
+			if ( data_also )
+				free(ptr2->data);
 			free(ptr2);
 		}
 		i++;
