@@ -177,7 +177,7 @@ void print_table_as_chars(hashtable_t * hashtable)
 			ptr = hashtable->table[i];
 			while(ptr!=NULL)
 			{
-				printf("key: %s - > data: %s\n",ptr->key,ptr->data);
+				printf("key: %s - > data: %s\n",ptr->key,(char*)ptr->data);
 				ptr=ptr->next;
 			}
 		}

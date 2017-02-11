@@ -297,38 +297,37 @@ int get_next_line(char * buffer, int buffer_size, int socket)
 * buffer - data to the http datagram
 */
 void parse_http_post_headers(hashtable_t * params, char * buffer){
-		char *args, *c;
+	char *args, *c;
 
-		args = c = buffer;
+	args = c = buffer;
 
-		while ( strstr(args, ": ") != NULL ){
-			args = strstr(args, ": ");
-			c = args;
-			while ( *c != '\n' && *c!='\r' && *c && c != buffer){
-				c--;
-			}
-			char * end_ptr = args;
-			while ( *end_ptr && *end_ptr != '\n' && *end_ptr != '\r'){
-				end_ptr++;
-			}
-			char temp = *end_ptr;
-			*end_ptr = '\0';
-			char * new_arg = strdup(args+2);
-			*end_ptr = temp;
-			end_ptr = c+1;
-			while ( *end_ptr && *end_ptr != ':'){
-				end_ptr++;
-			}
-			temp = *end_ptr;
-			*end_ptr = '\0';
-			char * new_key = strdup(c+1);
-			*end_ptr = temp;
-
-			put(params, new_key, new_arg);
-
-			args += 2;
-
+	while ( strstr(args, ": ") != NULL ){
+		args = strstr(args, ": ");
+		c = args;
+		while ( *c != '\n' && *c!='\r' && *c && c != buffer){
+			c--;
 		}
+		char * end_ptr = args;
+		while ( *end_ptr && *end_ptr != '\n' && *end_ptr != '\r'){
+			end_ptr++;
+		}
+		char temp = *end_ptr;
+		*end_ptr = '\0';
+		char * new_arg = strdup(args+2);
+		*end_ptr = temp;
+		end_ptr = c+1;
+		while ( *end_ptr && *end_ptr != ':'){
+			end_ptr++;
+		}
+		temp = *end_ptr;
+		*end_ptr = '\0';
+		char * new_key = strdup(c+1);
+		*end_ptr = temp;
+
+		put(params, new_key, new_arg);
+		args += 2;
+
+	}
 }
 
 /*

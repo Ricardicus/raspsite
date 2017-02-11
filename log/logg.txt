@@ -2045,3 +2045,19 @@ ERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on binding
 [Sat Feb 11 08:54:08 2017] 82.196.109.52: GET /style/smallbluegoat.jpg HTTP/1.1
 [Sat Feb 11 08:54:08 2017] 82.196.109.52: GET /style/snake.gif HTTP/1.1
 [Sat Feb 11 08:54:08 2017] 82.196.109.52: GET /index.cgi?action=get HTTP/1.1
+[Sat Feb 11 09:01:58 2017] 82.196.109.52: GET / HTTP/1.1
+[Sat Feb 11 09:01:58 2017] 82.196.109.52: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Feb 11 09:01:58 2017] 82.196.109.52: GET /style/index.css HTTP/1.1
+[Sat Feb 11 09:01:58 2017] 82.196.109.52: GET /style/bopsomn.gif HTTP/1.1
+[Sat Feb 11 09:01:58 2017] 82.196.109.52: GET /style/snake.gif HTTP/1.1
+[Sat Feb 11 09:01:58 2017] 82.196.109.52: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Feb 11 09:01:59 2017] 82.196.109.52: GET /index.cgi?action=get HTTP/1.1
+[Sat Feb 11 09:28:57 2017] 91.236.75.4: GET http://www.google.com/ HTTP/1.1
+[Sat Feb 11 09:58:39 2017] 212.129.5.109:  [DISREGARDED]
+[Sat Feb 11 10:48:34 2017] 82.196.109.52: GET / HTTP/1.1
+[Sat Feb 11 10:48:34 2017] 82.196.109.52: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Feb 11 10:48:34 2017] 82.196.109.52: GET /style/index.css HTTP/1.1
+[Sat Feb 11 10:48:34 2017] 82.196.109.52: GET /style/bopsomn.gif HTTP/1.1
+[Sat Feb 11 10:48:34 2017] 82.196.109.52: GET /style/snake.gif HTTP/1.1
+[Sat Feb 11 10:48:34 2017] 82.196.109.52: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Feb 11 10:48:35 2017] 82.196.109.52: GET /index.cgi?action=get HTTP/1.1

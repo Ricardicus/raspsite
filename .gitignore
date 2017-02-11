@@ -3,7 +3,7 @@
 
 # Object files
 *.o
-*/*.o
+src/*.o
 *.ko
 *.obj
 *.elf
