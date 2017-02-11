@@ -8,6 +8,7 @@ hashtable_t * new_hashtable(int size, float load)
 	hashtable_t * hashtable = malloc(sizeof(hashtable_t));
 	hashtable->size = size;
 	hashtable->ocupied = 0;
+	hashtable->data_also = 0; // to be modified by user
 	hashtable->load = load;
 	hashtable->table = (entry_t**) calloc(size,sizeof(entry_t*));
 	hashtable->put = put;
@@ -20,6 +21,7 @@ void rehash(hashtable_t * hashtable)
 	int size_old = hashtable->size;
 	int newsize = size_old * 2;
 	hashtable_t * hashtable_new = new_hashtable(newsize,hashtable->load);
+	hashtable_new->data_also = hashtable->data_also;
 	int i = 0;
 	while(i<size_old)
 	{
@@ -31,18 +33,18 @@ void rehash(hashtable_t * hashtable)
 		}
 		i++;
 	}
-	free_hashtable_table(hashtable,0);
+	free_hashtable_table(hashtable);
 	hashtable->table = hashtable_new->table;
 	hashtable->size = newsize;
 }
 
-void free_hashtable(hashtable_t * hash, int data_also)
+void free_hashtable(hashtable_t * hash)
 {
-	free_hashtable_table(hash,data_also);
+	free_hashtable_table(hash);
 	free(hash);
 }
 
-void free_hashtable_table(hashtable_t * hash, int data_also)
+void free_hashtable_table(hashtable_t * hash)
 {
 	int size = hash->size;
 	int i = 0;
@@ -55,8 +57,10 @@ void free_hashtable_table(hashtable_t * hash, int data_also)
 		{
 			ptr2 = ptr1;
 			ptr1 = ptr1->next;
-			if ( data_also )
+			if ( hash->data_also ){
 				free(ptr2->data);
+				free(ptr2->key);
+			}
 			free(ptr2);
 		}
 		i++;
@@ -153,6 +157,27 @@ void print_table_callbacks(hashtable_t * hashtable)
 			while(ptr!=NULL)
 			{
 				printf("key: %s - > data: %s\n",ptr->key,(char*)(((callback_func_t) ptr->data))(0,NULL,"NAME"));
+				ptr=ptr->next;
+			}
+		}
+		i++;
+	}
+}
+
+void print_table_as_chars(hashtable_t * hashtable)
+{
+	int i = 0;
+	int size = hashtable->size;
+	struct key_val_pair * ptr;
+
+	while(i<size)
+	{
+		if(hashtable->table[i] != NULL)
+		{
+			ptr = hashtable->table[i];
+			while(ptr!=NULL)
+			{
+				printf("key: %s - > data: %s\n",ptr->key,ptr->data);
 				ptr=ptr->next;
 			}
 		}

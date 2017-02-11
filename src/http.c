@@ -1,6 +1,7 @@
 #include "http.h"
 
 static hashtable_t * headers_callback;
+static pthread_mutex_t pthread_sync;
 /*
 * A bunch of functions that output meta data
 */ 
@@ -290,6 +291,73 @@ int get_next_line(char * buffer, int buffer_size, int socket)
 }
 
 /*
+* Parsing the header part of the http post data
+*
+* params - hash containg all keys relevant for the request
+* buffer - data to the http datagram
+*/
+void parse_http_post_headers(hashtable_t * params, char * buffer){
+		char *args, *c;
+
+		args = c = buffer;
+
+		while ( strstr(args, ": ") != NULL ){
+			args = strstr(args, ": ");
+			c = args;
+			while ( *c != '\n' && *c!='\r' && *c && c != buffer){
+				c--;
+			}
+			char * end_ptr = args;
+			while ( *end_ptr && *end_ptr != '\n' && *end_ptr != '\r'){
+				end_ptr++;
+			}
+			char temp = *end_ptr;
+			*end_ptr = '\0';
+			char * new_arg = strdup(args+2);
+			*end_ptr = temp;
+			end_ptr = c+1;
+			while ( *end_ptr && *end_ptr != ':'){
+				end_ptr++;
+			}
+			temp = *end_ptr;
+			*end_ptr = '\0';
+			char * new_key = strdup(c+1);
+			*end_ptr = temp;
+
+			put(params, new_key, new_arg);
+
+			args += 2;
+
+		}
+}
+
+/*
+* Parsing the body part of the http post data
+*
+* params - hash containg all keys relevant for the request
+* buffer - data to the http datagram
+*/
+void parse_http_post_data(hashtable_t * params, char * buffer){
+	char * data = strstr(buffer, "\r\n\r\n") + 4, *delim = "=", *token,*tmp_key;
+ 	int key = 1;
+
+ 	token = strtok(data, delim);
+
+ 	while ( token != NULL ){
+ 		if ( token[0] == '&' )
+ 			token++;
+ 		if ( key ){
+ 			tmp_key = token;
+ 		} else {
+ 			put(params, strdup(tmp_key), strdup(token));
+ 		}
+
+ 		key = (key + 1) % 2;
+ 		token = strtok(NULL, delim);
+ 	}
+}
+
+/*
 * Reads the first line message of the HTTP client request
 * and decides what to do. 
 *
@@ -300,8 +368,8 @@ void interpret_and_output(int socket, char * first_line)
 {
 
 	char *c, *args, *command, *path, 
-		*cleaner, *buffer;
-	int cc;
+		*cleaner, *buffer, temp_dump[1024];
+	int cc, n;
 	hashtable_t * params;
 
 	// Getting the HTTP command and path!
@@ -318,19 +386,16 @@ void interpret_and_output(int socket, char * first_line)
 		++c;
 	}
 
-
-	char temp_dump[1024];
-	read(socket, temp_dump, 600);
-
 	command = first_line;
 
 	if ( !strcmp(command, "GET") ){
 		// We have recieved a 'GET' request!
-
+		// Will only be looking at the first line, restfully.. 
+		// Reading the last part of the request so that the connection is not reset..
+		read(socket, temp_dump, sizeof(temp_dump));
+		
 		if ( !strcmp(path, "/") ){
  			// Outputting the index file!
-
-			printf("output index..\n");
 			output_index(socket);
    			return;
 		}
@@ -353,7 +418,7 @@ void interpret_and_output(int socket, char * first_line)
 
 			output_coffee_action(socket, args + 7);
 
-			free_hashtable(params,0);
+			free_hashtable(params);
 		} else if ( strstr(path, "game.cgi") != NULL ){
 			/*
 			* the game.cgi, args: action=[post_score|get_highscore], name=[*], score=[*]
@@ -386,7 +451,7 @@ void interpret_and_output(int socket, char * first_line)
 
 			snake_callback(socket, params);
 
-			free_hashtable(params,0);
+			free_hashtable(params);
 		} else if ( strstr(path, "index.cgi") != NULL ) {
 
 			char *msg, *c;
@@ -410,7 +475,6 @@ void interpret_and_output(int socket, char * first_line)
 					++c;
 				}
 
-				fprintf(fp, "%s", msg+8);
 				fclose(fp);
 
 				output_path(socket, path+1);
@@ -437,17 +501,33 @@ void interpret_and_output(int socket, char * first_line)
 
 	} else if ( !strcmp(command, "POST") ){
 		// This is interesting. Now i will read all arguments and parameters
+		pthread_mutex_lock(&pthread_sync);
 
-		// To be continued.. 
 		params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
+		params->data_also = 1;
 
-		put(params, "path", strdup(path));
+		// Preparing the params to be casted to the post handler
 
-		buffer = calloc(BACKEND_MAX_BUFFER_SIZE, 1);
+		/*
+		* To be continued
+		*/ 
 
+		put(params, strdup("path"), strdup(path));
 
+		buffer = calloc(1024*3, 1);
+		n = read(socket, buffer, 1024*3);
+
+		parse_http_post_headers(params, buffer);
+		parse_http_post_data(params, buffer);
+
+		print_table_as_chars(params);
+
+		output_txt_headers(socket);
+		write(socket, "Yes", 3);
 		free(buffer);
-		free_hashtable(params,1);
+		free_hashtable(params);
+
+		pthread_mutex_unlock(&pthread_sync);
 	}
 	
 }
@@ -468,7 +548,7 @@ void http_init()
 
 void http_quit()
 {
-	free_hashtable(headers_callback,0);
+	free_hashtable(headers_callback);
 }
 
 void * http_callback(void * http_data_ptr)

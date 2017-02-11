@@ -10,6 +10,7 @@ extern "C" {
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
+#include <pthread.h>
 #include "snakegame.h"
 #include "coffee.h"
 #include "hashtable.h"
@@ -40,6 +41,8 @@ void * http_callback(void *);
 void output_path(int, const char *);
 void output_index(int);
 int get_next_line(char *, int, int);
+void parse_http_post_data(hashtable_t *, char *);
+void parse_http_post_headers(hashtable_t *, char *);
 
 /* HTTP-Headers */
 void output_file_not_found(int);
