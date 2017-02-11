@@ -338,21 +338,18 @@ void parse_http_post_headers(hashtable_t * params, char * buffer){
 * buffer - data to the http datagram
 */
 void parse_http_post_data(hashtable_t * params, char * buffer){
-	char * data = strstr(buffer, "\r\n\r\n") + 4, *delim = "=", *token,*tmp_key;
- 	int key = 1;
-
+	char * data = strstr(buffer, "\r\n\r\n") + 4, *delim = "&", *token,*tmp;
+	
  	token = strtok(data, delim);
 
  	while ( token != NULL ){
- 		if ( token[0] == '&' )
- 			token++;
- 		if ( key ){
- 			tmp_key = token;
- 		} else {
- 			put(params, strdup(tmp_key), strdup(token));
+ 		tmp = strstr(token,"=");
+ 		if ( tmp != NULL ){
+ 			*tmp = '\0';
+ 			put(params, strdup(token), strdup(tmp+1));
+ 			*tmp = '=';
  		}
 
- 		key = (key + 1) % 2;
  		token = strtok(NULL, delim);
  	}
 }
