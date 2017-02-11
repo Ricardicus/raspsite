@@ -320,7 +320,7 @@ void interpret_and_output(int socket, char * first_line)
 
 
 	char temp_dump[1024];
-	read(socket, temp_dump, 1024);
+	read(socket, temp_dump, 600);
 
 	command = first_line;
 
