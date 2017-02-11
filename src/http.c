@@ -470,7 +470,8 @@ void interpret_and_output(int socket, char * first_line)
 						*c = ' ';
 					++c;
 				}
-
+				
+				fprintf(fp, "%s\n", msg+8);
 				fclose(fp);
 
 				output_path(socket, path+1);
