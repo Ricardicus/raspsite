@@ -16,9 +16,20 @@ Bop
 <img src="style/smallbluegoat.jpg" id="goatgif" onclick="window.open('krypt.html')">
 </center>
 <script>
-function dummy_post(){
 
-	document.cookie = ""
+function dummy_cookie(){
+	document.cookie =
+	"name=hejsan;";
+
+	http_get("/", "html", function(pageinHtml){
+		alert("Check the logs!");
+	}, function(){
+
+	})
+
+}
+
+function dummy_post(){
 
 	data={greeting: "hejsan"};
 	$.ajax({
