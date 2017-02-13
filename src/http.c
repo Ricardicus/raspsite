@@ -364,9 +364,9 @@ void interpret_and_output(int socket, char * first_line)
 {
 
 	char *c, *args, *command, *path, 
-		*cleaner, *buffer, temp_dump[1024];
+		*cleaner, *buffer;
 	int cc, n;
-	hashtable_t * params;
+	hashtable_t * params, *header_params;
 
 	// Getting the HTTP command and path!
 	c = first_line;
@@ -388,7 +388,27 @@ void interpret_and_output(int socket, char * first_line)
 		// We have recieved a 'GET' request!
 		// Will only be looking at the first line, restfully.. 
 		// Reading the last part of the request so that the connection is not reset..
-		read(socket, temp_dump, sizeof(temp_dump));
+
+		pthread_mutex_lock(&pthread_sync);
+		header_params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
+		header_params->data_also = 1;
+
+		// Preparing the params to be casted to the post handler
+
+		/*
+		* To be continued
+		*/ 
+
+		put(header_params, strdup("path"), strdup(path));
+
+		buffer = calloc(1024, 1);
+		pthread_mutex_unlock(&pthread_sync);	
+
+		n = read(socket, buffer, 1024);
+
+		parse_http_post_headers(header_params, buffer);
+
+		print_table_as_chars(header_params);
 		
 		if ( !strcmp(path, "/") ){
  			// Outputting the index file!
@@ -472,6 +492,7 @@ void interpret_and_output(int socket, char * first_line)
 				}
 				
 				fprintf(fp, "%s\n", msg+8);
+
 				fclose(fp);
 
 				output_path(socket, path+1);
@@ -488,13 +509,17 @@ void interpret_and_output(int socket, char * first_line)
 					while( (cc=fgetc(fp)) != EOF ){
 						write(socket, &cc, 1);
 					}
+					fclose(fp);
 				}
 
-				fclose(fp);
 			}
+
 		} else {
 			output_path(socket, path+1);
 		}
+
+		free(buffer);
+		free_hashtable(header_params);
 
 	} else if ( !strcmp(command, "POST") ){
 		// This is interesting. Now i will read all arguments and parameters

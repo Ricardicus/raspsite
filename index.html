@@ -2,6 +2,7 @@
 <html>
 <head>
  <script src="scripts/jquery-min.js"></script>
+ <script src="scripts/https.js"></script>
 <title>
 Bop
 </title>
@@ -15,6 +16,39 @@ Bop
 <img src="style/smallbluegoat.jpg" id="goatgif" onclick="window.open('krypt.html')">
 </center>
 <script>
+
+function dummy_cookie(){
+	document.cookie =
+	"name=hejsan;";
+
+	http_get("/", "html", function(pageinHtml){
+		alert("Check the logs!");
+	}, function(){
+
+	})
+
+}
+
+function dummy_post(){
+
+	data={greeting: "hejsan"};
+	$.ajax({
+		
+		type: "POST",
+		url:"post.api?hejsan", 
+		dataType: "text", 
+		data: data,
+		success: function(msg) {
+			console.log("Lyckades!!");
+
+		},
+		error: function(){
+			console.log("failed to post!");
+		}
+	
+	});
+}
+
 $(document).ready(function(){
 
 	$.ajax({
@@ -23,6 +57,7 @@ $(document).ready(function(){
 		dataType: "text", 
 		success: function(msg) {
 			$("#greeting").html(msg);
+			dummy_post();
 		},
 		error: function(){
 			console.log("failed to get the greeting from the server!");
