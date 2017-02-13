@@ -12,4 +12,4 @@ src/*.o
 src/makefile
 
 # logs ..
-log/*
+log/logg.txt
