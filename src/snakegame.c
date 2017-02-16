@@ -102,7 +102,10 @@ void snake_callback(int socket, hashtable_t * params){
 		msg = "Content-Type: text/plain\r\n\r\n";
    		write(socket,msg,strlen(msg));
 
+   		msg = "snakeCookie=";
+   		write(socket,msg,strlen(msg));
 		write(socket, tmp_key, strlen(tmp_key));
+		write(socket, ";", 1);
 
 	} else if ( !strcmp(action, "post") ){
 

@@ -71,11 +71,38 @@ function post_result(){
 
 }
 
+/* Lazy copy paste from https://www.w3schools.com/js/js_cookies.asp */
+function get_cookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 function load_cookie(successCallback){
   $.ajax({type: "GET", url: "game.cgi?action=load-game-cookie", dataType: "text",
     success: function(response){
       //alert("loaded cookie:" + response);
-      document.cookie = response;
+      var d = new Date();
+      // Expires after 2 hours
+      d.setTime(d.getTime() + 1000*60*60*2);
+      document.cookie = response + "expires=" + d.toUTCString() + ";";
+
+      // Checking if the cookie was loaded or not:
+      var name = response.split("=")[0];
+      if ( get_cookie(name).length < 2 ) {
+        alert("Your browser does not support cookies. Your results will therefore not be registered to the data base (sorry)!");
+      }
+
       if ( !(typeof successCallback === "undefined") ){
         successCallback();
       }
