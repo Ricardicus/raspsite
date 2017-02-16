@@ -401,14 +401,16 @@ void interpret_and_output(int socket, char * first_line)
 
 		put(header_params, strdup("path"), strdup(path));
 
-		buffer = calloc(1024, 1);
+		buffer = calloc(1024*3, 1);
 		pthread_mutex_unlock(&pthread_sync);	
 
-		n = read(socket, buffer, 1024);
+		n = read(socket, buffer, 1024*3);
 
 		parse_http_post_headers(header_params, buffer);
 
-		print_table_as_chars(header_params);
+//		printf("Cookie: %s\n", get(header_params,"Cookie"));
+
+		//print_table_as_chars(header_params);
 		
 		if ( !strcmp(path, "/") ){
  			// Outputting the index file!
@@ -445,24 +447,6 @@ void interpret_and_output(int socket, char * first_line)
 			args = strstr(path, "action=");
 			if ( args != NULL ) {
 				put(params, "action", args+7);
-			}
-
-			args = strstr(path, "name=");
-			if ( args != NULL ) {
-				put(params, "name", args + 5);
-			}
-
-			args = strstr(path, "score=");
-			if ( args != NULL ) {
-				put(params, "score", args + 6);
-			}
-
-			cleaner = path;
-			while ( *cleaner ){
-				if ( *cleaner == '&'){
-					*cleaner = '\0';
-				}
-				++cleaner;
 			}
 
 			snake_callback(socket, params);
@@ -542,7 +526,18 @@ void interpret_and_output(int socket, char * first_line)
 		parse_http_post_headers(params, buffer);
 		parse_http_post_data(params, buffer);
 
-		print_table_as_chars(params);
+//		print_table_as_chars(params);
+
+		if ( strstr(path, "game.cgi") != NULL ){
+			
+			printf("Cookie: %s\n", get(params,"Cookie"));
+			snake_callback(socket, params);
+
+		}
+
+
+
+//		print_table_as_chars(params);
 
 		output_txt_headers(socket);
 		write(socket, "Yes", 3);

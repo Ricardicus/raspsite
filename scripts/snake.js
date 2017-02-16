@@ -56,9 +56,11 @@ function init(){
 
 function post_result(){
 
-  var url = "game.cgi?action=post_score&name=" + player_name + "&score=" + points;
+  var url = "game.cgi?action=post_score";
 
-  $.ajax({type: "GET", url: url, dataType: "text",
+  var data = {name: player_name, score: points, action: "post"};
+
+  $.ajax({type: "POST", url: url, data: data, dataType: "text",
     success: function(response){
       setTimeout(get_highscore, 1000);
     }, 
@@ -67,6 +69,21 @@ function post_result(){
     }
   });
 
+}
+
+function load_cookie(successCallback){
+  $.ajax({type: "GET", url: "game.cgi?action=load-game-cookie", dataType: "text",
+    success: function(response){
+      //alert("loaded cookie:" + response);
+      document.cookie = response;
+      if ( !(typeof successCallback === "undefined") ){
+        successCallback();
+      }
+    },
+    error: function(){
+      console.log("Failed to load key cookie........... :(");
+    }
+  });
 }
 
 function get_highscore(){
@@ -278,7 +295,7 @@ function restart(){
   }
 }
 
-function addHandlers(){
+function add_handlers(){
   $(".overout")
   .mouseover(function() {
     $(this).fadeTo(100,1.0);
@@ -308,8 +325,8 @@ function to_hide(){
 
 $(document).ready(function(){
 
-  addHandlers();
-  get_highscore();
+  add_handlers();
+  load_cookie(get_highscore);
   to_hide();
 
   canvas = document.getElementById("tcanvas");
