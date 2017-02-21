@@ -4,7 +4,7 @@
  <script src="scripts/jquery-min.js"></script>
  <script src="scripts/https.js"></script>
 <title>
-Bop
+An HTTP Classic
 </title>
 </head>
 <link rel="stylesheet" href="style/index.css">
@@ -17,12 +17,13 @@ Bop
 </center>
 <script>
 
-function dummy_cookie(){
+function dummy_cookie(callback){
 	document.cookie =
 	"name=hejsan;";
 
 	http_get("/", "html", function(pageinHtml){
 		alert("Check the logs!");
+		callback();
 	}, function(){
 
 	})
@@ -57,7 +58,7 @@ $(document).ready(function(){
 		dataType: "text", 
 		success: function(msg) {
 			$("#greeting").html(msg);
-			dummy_post();
+//			dummy_cookie(dummy_post);
 		},
 		error: function(){
 			console.log("failed to get the greeting from the server!");

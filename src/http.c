@@ -365,7 +365,7 @@ void interpret_and_output(int socket, char * first_line)
 
 	char *c, *args, *command, *path, 
 		*cleaner, *buffer;
-	int cc, n;
+	int cc;
 	hashtable_t * params, *header_params;
 
 	// Getting the HTTP command and path!
@@ -401,7 +401,8 @@ void interpret_and_output(int socket, char * first_line)
 
 		put(header_params, strdup("path"), strdup(path));
 
-		buffer = calloc(1024*3, 1);
+		buffer = calloc(1024*5, 1);
+
 		pthread_mutex_unlock(&pthread_sync);	
 
 		n = read(socket, buffer, 1024*3);
@@ -411,7 +412,8 @@ void interpret_and_output(int socket, char * first_line)
 //		printf("Cookie: %s\n", get(header_params,"Cookie"));
 
 		//print_table_as_chars(header_params);
-		
+//		print_table_as_chars(header_params);
+
 		if ( !strcmp(path, "/") ){
  			// Outputting the index file!
 			output_index(socket);
@@ -520,7 +522,7 @@ void interpret_and_output(int socket, char * first_line)
 
 		put(params, strdup("path"), strdup(path));
 
-		buffer = calloc(1024*3, 1);
+		buffer = calloc(1024*5, 1);
 		n = read(socket, buffer, 1024*3);
 
 		parse_http_post_headers(params, buffer);
@@ -530,12 +532,10 @@ void interpret_and_output(int socket, char * first_line)
 
 		if ( strstr(path, "game.cgi") != NULL ){
 			
-			printf("Cookie: %s\n", get(params,"Cookie"));
+			printf("Cookie: %s\n",(char*) get(params,"Cookie"));
 			snake_callback(socket, params);
 
 		}
-
-
 
 //		print_table_as_chars(params);
 
