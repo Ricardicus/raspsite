@@ -62,6 +62,12 @@ function post_result(){
 
   $.ajax({type: "POST", url: url, data: data, dataType: "text",
     success: function(response){
+
+      if ( response.indexOf("Error") != -1 ){
+        // Will not post results! Sorry.
+        alert("Hey, sorry but your results was not posted. Your browser needs to support cookies to do so!");
+      }
+
       setTimeout(get_highscore, 1000);
     }, 
     error: function(){
