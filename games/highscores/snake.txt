@@ -14,7 +14,3 @@ MobilName
 12
 Skolan
 7
-RickardN
-4
-Philip
-3

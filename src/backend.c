@@ -2,7 +2,7 @@
    Port passed as an argument */
 #include "backend.h"
 
-static volatile bool run_this_server_please_mister = true;
+volatile bool run_this_server_please_mister;
 
 void * input_reader_callback(void * data)
 {
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 	time_t raw_time;
 	struct tm * time_info;
 	char client_IP[INET_ADDRSTRLEN];
-	pthread_t input_reader_thread;
+	pthread_t input_reader_thread, file_reader_thread;
 	struct sockaddr_in serv_addr, cli_addr;
 
 	if (argc < 2) {
@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
 	clilen = sizeof(cli_addr);
 
 	pthread_create(&input_reader_thread, NULL, input_reader_callback, NULL);
+	pthread_create(&file_reader_thread, NULL, file_receiver_thread_callback, NULL);
 
 	log("Backend v.%s, c. %s %s\n",str(VERSION),__DATE__,__TIME__);
 	while ( run_this_server_please_mister ){
