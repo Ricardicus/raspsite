@@ -85,7 +85,8 @@ int output_file(int socket, const char * filepath, char * filename)
 	write(socket, &size_length_ch, 1);
 
 	// Telling the server just how many bytes are expected to be sent
-	for ( int i = 0; i < size_length_ch; i++ ){			
+	int i = 0;
+	for (; i < size_length_ch; i++ ){			
 		length_ch = (char)(file_size >> i*8);
 		write(socket, &length_ch, 1);
 	}
@@ -185,7 +186,9 @@ void receive_file(int socket, const char * directory){
 	// Writing the data to file
 	if ( size_8 != 0 ){
 
-		for ( int8_t i = 0; i < size_8; ++i ){
+		int8_t i = 0;
+
+		for (; i < size_8; ++i ){
 			read(socket, &response_ch, 1);
 			fputc(response_ch, fp);
 		}
@@ -201,7 +204,9 @@ void receive_file(int socket, const char * directory){
 
 	} else if ( size_16 != 0 ){
 
-		for ( int16_t i = 0; i < size_16; ++i ){
+		int16_t i = 0;
+
+		for (; i < size_16; ++i ){
 			read(socket, &response_ch, 1);
 			fputc(response_ch, fp);
 		}
@@ -216,7 +221,9 @@ void receive_file(int socket, const char * directory){
 
 	} else if ( size_32 != 0 ){
 
-		for ( int32_t i = 0; i < size_32; ++i ){
+		int32_t i = 0;
+
+		for (; i < size_32; ++i ){
 			read(socket, &response_ch, 1);
 			fputc(response_ch, fp);
 		}
@@ -230,7 +237,9 @@ void receive_file(int socket, const char * directory){
 	
 	} else if ( size_64 != 0 ){
 
-		for ( int64_t i = 0; i < size_64; i++ ){
+		int64_t  i=0;
+
+		for (; i < size_64; i++ ){
 			read(socket, &response_ch, 1);
 			fputc(response_ch, fp);
 		}
