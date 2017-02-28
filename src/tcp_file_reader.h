@@ -27,6 +27,12 @@ extern "C" {
 
 #define FILE_RECEIVE_PORT	8090
 
+typedef struct tcp_receive_operation_t {
+	int command;
+	int socket;
+	char client_ip[40];
+} tcp_receive_operation_t;
+
 void * file_receiver_thread_callback(void *);
 void * tcp_receive_file(void *);
 

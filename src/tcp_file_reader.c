@@ -2,9 +2,19 @@
 
 void * tcp_receive_file(void * data)
 {
-	int socket = *((int*) data);
-	printf("Accepted connection on socket: %d\n", socket);
-	receive_file(socket, "downloads");
+	tcp_receive_operation_t * op = (tcp_receive_operation_t *) data;
+	printf("Accepted connection on socket: %d from ip: %s\n", op->socket, op->client_ip);
+
+	switch ( op->command ) {
+	case SEND_FILE:
+		receive_file(op->socket, "downloads"); // socket closed by this function
+	break;
+	default:
+	// more to come..
+	break;
+	}
+
+	free(op);
 	return NULL;
 }
 
@@ -47,19 +57,16 @@ void * file_receiver_thread_callback(void * data)
 		// get client IP
 		inet_ntop(AF_INET, &cli_addr.sin_addr ,client_IP, INET_ADDRSTRLEN);
 
-		// heap allocated client ip
-		char * client_ip_heap = calloc(strlen(client_IP)+1, 1);
-		strcpy(client_ip_heap, client_IP);
-
-		log("File transfer request from IP: %s\n", client_ip_heap);
-		free(client_ip_heap);
+		// heap allocated request data
+		tcp_receive_operation_t * op = calloc(sizeof(tcp_receive_operation_t),1);
+		op->socket = newsockfd_stack;
+		strcpy(op->client_ip, client_IP);
 
 		// Getting the command
 		read(newsockfd_stack, &command, 1);
+		op->command = command;
 		
-		if ( command == SEND_FILE ){
-			pthread_create(&callback_thread, NULL, tcp_receive_file, &newsockfd_stack);
-		}
+		pthread_create(&callback_thread, NULL, tcp_receive_file, op);
 
 	}
 

@@ -13,3 +13,6 @@ src/makefile
 
 # logs ..
 log/logg.txt
+
+# downloads
+downloads/*

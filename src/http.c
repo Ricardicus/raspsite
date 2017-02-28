@@ -365,7 +365,7 @@ void interpret_and_output(int socket, char * first_line)
 
 	char *c, *args, *command, *path, 
 		*cleaner, *buffer;
-	int cc;
+	int cc,n;
 	hashtable_t * params, *header_params;
 
 	// Getting the HTTP command and path!
