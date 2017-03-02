@@ -24,7 +24,7 @@ When you want to stop the server you need to reenter the tmux session, ths is do
 
 And the server is stopped.
 
-# Make it your own personal site
+# Make it your own
 
 The first thing it will do is map "/" to the file "index.html".
 With that in mind free to include you own files and write your own pages!
