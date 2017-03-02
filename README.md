@@ -26,8 +26,8 @@ And the server is stopped.
 
 # Make it your own personal site
 
-The first thing it will do is output "index.html"
-Feel free to write your own pages!
+The first thing it will do is map "/" to the file "index.html".
+With that in mind free to include you own files and write your own pages!
 Every file that exists will be outputted with corresponding headers (at least .js and .html, feel free to include more by digging into the code of http.c), exept files under /etc/, /src/, /log/, and paths including '~' or '..'. 
 
 You can also write you owns cgi's under the directory '/cgi/' for now it only supports cgi's written i python, 
