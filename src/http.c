@@ -296,7 +296,7 @@ int get_next_line(char * buffer, int buffer_size, int socket)
 * params - hash containg all keys relevant for the request
 * buffer - data to the http datagram
 */
-void parse_http_post_headers(hashtable_t * params, char * buffer){
+void parse_http_headers(hashtable_t * params, char * buffer){
 	char *args, *c;
 
 	args = c = buffer;
@@ -354,6 +354,17 @@ void parse_http_post_data(hashtable_t * params, char * buffer){
 }
 
 /*
+* Parsing the body part of the http post data
+*
+* params - hash containg all keys relevant for the request
+* buffer - data to the http datagram
+*/
+void parse_http_get_headers_and_arguments(hashtable_t * params, char * buffer)
+{
+
+}
+
+/*
 * Reads the first line message of the HTTP client request
 * and decides what to do. 
 *
@@ -364,9 +375,10 @@ void interpret_and_output(int socket, char * first_line)
 {
 
 	char *c, *args, *command, *path, 
-		*cleaner, *buffer;
+		*cleaner, *buffer, *tmp;
 	int cc,n;
 	hashtable_t * params, *header_params;
+	FILE *fp;
 
 	// Getting the HTTP command and path!
 	c = first_line;
@@ -407,12 +419,7 @@ void interpret_and_output(int socket, char * first_line)
 
 		n = read(socket, buffer, 1024*3);
 
-		parse_http_post_headers(header_params, buffer);
-
-//		printf("Cookie: %s\n", get(header_params,"Cookie"));
-
-		//print_table_as_chars(header_params);
-//		print_table_as_chars(header_params);
+		parse_http_headers(header_params, buffer);
 
 		if ( !strcmp(path, "/") ){
  			// Outputting the index file!
@@ -420,7 +427,25 @@ void interpret_and_output(int socket, char * first_line)
    			return;
 		}
 
-		if ( strstr(path, "coffee.cgi") != NULL ){
+		if ( strstr(path, "cgi/") != NULL && strstr(path, ".py") != NULL ){
+
+			tmp = calloc(strlen(path)+1,1);
+			strcpy(tmp, path);
+			cleaner = strstr(tmp, "?");
+			if ( cleaner != NULL ){
+				*cleaner = '\0';
+			}
+
+			fp = fopen(tmp+1, "r");
+			if ( fp != NULL ){
+				fclose(fp);
+				cgi_py(socket, header_params, path); // Leaving it to the cgi writer to make sense!
+			} else {
+				output_file_not_found(socket);
+			}
+
+			free(tmp);
+		} else if ( strstr(path, "coffee.cgi") != NULL ){
 			/*
 			* the coffe.cgi. Args: action
 			*/ 
@@ -525,7 +550,7 @@ void interpret_and_output(int socket, char * first_line)
 		buffer = calloc(1024*5, 1);
 		n = read(socket, buffer, 1024*3);
 
-		parse_http_post_headers(params, buffer);
+		parse_http_headers(params, buffer);
 		parse_http_post_data(params, buffer);
 
 //		print_table_as_chars(params);

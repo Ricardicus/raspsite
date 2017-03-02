@@ -184,3 +184,24 @@ void print_table_as_chars(hashtable_t * hashtable)
 		i++;
 	}
 }
+
+void write_table_as_python_os_environ(hashtable_t * hashtable, FILE * fp)
+{
+	int i = 0;
+	int size = hashtable->size;
+	struct key_val_pair * ptr;
+
+	while(i<size)
+	{
+		if(hashtable->table[i] != NULL)
+		{
+			ptr = hashtable->table[i];
+			while(ptr!=NULL)
+			{
+				fprintf(fp,"os.environ[\"%s\"] = \"%s\"\n",ptr->key,(char*)ptr->data);
+				ptr=ptr->next;
+			}
+		}
+		i++;
+	}
+}

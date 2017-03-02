@@ -2,8 +2,13 @@
 
 void * tcp_receive_file(void * data)
 {
+	char command;
 	tcp_receive_operation_t * op = (tcp_receive_operation_t *) data;
 	printf("Accepted connection on socket: %d from ip: %s\n", op->socket, op->client_ip);
+
+	// Getting the command
+	read(op->socket, &command, 1);
+	op->command = command;
 
 	switch ( op->command ) {
 	case SEND_FILE:
@@ -27,7 +32,7 @@ void * file_receiver_thread_callback(void * data)
 	int sockfd, portno = FILE_RECEIVE_PORT, newsockfd_stack;
 	socklen_t clilen; 
 
-	char client_IP[INET_ADDRSTRLEN], command;
+	char client_IP[INET_ADDRSTRLEN];
 	struct sockaddr_in serv_addr, cli_addr;
 
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -61,10 +66,6 @@ void * file_receiver_thread_callback(void * data)
 		tcp_receive_operation_t * op = calloc(sizeof(tcp_receive_operation_t),1);
 		op->socket = newsockfd_stack;
 		strcpy(op->client_ip, client_IP);
-
-		// Getting the command
-		read(newsockfd_stack, &command, 1);
-		op->command = command;
 		
 		pthread_create(&callback_thread, NULL, tcp_receive_file, op);
 

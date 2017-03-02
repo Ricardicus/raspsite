@@ -11,10 +11,12 @@ extern "C" {
 #include <unistd.h>
 #include <errno.h>
 #include <pthread.h>
+#include <stdint.h>
 #include "snakegame.h"
 #include "coffee.h"
 #include "hashtable.h"
 #include "logger.h"
+#include "cgi.h"
 
 #define xstr(a) 		#a
 #define str(a)			xstr(a)
@@ -41,8 +43,9 @@ void * http_callback(void *);
 void output_path(int, const char *);
 void output_index(int);
 int get_next_line(char *, int, int);
+void parse_http_get_headers_and_arguments(hashtable_t*, char*);
 void parse_http_post_data(hashtable_t *, char *);
-void parse_http_post_headers(hashtable_t *, char *);
+void parse_http_headers(hashtable_t *, char *);
 
 /* HTTP-Headers */
 void output_file_not_found(int);

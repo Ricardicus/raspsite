@@ -3334,7 +3334,6 @@ File transfer request from IP: 127.0.0.1
 Backend v.1, c. Feb 28 2017 14:48:38
 File transfer request from IP: 127.0.0.1
 File transfer request from IP: 127.0.0.1
-=======
 [Tue Feb 21 20:47:28 2017] 192.168.1.133: GET / HTTP/1.1
 [Tue Feb 21 20:47:28 2017] 192.168.1.133: GET /style/index.css HTTP/1.1
 [Tue Feb 21 20:47:28 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
@@ -3410,3 +3409,69 @@ ERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on binding
 [Tue Feb 21 22:44:46 2017] 192.168.1.128: GET /style/snake.gif HTTP/1.1
 [Tue Feb 21 22:44:46 2017] 192.168.1.128: GET /style/smallbluegoat.jpg HTTP/1.1
 [Tue Feb 21 22:44:46 2017] 192.168.1.128: GET /index.cgi?action=get HTTP/1.1
+Backend v.1, c. Feb 28 2017 14:48:38
+File transfer request from IP: 127.0.0.1
+Backend v.1, c. Feb 28 2017 15:24:03
+Backend v.1, c. Feb 28 2017 15:24:03
+Backend v.1, c. Feb 28 2017 15:24:03
+Backend v.1, c. Feb 28 2017 15:24:03
+Backend v.1, c. Mar  2 2017 22:39:09
+[Thu Mar  2 22:43:55 2017] 127.0.0.1: GET / HTTP/1.1
+[Thu Mar  2 22:43:55 2017] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Thu Mar  2 22:43:56 2017] 127.0.0.1: GET /scripts/https.js HTTP/1.1
+[Thu Mar  2 22:43:56 2017] 127.0.0.1: GET /style/index.css HTTP/1.1
+[Thu Mar  2 22:43:56 2017] 127.0.0.1: GET /style/bopsomn.gif HTTP/1.1
+[Thu Mar  2 22:43:56 2017] 127.0.0.1: GET /style/snake.gif HTTP/1.1
+[Thu Mar  2 22:43:56 2017] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+[Thu Mar  2 22:43:56 2017] 127.0.0.1: GET /index.cgi?action=get HTTP/1.1
+[Thu Mar  2 22:43:56 2017] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Thu Mar  2 22:44:20 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+[Thu Mar  2 22:44:20 2017] 127.0.0.1:  [DISREGARDED]
+[Thu Mar  2 22:44:20 2017] 127.0.0.1:  [DISREGARDED]
+[Thu Mar  2 22:44:20 2017] 127.0.0.1:  [DISREGARDED]
+[Thu Mar  2 22:44:20 2017] 127.0.0.1:  [DISREGARDED]
+[Thu Mar  2 22:44:20 2017] 127.0.0.1:  [DISREGARDED]
+ERROR on bindingBackend v.1, c. Mar  2 2017 22:39:09
+[Thu Mar  2 22:46:39 2017] 127.0.0.1: GET / HTTP/1.1
+[Thu Mar  2 22:46:39 2017] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Thu Mar  2 22:46:39 2017] 127.0.0.1: GET /scripts/https.js HTTP/1.1
+[Thu Mar  2 22:46:39 2017] 127.0.0.1: GET /style/index.css HTTP/1.1
+[Thu Mar  2 22:46:40 2017] 127.0.0.1: GET /style/bopsomn.gif HTTP/1.1
+[Thu Mar  2 22:46:40 2017] 127.0.0.1: GET /style/snake.gif HTTP/1.1
+[Thu Mar  2 22:46:40 2017] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+[Thu Mar  2 22:46:40 2017] 127.0.0.1: GET /index.cgi?action=get HTTP/1.1
+[Thu Mar  2 22:46:40 2017] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Thu Mar  2 22:46:45 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+[Thu Mar  2 22:46:45 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+[Thu Mar  2 22:46:45 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+[Thu Mar  2 22:46:45 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+[Thu Mar  2 22:46:45 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+[Thu Mar  2 22:46:45 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+[Thu Mar  2 22:46:46 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+[Thu Mar  2 22:46:46 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+[Thu Mar  2 22:46:51 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+Backend v.1, c. Mar  2 2017 22:39:09
+[Thu Mar  2 22:49:36 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+[Thu Mar  2 22:49:36 2017] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Thu Mar  2 22:49:36 2017] 127.0.0.1:  [DISREGARDED]
+ERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingBackend v.1, c. Mar  2 2017 22:39:09
+[Thu Mar  2 22:55:06 2017] 127.0.0.1: GET / HTTP/1.1
+[Thu Mar  2 22:55:06 2017] 127.0.0.1: GET /scripts/jquery-min.js HTTP/1.1
+[Thu Mar  2 22:55:06 2017] 127.0.0.1: GET /scripts/https.js HTTP/1.1
+[Thu Mar  2 22:55:06 2017] 127.0.0.1: GET /style/index.css HTTP/1.1
+[Thu Mar  2 22:55:06 2017] 127.0.0.1: GET /style/bopsomn.gif HTTP/1.1
+[Thu Mar  2 22:55:06 2017] 127.0.0.1: GET /style/snake.gif HTTP/1.1
+[Thu Mar  2 22:55:06 2017] 127.0.0.1: GET /style/smallbluegoat.jpg HTTP/1.1
+[Thu Mar  2 22:55:06 2017] 127.0.0.1: GET /index.cgi?action=get HTTP/1.1
+[Thu Mar  2 22:55:07 2017] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Thu Mar  2 22:55:07 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+[Thu Mar  2 22:55:07 2017] 127.0.0.1: GET /favicon.ico HTTP/1.1
+ERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingBackend v.1, c. Mar  2 2017 22:39:09
+[Thu Mar  2 22:55:58 2017] 127.0.0.1: GET /cgi/test.py HTTP/1.1
+[Thu Mar  2 22:55:58 2017] 127.0.0.1: GET /favicon.ico HTTP/1.1
+[Thu Mar  2 22:55:58 2017] 127.0.0.1: GET /cgi/test.py? HTTP/1.1
+[Thu Mar  2 22:56:04 2017] 127.0.0.1:  [DISREGARDED]
+[Thu Mar  2 22:56:04 2017] 127.0.0.1:  [DISREGARDED]
+[Thu Mar  2 23:03:34 2017] 127.0.0.1: GET /cgi/example.cgi HTTP/1.1
+[Thu Mar  2 23:03:34 2017] 127.0.0.1: GET /cgi/example_cgi.py HTTP/1.1
+[Thu Mar  2 23:03:34 2017] 127.0.0.1:  [DISREGARDED]
