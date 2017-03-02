@@ -22,4 +22,14 @@ When you want to stop the server you need to reenter the tmux session, ths is do
 10. Type: "q"
 11. Refresh the page,
 
-And the server is stopped.. :) 
+And the server is stopped.
+
+# Make it you own
+
+The first thing it will do is output "index.html"
+Feel free to write your own pages!
+Every file that exists will be outputted with corresponding headers (at least .js and .html, feel free to include more by digging into the code of http.c), exept files under /etc/, /src/, /log/, and paths including '~' or '..'. 
+
+You can also write you owns cgi's under the directory '/cgi/' for now it only supports cgi's written i python, 
+but I might extend it to perl, bash and other interpreted languages in the future! 
+I hope you have fun with it. 
