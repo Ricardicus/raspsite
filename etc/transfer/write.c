@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 		printf("File received on host.\n");
 	break;
 	default:
-		printf("Consult the log file, something went wrong during file send operation. Is the server responding?");
+		printf("Consult the log file, something went wrong during file send operation. Is the server responding?\n");
 	break;
 	}
 
