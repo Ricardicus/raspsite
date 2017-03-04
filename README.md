@@ -27,9 +27,9 @@ And the server is stopped.
 # Make it your own
 
 The first thing it will do is map "/" to the file "index.html".
-With that in mind free to include you own files and write your own pages!
-Every file that exists will be outputted with corresponding headers (at least .js and .html, feel free to include more by digging into the code of http.c), exept files under /etc/, /src/, /log/, and paths including '~' or '..'. 
+With that in mind please feel free to include you own files and write your own pages!
+Every file that exists will be outputted with corresponding headers (at least .js and .html, feel free to include more by digging into the code of http.c), except files under /etc/, /src/, /log/, and paths including '~' or '..'. 
 
-You can also write you owns cgi's under the directory '/cgi/' for now it only supports cgi's written i python, 
+You can also write you own cgi's under the directory '/cgi/'. For now it only supports cgi's written i python, 
 but I might extend it to perl, bash and other interpreted languages in the future! 
-I hope you have fun with it. 
+I hope you can have fun with it!
