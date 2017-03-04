@@ -19,13 +19,14 @@
 
 int main(int argc, char *argv[])
 {
+	int socket, response;
 
 	if ( argc < 4 ){
 		printf("usage: ./write [server-IP][ file] [received file name]\n");
 		return -1;
 	}
 
-	int socket = make_contact(argv[1], 8090);
+	socket = make_contact(argv[1], 8090);
 
 	if ( socket == -1 ){
 		log_error("Failed to connect to server.");
@@ -33,8 +34,18 @@ int main(int argc, char *argv[])
 	}
 
 	printf("Attempting to output file\n");
-	output_file(socket, argv[2], argv[3]);
-	printf("File received on host.\n");
+	
+	response = output_file(socket, argv[2], argv[3]);
+	
+	switch (response) {
+	case EVERYTHING_OK:
+		printf("File received on host.\n");
+	break;
+	default:
+		printf("Consult the log file, something went wrong during file send operation. Is the server responding?");
+	break;
+	}
+
 	close(socket);
 
 	return 0;
