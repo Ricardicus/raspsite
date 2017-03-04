@@ -3409,6 +3409,7 @@ ERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on binding
 [Tue Feb 21 22:44:46 2017] 192.168.1.128: GET /style/snake.gif HTTP/1.1
 [Tue Feb 21 22:44:46 2017] 192.168.1.128: GET /style/smallbluegoat.jpg HTTP/1.1
 [Tue Feb 21 22:44:46 2017] 192.168.1.128: GET /index.cgi?action=get HTTP/1.1
+<<<<<<< Updated upstream
 Backend v.1, c. Feb 28 2017 14:48:38
 File transfer request from IP: 127.0.0.1
 Backend v.1, c. Feb 28 2017 15:24:03
