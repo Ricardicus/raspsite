@@ -30,7 +30,7 @@ while [ -f "$HOME/coding/webb/raspsite/etc/keep-alive.txt" ]; do
 
 	else 
 		echo "Watchdog: Could not find 'backend' among the active processes, will start it."
-		./backend BACKEND_PORT
+		./backend $BACKEND_PORT
 		sleep 60 # Waiting for sockets to timeout
 	fi	
 done

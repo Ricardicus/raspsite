@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 	serv_addr.sin_port = htons(portno);
 
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-		log_error("ERROR on binding");
+		log_error("ERROR on binding\n");
 		scores_quit();
 		return EXIT_FAILURE;
 	}
