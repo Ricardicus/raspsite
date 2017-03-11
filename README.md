@@ -24,6 +24,15 @@ When you want to stop the server you need to reenter the tmux session, ths is do
 
 And the server is stopped.
 
+# Regarding step 6 (watchdog)
+To keep the server running for as long as possible do the following instead of step 6:
+
+1. Create a file called 'keep-alive.txt' under the directory 'etc': 'echo "For the watchdog." > etc/keep-alive.txt' 
+2. Type: 'chmod ugo+x watchdog.sh'
+3. Launch the server through the watchdog: "./watchdog 8080"
+
+The server is now running for as long as possible, recovering from whatever caused it to crash. 
+
 # Make it your own
 
 The first thing it will do is map "/" to the file "index.html".
