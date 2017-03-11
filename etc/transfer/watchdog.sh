@@ -31,8 +31,11 @@ while [ -f "$HOME/coding/webb/raspsite/etc/keep-alive.txt" ]; do
 	else 
 		echo "Watchdog: Could not find 'backend' among the active processes, will start it."
 		./backend 8080
-		sleep 60 # Waiting for sockets to timeout
+		sleep 10 # relaxing the watchdog
+		return
 	fi	
 done
+
+echo "$(ps -a)"
 
 echo "Watchdog session ended"

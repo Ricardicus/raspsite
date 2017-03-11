@@ -3410,6 +3410,7 @@ ERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on binding
 [Tue Feb 21 22:44:46 2017] 192.168.1.128: GET /style/smallbluegoat.jpg HTTP/1.1
 [Tue Feb 21 22:44:46 2017] 192.168.1.128: GET /index.cgi?action=get HTTP/1.1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Backend v.1, c. Feb 28 2017 14:48:38
 File transfer request from IP: 127.0.0.1
 Backend v.1, c. Feb 28 2017 15:24:03
@@ -3476,3 +3477,220 @@ ERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on binding
 [Thu Mar  2 23:03:34 2017] 127.0.0.1: GET /cgi/example.cgi HTTP/1.1
 [Thu Mar  2 23:03:34 2017] 127.0.0.1: GET /cgi/example_cgi.py HTTP/1.1
 [Thu Mar  2 23:03:34 2017] 127.0.0.1:  [DISREGARDED]
+=======
+Backend v.1, c. Feb 28 2017 19:08:59
+>>>>>>> Stashed changes
+Backend v.1, c. Feb 28 2017 19:08:59
+[Sat Mar  4 11:24:16 2017] 192.168.1.133: GET / HTTP/1.1
+[Sat Mar  4 11:24:16 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar  4 11:24:17 2017] 192.168.1.133: GET /scripts/https.js HTTP/1.1
+[Sat Mar  4 11:24:17 2017] 192.168.1.133: GET /style/index.css HTTP/1.1
+[Sat Mar  4 11:24:17 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Sat Mar  4 11:24:17 2017] 192.168.1.133: GET /style/snake.gif HTTP/1.1
+[Sat Mar  4 11:24:17 2017] 192.168.1.133: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Mar  4 11:24:17 2017] 192.168.1.133: GET /index.cgi?action=get HTTP/1.1
+[Sat Mar  4 11:24:18 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Sat Mar  4 11:24:18 2017] 192.168.1.133: GET /snake.html HTTP/1.1
+[Sat Mar  4 11:24:20 2017] 192.168.1.133: GET /style/look.css HTTP/1.1
+[Sat Mar  4 11:24:20 2017] 192.168.1.133: GET /style/snakelook.css HTTP/1.1
+[Sat Mar  4 11:24:20 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar  4 11:24:20 2017] 192.168.1.133: GET /scripts/snake.js HTTP/1.1
+[Sat Mar  4 11:24:20 2017] 192.168.1.133: GET /style/ajax-loader.gif HTTP/1.1
+[Sat Mar  4 11:24:20 2017] 192.168.1.133: GET /game.cgi?action=load-game-cookie HTTP/1.1
+[Sat Mar  4 11:24:20 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Mar  4 11:24:24 2017] 192.168.1.133: GET /game.cgi?action=get_highscore HTTP/1.1
+[Sat Mar  4 11:39:16 2017] 192.168.1.133: GET /cgi/example.cgi?hejsan HTTP/1.1
+[Sat Mar  4 11:39:16 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:39:16 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:39:16 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:39:16 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:39:16 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:39:38 2017] 192.168.1.133: GET /cgi/example_cgi.py?hejsan HTTP/1.1
+[Sat Mar  4 11:39:38 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:39:38 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:39:38 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:39:38 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:39:38 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:40:24 2017] 192.168.1.133: GET /cgi/example_cgi?hejsan HTTP/1.1
+[Sat Mar  4 11:40:24 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:40:24 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:40:24 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:40:24 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:40:35 2017] 192.168.1.133: GET /cgi/example_cgi?hejsan=sa HTTP/1.1
+[Sat Mar  4 11:40:35 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:40:36 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:40:35 2017] 192.168.1.133:  [DISREGARDED]
+ERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingBackend v.1, c. Mar  4 2017 11:43:34
+[Sat Mar  4 11:45:01 2017] 192.168.1.133: GET / HTTP/1.1
+[Sat Mar  4 11:45:01 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar  4 11:45:01 2017] 192.168.1.133: GET /scripts/https.js HTTP/1.1
+[Sat Mar  4 11:45:01 2017] 192.168.1.133: GET /style/index.css HTTP/1.1
+[Sat Mar  4 11:45:01 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Sat Mar  4 11:45:01 2017] 192.168.1.133: GET /style/snake.gif HTTP/1.1
+[Sat Mar  4 11:45:01 2017] 192.168.1.133: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Mar  4 11:45:01 2017] 192.168.1.133: GET /index.cgi?action=get HTTP/1.1
+[Sat Mar  4 11:45:02 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Sat Mar  4 11:45:10 2017] 192.168.1.133: GET /cgi/example_cgi.py?hej HTTP/1.1
+[Sat Mar  4 11:45:10 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:45:10 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:45:10 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:45:10 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:47:19 2017] 192.168.1.133: GET /cgi/example_cgi.py?hej HTTP/1.1
+[Sat Mar  4 11:47:19 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Sat Mar  4 11:47:19 2017] 192.168.1.133: GET /cgi/example_cgi.py?hejsandsa=sa HTTP/1.1
+[Sat Mar  4 11:47:19 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 11:47:23 2017] 192.168.1.133:  [DISREGARDED]
+Backend v.1, c. Mar  4 2017 11:43:34
+[Sat Mar  4 16:55:18 2017] 192.168.1.133: GET /cgi/example_cgi.py?hejsandsa=sa HTTP/1.1
+[Sat Mar  4 16:55:18 2017] 192.168.1.133: GET /cgi/example_cgi.py?hejsandsa=sasda HTTP/1.1
+[Sat Mar  4 16:55:18 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar  4 16:55:30 2017] 192.168.1.133: GET /cgi/example_cgi.py?hejsandsa=sasda HTTP/1.1
+[Sat Mar  4 16:55:53 2017] 192.168.1.133: GET / HTTP/1.1
+[Sat Mar  4 16:55:53 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar  4 16:55:53 2017] 192.168.1.133: GET /scripts/https.js HTTP/1.1
+[Sat Mar  4 16:55:53 2017] 192.168.1.133: GET /style/index.css HTTP/1.1
+[Sat Mar  4 16:55:53 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Sat Mar  4 16:55:54 2017] 192.168.1.133: GET /style/snake.gif HTTP/1.1
+[Sat Mar  4 16:55:54 2017] 192.168.1.133: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Mar  4 16:55:54 2017] 192.168.1.133: GET /scripts/jquery.min.map HTTP/1.1
+[Sat Mar  4 16:55:54 2017] 192.168.1.133: GET /index.cgi?action=get HTTP/1.1
+[Sat Mar  4 18:03:12 2017] 89.249.247.149: GET http://cdnjs.cloudflare.com/ajax/libs/6px/1.0.3/6px.min.js HTTP/1.1
+[Sat Mar  4 19:19:04 2017] 77.218.252.22: GET / HTTP/1.1
+[Sat Mar  4 19:19:05 2017] 77.218.252.22: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar  4 19:19:05 2017] 77.218.252.22: GET /scripts/https.js HTTP/1.1
+[Sat Mar  4 19:19:05 2017] 77.218.252.22: GET /style/bopsomn.gif HTTP/1.1
+[Sat Mar  4 19:19:05 2017] 77.218.252.22: GET /style/index.css HTTP/1.1
+[Sat Mar  4 19:19:05 2017] 77.218.252.22: GET /style/snake.gif HTTP/1.1
+[Sat Mar  4 19:19:05 2017] 77.218.252.22: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Mar  4 19:19:05 2017] 77.218.252.22: GET /index.cgi?action=get HTTP/1.1
+[Sat Mar  4 19:19:09 2017] 77.218.252.22: GET /krypt.html HTTP/1.1
+[Sat Mar  4 19:19:09 2017] 77.218.252.22: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Mar  4 19:19:09 2017] 77.218.252.22: GET /style/look.css HTTP/1.1
+[Sat Mar  4 19:19:09 2017] 77.218.252.22: GET /scripts/kryptering.js HTTP/1.1
+[Sat Mar  4 19:19:09 2017] 77.218.252.22: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar  4 19:22:19 2017] 77.218.252.22: GET / HTTP/1.1
+[Sat Mar  4 19:22:19 2017] 77.218.252.22: GET /scripts/https.js HTTP/1.1
+[Sat Mar  4 19:22:19 2017] 77.218.252.22: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar  4 19:22:19 2017] 77.218.252.22: GET /style/index.css HTTP/1.1
+[Sat Mar  4 19:22:19 2017] 77.218.252.22: GET /style/bopsomn.gif HTTP/1.1
+[Sat Mar  4 19:22:20 2017] 77.218.252.22: GET /style/snake.gif HTTP/1.1
+[Sat Mar  4 19:22:20 2017] 77.218.252.22: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Mar  4 19:22:20 2017] 77.218.252.22: GET /index.cgi?action=get HTTP/1.1
+[Sat Mar  4 19:23:02 2017] 77.218.252.22: GET /index.cgi?action=set&message=Huvudmatnu HTTP/1.1
+[Sat Mar  4 19:23:15 2017] 77.218.252.22: GET / HTTP/1.1
+[Sat Mar  4 19:23:16 2017] 77.218.252.22: GET /style/index.css HTTP/1.1
+[Sat Mar  4 19:23:16 2017] 77.218.252.22: GET /scripts/https.js HTTP/1.1
+[Sat Mar  4 19:23:16 2017] 77.218.252.22: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar  4 19:23:16 2017] 77.218.252.22: GET /style/bopsomn.gif HTTP/1.1
+[Sat Mar  4 19:23:16 2017] 77.218.252.22: GET /style/snake.gif HTTP/1.1
+[Sat Mar  4 19:23:16 2017] 77.218.252.22: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Mar  4 19:23:16 2017] 77.218.252.22: GET /index.cgi?action=get HTTP/1.1
+[Sat Mar  4 19:23:16 2017] 77.218.252.22: GET /apple-touch-icon-120x120-precomposed.png HTTP/1.1
+[Sat Mar  4 19:23:16 2017] 77.218.252.22: GET /apple-touch-icon-120x120.png HTTP/1.1
+[Sat Mar  4 19:23:16 2017] 77.218.252.22: GET /apple-touch-icon-precomposed.png HTTP/1.1
+[Sat Mar  4 19:23:17 2017] 77.218.252.22: GET /apple-touch-icon.png HTTP/1.1
+[Sat Mar  4 19:52:53 2017] 77.218.252.22: GET / HTTP/1.1
+[Sat Mar  4 19:52:53 2017] 77.218.252.22: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar  4 19:52:53 2017] 77.218.252.22: GET /style/bopsomn.gif HTTP/1.1
+[Sat Mar  4 19:52:53 2017] 77.218.252.22: GET /scripts/https.js HTTP/1.1
+[Sat Mar  4 19:52:53 2017] 77.218.252.22: GET /style/index.css HTTP/1.1
+[Sat Mar  4 19:52:53 2017] 77.218.252.22: GET /style/snake.gif HTTP/1.1
+[Sat Mar  4 19:52:53 2017] 77.218.252.22: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Mar  4 19:52:53 2017] 77.218.252.22: GET /index.cgi?action=get HTTP/1.1
+[Sat Mar  4 19:53:04 2017] 77.218.252.22: GET / HTTP/1.1
+[Sat Mar  4 19:53:04 2017] 77.218.252.22: GET /style/index.css HTTP/1.1
+[Sat Mar  4 19:53:04 2017] 77.218.252.22: GET /scripts/https.js HTTP/1.1
+[Sat Mar  4 19:53:04 2017] 77.218.252.22: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar  4 19:53:04 2017] 77.218.252.22: GET /style/bopsomn.gif HTTP/1.1
+[Sat Mar  4 19:53:04 2017] 77.218.252.22: GET /style/snake.gif HTTP/1.1
+[Sat Mar  4 19:53:04 2017] 77.218.252.22: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Mar  4 19:53:30 2017] 77.218.252.22: GET /index.cgi?action=set&message=Hej@Lisa@%3C3 HTTP/1.1
+[Sat Mar  4 19:53:34 2017] 77.218.252.22: GET / HTTP/1.1
+[Sat Mar  4 19:53:34 2017] 77.218.252.22: GET /style/bopsomn.gif HTTP/1.1
+[Sat Mar  4 19:53:34 2017] 77.218.252.22: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar  4 19:53:34 2017] 77.218.252.22: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Mar  4 19:53:35 2017] 77.218.252.22: GET /index.cgi?action=get HTTP/1.1
+Backend v.1, c. Mar  4 2017 11:43:34
+file_receiver_thread_callback ERROR on file receive binding
+Backend v.1, c. Mar  4 2017 11:43:34
+[Thu Mar  9 19:26:16 2017] 192.168.1.133: GET / HTTP/1.1
+[Thu Mar  9 19:26:16 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Thu Mar  9 19:26:17 2017] 192.168.1.133: GET /scripts/https.js HTTP/1.1
+[Thu Mar  9 19:26:17 2017] 192.168.1.133: GET /style/index.css HTTP/1.1
+[Thu Mar  9 19:26:17 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Thu Mar  9 19:26:17 2017] 192.168.1.133: GET /style/snake.gif HTTP/1.1
+[Thu Mar  9 19:26:17 2017] 192.168.1.133: GET /style/smallbluegoat.jpg HTTP/1.1
+[Thu Mar  9 19:26:17 2017] 192.168.1.133: GET /index.cgi?action=get HTTP/1.1
+[Thu Mar  9 19:26:19 2017] 192.168.1.133: GET / HTTP/1.1
+[Thu Mar  9 19:26:19 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Thu Mar  9 19:26:19 2017] 192.168.1.133: GET /scripts/https.js HTTP/1.1
+[Thu Mar  9 19:26:19 2017] 192.168.1.133: GET /style/index.css HTTP/1.1
+[Thu Mar  9 19:26:19 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Thu Mar  9 19:26:19 2017] 192.168.1.133: GET /style/snake.gif HTTP/1.1
+[Thu Mar  9 19:26:19 2017] 192.168.1.133: GET /style/smallbluegoat.jpg HTTP/1.1
+[Thu Mar  9 19:26:19 2017] 192.168.1.133: GET /index.cgi?action=get HTTP/1.1
+[Thu Mar  9 19:26:19 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Thu Mar  9 19:26:20 2017] 192.168.1.133: GET / HTTP/1.1
+[Thu Mar  9 19:26:20 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Thu Mar  9 19:26:20 2017] 192.168.1.133: GET /scripts/https.js HTTP/1.1
+[Thu Mar  9 19:26:20 2017] 192.168.1.133: GET /style/index.css HTTP/1.1
+[Thu Mar  9 19:26:20 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Thu Mar  9 19:26:20 2017] 192.168.1.133: GET /style/snake.gif HTTP/1.1
+[Thu Mar  9 19:26:21 2017] 192.168.1.133: GET /style/smallbluegoat.jpg HTTP/1.1
+[Thu Mar  9 19:26:21 2017] 192.168.1.133: GET /index.cgi?action=get HTTP/1.1
+[Thu Mar  9 19:26:21 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Thu Mar  9 19:53:01 2017] 80.65.206.171: GET / HTTP/1.0
+[Thu Mar  9 21:08:38 2017] 76.69.50.125: GET / HTTP/1.0
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+[Sat Mar 11 12:11:11 2017] 192.168.1.133: GET / HTTP/1.1
+[Sat Mar 11 12:11:11 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar 11 12:11:11 2017] 192.168.1.133: GET /scripts/https.js HTTP/1.1
+[Sat Mar 11 12:11:11 2017] 192.168.1.133: GET /style/index.css HTTP/1.1
+[Sat Mar 11 12:11:11 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Sat Mar 11 12:11:11 2017] 192.168.1.133: GET /index.cgi?action=get HTTP/1.1
+[Sat Mar 11 12:11:11 2017] 192.168.1.133: GET /style/snake.gif HTTP/1.1
+[Sat Mar 11 12:11:11 2017] 192.168.1.133: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Mar 11 12:11:11 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+[Sat Mar 11 12:19:14 2017] 192.168.1.133: GET /watchdog.sh HTTP/1.1
+[Sat Mar 11 12:19:14 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar 11 12:19:14 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar 11 12:19:14 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar 11 12:19:14 2017] 192.168.1.133:  [DISREGARDED]
+[Sat Mar 11 12:19:26 2017] 192.168.1.133: GET / HTTP/1.1
+[Sat Mar 11 12:19:26 2017] 192.168.1.133: GET /style/index.css HTTP/1.1
+[Sat Mar 11 12:19:26 2017] 192.168.1.133: GET /index.cgi?action=get HTTP/1.1
+[Sat Mar 11 12:19:26 2017] 192.168.1.133:  [DISREGARDED]
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+ERROR on bindingERROR on bindingBackend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+ERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingERROR on bindingBackend v.1, c. Mar  4 2017 11:43:34
+Backend v.1, c. Mar  4 2017 11:43:34
+[Sat Mar 11 14:24:26 2017] 192.168.1.133: GET / HTTP/1.1
+[Sat Mar 11 14:24:26 2017] 192.168.1.133: GET /style/index.css HTTP/1.1
+[Sat Mar 11 14:24:26 2017] 192.168.1.133: GET /scripts/jquery-min.js HTTP/1.1
+[Sat Mar 11 14:24:26 2017] 192.168.1.133: GET /scripts/https.js HTTP/1.1
+[Sat Mar 11 14:24:26 2017] 192.168.1.133: GET /style/bopsomn.gif HTTP/1.1
+[Sat Mar 11 14:24:26 2017] 192.168.1.133: GET /style/snake.gif HTTP/1.1
+[Sat Mar 11 14:24:26 2017] 192.168.1.133: GET /style/smallbluegoat.jpg HTTP/1.1
+[Sat Mar 11 14:24:26 2017] 192.168.1.133: GET /index.cgi?action=get HTTP/1.1
+[Sat Mar 11 14:24:26 2017] 192.168.1.133: GET /favicon.ico HTTP/1.1
+Backend v.1, c. Mar  4 2017 11:43:34
