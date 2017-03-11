@@ -29,8 +29,9 @@ To keep the server running for as long as possible do the following instead of s
 
 1. Create a file called 'keep-alive.txt' under the directory 'etc': 'echo "For the watchdog." > etc/keep-alive.txt' 
 2. Type: 'chmod ugo+x watchdog.sh'
-3. Launch the server through the watchdog: "./watchdog 8080"
+3. Launch the server through the watchdog: "./watchdog.sh 8080"
 
+Continue on with step 7 in the previously described set of steps.
 The server is now running for as long as possible, recovering from whatever caused it to crash. 
 
 # Make it your own
