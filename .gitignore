@@ -7,6 +7,7 @@ src/*.o
 *.ko
 *.obj
 *.elf
+*.pyc
 
 # For building on my laptop, I use another makefile
 src/makefile
