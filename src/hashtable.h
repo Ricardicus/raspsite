@@ -8,6 +8,7 @@ extern "C" {
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #define START_SPACE		5
 
@@ -44,7 +45,7 @@ void put(hashtable_t*,char*,void*);
 void print_table_callbacks(hashtable_t*);
 void print_table_as_chars(hashtable_t*);
 void write_table_as_python_os_environ(hashtable_t*,FILE*);
-
+void write_table_as_bash_variables(hashtable_t*,FILE*);
 
 #endif
 

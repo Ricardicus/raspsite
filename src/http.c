@@ -445,6 +445,24 @@ void interpret_and_output(int socket, char * first_line)
 			}
 
 			free(tmp);
+		} else if ( strstr(path, "cgi/") != NULL && strstr(path, ".sh") != NULL ){
+
+			tmp = calloc(strlen(path)+1,1);
+			strcpy(tmp, path);
+			cleaner = strstr(tmp, "?");
+			if ( cleaner != NULL ){
+				*cleaner = '\0';
+			}
+
+			fp = fopen(tmp+1, "r");
+			if ( fp != NULL ){
+				fclose(fp);
+				cgi_sh(socket, header_params, path); // Leaving it to the cgi writer to make sense!
+			} else {
+				output_file_not_found(socket);
+			}
+
+			free(tmp);
 		} else if ( strstr(path, "coffee.cgi") != NULL ){
 			/*
 			* the coffe.cgi. Args: action

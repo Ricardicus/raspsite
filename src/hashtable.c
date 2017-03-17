@@ -205,3 +205,32 @@ void write_table_as_python_os_environ(hashtable_t * hashtable, FILE * fp)
 		i++;
 	}
 }
+
+void write_table_as_bash_variables(hashtable_t * hashtable, FILE * fp)
+{
+	int i = 0;
+	char *c;
+	int size = hashtable->size;
+	struct key_val_pair * ptr;
+
+	while(i<size)
+	{
+		if(hashtable->table[i] != NULL)
+		{
+			ptr = hashtable->table[i];
+			while(ptr!=NULL)
+			{
+				c = ptr->key;
+				while ( *c ){
+					if ( *c != '-') {
+						fputc(toupper(*c), fp);
+					}
+					++c;
+				}
+				fprintf(fp,"=\"%s\"\n",(char*)ptr->data);
+				ptr=ptr->next;
+			}
+		}
+		i++;
+	}
+}
