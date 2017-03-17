@@ -40,6 +40,6 @@ The first thing it will do is map "/" to the file "index.html".
 With that in mind please feel free to include you own files and write your own pages!
 Every file that exists will be outputted with corresponding headers (at least .js and .html, feel free to include more by digging into the code of http.c), except files under /etc/, /src/, /log/, and paths including '~' or '..'. 
 
-You can also write you own cgi's under the directory '/cgi/'. For now it only supports cgi's written i python, 
-but I might extend it to perl, bash and other interpreted languages in the future! 
+You can also write you own cgi's under the directory '/cgi/'. For now it only supports cgi's written in Python and Bash, 
+but I might extend it to Perl and other interpreted languages in the future! 
 I hope you can have fun with it!
