@@ -12,6 +12,7 @@ extern "C" {
 #include <errno.h>
 #include <pthread.h>
 #include <stdint.h>
+#include <sys/types.h>
 #include "snakegame.h"
 #include "coffee.h"
 #include "hashtable.h"

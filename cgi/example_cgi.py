@@ -5,7 +5,7 @@
 #   you might want to write cgi's in a different language than C. 
 #
 # Notes:
-# * Every HTTP header will be stored under the os.environ map
+# * Every HTTP header will be stored in capital letters under the os.environ map
 # 	You can use URI encoded data by parsing the os.environ["path"] variable.
 # 	When you end the header section remeber that print outputs \n in the end. 
 # 	If you enter arguments to the URI, do it like this: 

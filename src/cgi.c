@@ -28,7 +28,7 @@ void cgi_py(int socket, hashtable_t* params, const char * cgi_path)
 
 	process = popen("python cgi/python.cgi", "r");
 
-	while ( fgets(buffer, sizeof(buffer), process) != NULL ){
+	while ( fgets(buffer, sizeof(buffer)-1, process) != NULL ){
 		write(socket, buffer, strlen(buffer));
 	}
 

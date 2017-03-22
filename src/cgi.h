@@ -16,6 +16,7 @@ extern "C" {
 #include <unistd.h>
 #include <errno.h>
 #include <pthread.h>
+#include <sys/types.h>
 #include "hashtable.h"
 
 void	cgi_py(int, hashtable_t*, const char*);
