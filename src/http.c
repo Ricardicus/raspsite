@@ -424,7 +424,11 @@ void interpret_and_output(int socket, char * first_line)
 
 		if ( !strcmp(path, "/") ){
  			// Outputting the index file!
-			output_index(socket);
+ 			pid = fork();
+			if ( pid == 0 ){
+				output_index(socket);
+			}
+
    			return;
 		}
 
@@ -555,7 +559,11 @@ void interpret_and_output(int socket, char * first_line)
 			}
 
 		} else {
-			output_path(socket, path+1);
+			
+			pid = fork();
+			if ( pid == 0 ){
+				output_path(socket, path+1);
+			}
 		}
 
 		free(buffer);
