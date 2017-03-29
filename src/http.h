@@ -10,6 +10,7 @@ extern "C" {
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
+#include <signal.h>
 #include <pthread.h>
 #include <stdint.h>
 #include <sys/types.h>
