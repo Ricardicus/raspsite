@@ -98,10 +98,12 @@ int main(int argc, char *argv[])
 		http_data->socket = newsockfd;
 
 		pthread_create(&callback_thread, NULL, http_callback, (void*)http_data);
+
 	}
 
 	scores_quit();
 	http_quit();
 	close(sockfd);
+
 	return EXIT_SUCCESS; 
 }

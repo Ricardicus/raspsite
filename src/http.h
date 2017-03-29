@@ -13,6 +13,8 @@ extern "C" {
 #include <pthread.h>
 #include <stdint.h>
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "snakegame.h"
 #include "coffee.h"
 #include "hashtable.h"

@@ -171,9 +171,12 @@ void output_file_not_found(int socket)
 void output_path(int socket, const char * path)
 {
 	http_header_callback_t callback;
-	char * msg; 
+	char *msg, *data; 
+	long int sz;
 	const char * file_type;
 	FILE * fp;
+	int fd;
+	struct stat st;
 
 	// hiding some "sensitive" information
 	if ( (strstr(path, "/etc/") != NULL) ||( strstr(path, "/src/") != NULL )
@@ -204,8 +207,8 @@ void output_path(int socket, const char * path)
 	* Outputs file if it exists
 	*/
 
-	fp = fopen(path, "r");
-	if ( ! fp ){
+	fd = open(path, O_RDONLY);
+	if ( fd < 0 ){
 		// sending a signal that it is no file with that name present.
 		output_file_not_found(socket);
 		return;
@@ -222,7 +225,7 @@ void output_path(int socket, const char * path)
 		log("error: file type of requested resource %s was not found.\n", path);
 		
 		output_file_not_found(socket);
-		fclose(fp);
+		close(fd);
    		return;
 	}
 
@@ -230,29 +233,36 @@ void output_path(int socket, const char * path)
 
 	callback = (http_header_callback_t) get(headers_callback, file_type);
 
+	stat(path, &st);
+	sz = st.st_size;
+
+	data = malloc(sz+1);
+	if ( data == NULL ){
+		output_file_not_found(socket);
+		close(fd);
+		return;
+	}
+
+	data[sz] = '\0';
+
+	read( fd, data, sz );
+
 	if ( callback != NULL ){
 		callback(socket);
-		int c;
-		while ( (c = fgetc(fp)) != EOF ){
-   			write(socket, &c, 1);
-   		}
-   		fclose(fp);
-   		return;
+   		write(socket, data, sz);
+   		close(fd);
 	} else {
 		// Outputting a simple html page 
 		((http_header_callback_t) get(headers_callback, "html"))(socket);
 
 		msg = "<!DOCTYPE html><body><pre>";
 		write(socket,msg, strlen(msg));
-		int c;
-		while ( (c = fgetc(fp)) != EOF ){
-			write(socket, &c, 1);
-		}
-		fclose(fp);
+		write(socket, data, sz);
+		close(fd);
 		msg = "</pre></body></html>";
 		write(socket,msg, strlen(msg));
-
 	}
+	free(data);
 }
 
 /*
