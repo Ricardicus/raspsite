@@ -5,6 +5,8 @@ extern "C" {
 #ifndef HTTP_UTIL_H
 #define HTTP_UTIL_H
 
+#include <ctype.h>
+
 /*
 * Wrapper for base 64 decoding and encoding found online at:
 * stackoverflow.com: http://stackoverflow.com/questions/342409/how-do-i-base64-encode-decode-in-c
@@ -19,7 +21,7 @@ void base64_cleanup(void);
 * Function for url decoding found online at:
 * stackoverflow.com: http://stackoverflow.com/questions/2673207/c-c-url-decode-library
 */
-void urldecode2(char *, const char *)
+void urldecode2(char *, const char *);
 
 #endif
 
