@@ -16,6 +16,8 @@ extern "C" {
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "snakegame.h"
+#include "http_util.h"
+#include "password.h"
 #include "coffee.h"
 #include "hashtable.h"
 #include "logger.h"
@@ -49,6 +51,7 @@ int get_next_line(char *, int, int);
 void parse_http_get_headers_and_arguments(hashtable_t*, char*);
 void parse_http_post_data(hashtable_t *, char *);
 void parse_http_headers(hashtable_t *, char *);
+void urldecode2(char *, const char *);
 
 /* HTTP-Headers */
 void output_file_not_found(int);

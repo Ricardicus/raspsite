@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -pthread
-OBJS = backend.o snakegame.o http.o coffee.o hashtable.o notif.o tcp_file_reader.o cgi.o file_display_cgi.o
+OBJS = backend.o snakegame.o http.o coffee.o hashtable.o notif.o tcp_file_reader.o cgi.o file_display_cgi.o http_util.o
 
 all : backend
 
@@ -8,7 +8,8 @@ backend: $(OBJS)
 	$(CC) $(OBJS) $(CFLAGS) -o backend
 backend.o: backend.c backend.h http.h hashtable.h snakegame.h coffee.h logger.h notif.h tcp_file_reader.h
 snakegame.o: snakegame.c snakegame.h logger.h
-http.o: http.c http.h snakegame.h coffee.h hashtable.h logger.h cgi.h
+http.o: http.c http.h snakegame.h coffee.h hashtable.h logger.h cgi.h password.h http_util.h
+http_util.o: http_util.c http_util.h
 coffee.o: coffee.c coffee.h
 hashtable.o: hashtable.c hashtable.h
 notif.o: notif.c notif.h tcp_file_reader.h

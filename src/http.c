@@ -2,6 +2,7 @@
 
 static hashtable_t * headers_callback;
 static pthread_mutex_t pthread_sync;
+
 /*
 * A bunch of functions that output meta data
 */ 
@@ -17,6 +18,25 @@ void output_js_headers(int socket)
 	msg = "Expires: 0\r\n";
 	write(socket,msg, strlen(msg));
    	msg = "Content-Type: application/javascript; charset=utf-8\r\n\r\n";
+   	write(socket,msg, strlen(msg));
+}
+
+void output_authenticate_headers(int socket)
+{
+	char * msg = "HTTP/1.1 401 Unauthorized\r\n";
+   	write(socket,msg,strlen(msg));
+   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
+   	write(socket,msg, strlen(msg));
+   	msg = "Pragma: no-cache\r\n";
+	write(socket,msg, strlen(msg));
+	msg = "Expires: 0\r\n";
+	write(socket,msg, strlen(msg));
+	msg = "WWW-Authenticate: Basic realm=\"private\"\r\n";
+	write(socket,msg, strlen(msg));
+   	msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
+   	write(socket,msg, strlen(msg));
+
+   	msg = "<!DOCTYPE html><body><pre>Authorization required.</pre></body></html>";
    	write(socket,msg, strlen(msg));
 }
 
@@ -680,9 +700,37 @@ void interpret_and_output(int socket, char * first_line)
 			}
 
 		} else if ( strstr(path, "list.cgi" ) ) {
-			char *list_action_cgi, *list_path_cgi;
+			char *list_action_cgi, *list_path_cgi, auth_info[100], *auth;
+			unsigned char *auth_decoded;
+			size_t out_len;
+			hashtable_t *display_parameters;
+
+			memset(auth_info, '\0', sizeof auth_info);
+
+			auth = (char*) get(header_params, "Authorization");
+			if ( auth == NULL ) {
+				output_authenticate_headers(socket);			
+				free(buffer);
+				free_hashtable(header_params);
+				return;
+			} 
+
+			auth_decoded = base64_decode(auth + 6, strlen(auth) - strlen("Basic "), &out_len);
+
+			if ( strcmp((char*)auth_decoded, STANDARD_USER_PASSWORD) ){
+				// Wrong user or password or both given!
+				output_authenticate_headers(socket);
+				free(buffer);
+				free_hashtable(header_params);
+				free(auth_decoded);
+				base64_cleanup(); 
+				return;
+			}
 			
-			hashtable_t *display_parameters = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
+			free(auth_decoded);
+			base64_cleanup(); 
+
+			display_parameters = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
 			display_parameters->data_also = 1;
 
 			if ( strstr(path, "path=") == NULL ||strstr(path, "action=") == NULL ||strchr(path, '&') == NULL ){
