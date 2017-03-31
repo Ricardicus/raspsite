@@ -18,7 +18,7 @@ static int mod_table[] = {0, 2, 1};
 char *base64_encode(const unsigned char *data,
                     size_t input_length,
                     size_t *output_length) {
-    int i;
+    int i,j;
 
     *output_length = 4 * ((input_length + 2) / 3);
 
@@ -49,7 +49,7 @@ char *base64_encode(const unsigned char *data,
 unsigned char *base64_decode(const char *data,
                              size_t input_length,
                              size_t *output_length) {
-    int i;
+    int i,j;
 
     if (decoding_table == NULL) build_decoding_table();
 
