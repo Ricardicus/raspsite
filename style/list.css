@@ -1,0 +1,24 @@
+
+.article img.back {
+	opacity: 0.4;
+	border-radius: 20px;
+	position: absolute;
+	width: 600px;
+	height: 400px;
+	top: 100px;
+	z-index:-1;
+	left: 30%;
+}
+
+td {
+	width: 100px;
+}
+
+td img {
+	width: 20px;
+	height: 20px;
+} 
+
+body {
+    background-color: #AAAAFF;
+}

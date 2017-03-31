@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script src="scripts/jquery-min.js"></script>
+ <script src="scripts/https.js"></script>
+ <script src="scripts/format.js"></script>
+ <script src="scripts/list_cgi.js"></script>
+<title>
+An HTTP Classic
+</title>
+</head>
+<link rel="stylesheet" href="style/list.css">
+<body bgcolor="0000FF">
+<div class="article">
+<img class="back" src="style/bopsomn.gif">
+<center>
+<table>
+	<tbody id="files-table-tbody">
+	</tbody>
+</table>
+</center>
+</div>
+<center>
+<p id="greeting"></p><br><br>
+</center>
+<script>
+
+function handlers(){
+	
+	// Graphic stuff
+	$(".overout")
+  	.mouseover(function() {
+	  	$(this).fadeTo(100,0.5);
+	})
+	.mouseout(function() {
+	    $(this).fadeTo(100,1.0);
+	})
+	.unbind("click")
+	.click(function(){
+
+		var type = $(this).attr("type");
+		var path = $(this).attr("path");
+
+		if ( type == "file" ) {
+			window_open("/list.cgi?action=download&path="+path);
+		} else if ( type == "dir" ) {
+			list(path);
+		}
+
+	})
+
+	;
+
+
+}
+
+$(document).ready(function(){
+	list("/");
+});
+
+</script>
+</body>
+</html>
+
