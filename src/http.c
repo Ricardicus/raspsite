@@ -387,7 +387,6 @@ void interpret_and_output(int socket, char * first_line)
 	char *c, *args, *command, *path, 
 		*cleaner, *buffer, *tmp;
 	int cc,n;
-	pid_t pid;
 	hashtable_t * params, *header_params;
 	FILE *fp;
 
@@ -434,10 +433,7 @@ void interpret_and_output(int socket, char * first_line)
 
 		if ( !strcmp(path, "/") ){
  			// Outputting the index file!
- 			pid = fork();
-			if ( pid == 0 ){
-				output_index(socket);
-			}
+			output_index(socket);
 
    			return;
 		}
@@ -453,12 +449,9 @@ void interpret_and_output(int socket, char * first_line)
 
 			fp = fopen(tmp+1, "r");
 			if ( fp != NULL ){
-				fclose(fp);
 
-				pid = fork();
-				if ( pid == 0 ){
-					cgi_py(socket, header_params, path); // Leaving it to the cgi writer to make sense!
-				}
+				fclose(fp);
+				cgi_py(socket, header_params, path); // Leaving it to the cgi writer to make sense!
 
 			} else {
 				output_file_not_found(socket);
@@ -476,12 +469,9 @@ void interpret_and_output(int socket, char * first_line)
 
 			fp = fopen(tmp+1, "r");
 			if ( fp != NULL ){
-				fclose(fp);
 
-				pid = fork();
-				if ( pid == 0 ){
-					cgi_sh(socket, header_params, path); // Leaving it to the cgi writer to make sense!
-				}
+				fclose(fp);
+				cgi_sh(socket, header_params, path); // Leaving it to the cgi writer to make sense!
 
 			} else {
 				output_file_not_found(socket);
@@ -558,7 +548,7 @@ void interpret_and_output(int socket, char * first_line)
 				fp = fopen("etc/index.txt", "r");
 
 				if ( fp == NULL ){
-					write(socket,"Lilla boppen, lilla lilla boppen", strlen("Lilla boppen, lilla lilla boppen"));
+					write(socket,"Hej", 3);
 				} else {
 					while( (cc=fgetc(fp)) != EOF ){
 						write(socket, &cc, 1);
@@ -570,10 +560,8 @@ void interpret_and_output(int socket, char * first_line)
 
 		} else {
 			
-			pid = fork();
-			if ( pid == 0 ){
-				output_path(socket, path+1);
-			}
+			output_path(socket, path+1);
+
 		}
 
 		free(buffer);
