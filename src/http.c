@@ -734,7 +734,6 @@ void interpret_and_output(int socket, char * first_line)
 			display_parameters->data_also = 1;
 
 			if ( strstr(path, "path=") == NULL ||strstr(path, "action=") == NULL ||strchr(path, '&') == NULL ){
-				printf("HERE\n");
 				output_file_not_found(socket);
 				return;
 			} 
