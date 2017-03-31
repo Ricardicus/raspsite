@@ -44,7 +44,6 @@ void free_http_data(http_data_t **);
 void interpret_and_output(int, char*);
 void * http_callback(void *);
 void output_path(int, const char *);
-void output_index(int);
 int get_next_line(char *, int, int);
 void parse_http_get_headers_and_arguments(hashtable_t*, char*);
 void parse_http_post_data(hashtable_t *, char *);

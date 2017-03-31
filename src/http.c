@@ -104,32 +104,6 @@ void free_http_data(http_data_t ** http_data)
 }
 
 /*
-* Writes the index page to the tcp/ip socket API
-*/
-void output_index(int socket)
-{
-	char * msg = "HTTP/1.1 200 OK\r\n";
-   	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-	write(socket,msg, strlen(msg));
-   	msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
-   	write(socket,msg, strlen(msg));
-
-   	FILE * fp = fopen("index.html", "r");
-   	int c;
-   	while ( (c = fgetc(fp)) != EOF ){
-   		write(socket, &c, 1);
-   	}
-   	fclose(fp);
-
-   	close(socket);
-}
-
-/*
 * The file requested was not found on the server.. Outputs some fantastic ASCII art.
 */
 void output_file_not_found(int socket)
@@ -165,8 +139,9 @@ void output_file_not_found(int socket)
 * accessible file system, this function is responsible for 
 * outputting the file.
 * 
-* socket - tcp/ip api to write data to
-* path - URL of the get request
+* params:
+* 	@socket - tcp/ip api to write data to
+* 	@path - URL of the get request
 */
 void output_path(int socket, const char * path)
 {
@@ -174,9 +149,76 @@ void output_path(int socket, const char * path)
 	char *msg, *data; 
 	long int sz;
 	const char * file_type;
-	FILE * fp;
 	int fd;
 	struct stat st;
+
+	// Mapping '/' to the file 'index.html'
+ 	if ( ! strncmp(path, "/", 2) ){
+
+		output_html_headers(socket);
+		stat("index.html", &st);
+		sz = st.st_size;
+
+	   	fd = open("index.html", O_RDONLY);
+	   	
+	   	if ( fd < 0 ){
+			// sending a signal that it is no file with that name present.
+			output_file_not_found(socket);
+			return;
+		}
+
+		data = malloc(sz+1);
+		if ( data == NULL ){
+			printf("NO DATA!!!!!!\n");
+			output_file_not_found(socket);
+			close(fd);
+			return;
+		}
+
+		data[sz] = '\0';
+
+		read( fd, data, sz );
+   		write(socket, data, sz);
+
+		close(fd);
+		free(data);
+		return;
+	}
+
+	++path; // The paths should not be directed to the root '/' directory as base.. 
+
+	// if someone asks for the icon, i placed it under etc 
+	// so I need to add this little exception..
+	if ( strstr(path, "favicon.ico") != NULL ){
+
+		output_jpg_headers(socket);
+		stat("etc/favicon.ico", &st);
+		sz = st.st_size;
+
+	   	fd = open("etc/favicon.ico", O_RDONLY);
+	   	
+	   	if ( fd < 0 ){
+			// sending a signal that it is no file with that name present.
+			output_file_not_found(socket);
+			return;
+		}
+
+		data = malloc(sz+1);
+		if ( data == NULL ){
+			output_file_not_found(socket);
+			close(fd);
+			return;
+		}
+
+		data[sz] = '\0';
+
+		read( fd, data, sz );
+   		write(socket, data, sz);
+
+		close(fd);
+		free(data);
+		return;
+	}
 
 	// hiding some "sensitive" information
 	if ( (strstr(path, "/etc/") != NULL) ||( strstr(path, "/src/") != NULL )
@@ -187,21 +229,6 @@ void output_path(int socket, const char * path)
 		
 		return;
 	} 
-
-	// if someone asks for the icon, i placed it under etc 
-	// so I need to add this little exception..
-	if ( strstr(path, "favicon.ico") != NULL ){
-
-		output_jpg_headers(socket);
-	   	fp = fopen("etc/favicon.ico", "r");
-	   	int c;
-	   	while ( (c = fgetc(fp)) != EOF ){
-	   		write(socket, &c, 1);
-	   	}
-	   	fclose(fp);
-		return;
-
-	}
 
 	/*
 	* Outputs file if it exists
@@ -431,13 +458,6 @@ void interpret_and_output(int socket, char * first_line)
 
 		parse_http_headers(header_params, buffer);
 
-		if ( !strcmp(path, "/") ){
- 			// Outputting the index file!
-			output_index(socket);
-
-   			return;
-		}
-
 		if ( strstr(path, "cgi/") != NULL && strstr(path, ".py") != NULL ){
 
 			tmp = calloc(strlen(path)+1,1);
@@ -560,7 +580,7 @@ void interpret_and_output(int socket, char * first_line)
 
 		} else {
 			
-			output_path(socket, path+1);
+			output_path(socket, path);
 
 		}
 
