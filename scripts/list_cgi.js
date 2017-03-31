@@ -30,8 +30,6 @@ function list(path) {
 
 					var doms = path.split("/");
 
-					console.log(doms);
-
 					var url = "/";
 					for ( var n = 1; n < doms.length - 3; n++) {
 						url += doms[n];

@@ -57,7 +57,7 @@ void file_display_cgi(int socket, hashtable_t * params)
 
 		read(fd, data, sz);
 		write(socket, data, sz);
-
+		
 		free(data);
 		close(fd);
 

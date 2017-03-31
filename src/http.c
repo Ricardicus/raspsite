@@ -60,6 +60,14 @@ void output_file_transfer_headers(int socket, char *file)
    	msg = "Content-Type: application/octet-stream\r\n";
    	write(socket,msg, strlen(msg));
 
+   	stat(file, &st);
+   	sz = st.st_size;
+
+	memset(http_line, '\0', sizeof http_line);
+	snprintf(http_line, sizeof(http_line) - 1, "Content-Length: %u\r\n", sz);
+
+   	write(socket,http_line, strlen(http_line));
+
 	memset(http_line, '\0', sizeof http_line);
 
 	ch = file;
@@ -72,17 +80,7 @@ void output_file_transfer_headers(int socket, char *file)
 	file = slash+1;
 	*slash = '\0';
 
-
-	snprintf(http_line, sizeof(http_line) - 1, "Content-Disposition: attachment; filename=\"%s\"\r\n", file);
-
-   	write(socket,http_line, strlen(http_line));
-
-   	stat(file, &st);
-   	sz = st.st_size;
-
-	memset(http_line, '\0', sizeof http_line);
-	snprintf(http_line, sizeof(http_line) - 1, "Content-Length: %u\r\n\r\n", sz);
-
+	snprintf(http_line, sizeof(http_line) - 1, "Content-Disposition: attachment; filename=\"%s\"\r\n\r\n", file);
    	write(socket,http_line, strlen(http_line));
 }
 
@@ -124,6 +122,20 @@ void output_jpg_headers(int socket)
    	msg = "Content-Disposition: attachment; filename=\"image.jpg\"\r\n";
    	write(socket,msg, strlen(msg));	
 	msg = "Content-Type: image/jpeg\r\n\r\n";
+  	write(socket,msg, strlen(msg));
+}
+
+void output_png_headers(int socket)
+{
+	char * msg = "HTTP/1.1 200 OK\r\n";
+   	write(socket,msg,strlen(msg));
+	msg = "Content-Description: File Transfer\r\n";
+   	write(socket,msg, strlen(msg));	
+   	msg = "Content-Transfer-Encoding: binary\r\n";
+   	write(socket,msg, strlen(msg));	
+   	msg = "Content-Disposition: attachment; filename=\"image.jpg\"\r\n";
+   	write(socket,msg, strlen(msg));	
+	msg = "Content-Type: image/png\r\n\r\n";
   	write(socket,msg, strlen(msg));
 }
 
@@ -810,6 +822,7 @@ void http_init()
 	put(headers_callback, "html", output_html_headers);
 	// Map all kinds of things to jpg for this server..
 	put(headers_callback, "jpg", output_jpg_headers);
+	put(headers_callback, "png", output_png_headers);
 	put(headers_callback, "jpeg", output_jpg_headers);
 	put(headers_callback, "gif", output_jpg_headers);
 	put(headers_callback, "ico", output_jpg_headers);

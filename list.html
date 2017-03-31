@@ -42,7 +42,7 @@ function handlers(){
 		var path = $(this).attr("path");
 
 		if ( type == "file" ) {
-			window_open("/list.cgi?action=download&path="+path);
+			window.open("/list.cgi?action=download&path="+path);
 		} else if ( type == "dir" ) {
 			list(path);
 		}
