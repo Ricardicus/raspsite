@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -pthread
-OBJS = backend.o snakegame.o http.o coffee.o hashtable.o notif.o tcp_file_reader.o cgi.o
+OBJS = backend.o snakegame.o http.o coffee.o hashtable.o notif.o tcp_file_reader.o cgi.o file_display_cgi.o
 
 all : backend
 
@@ -13,6 +13,7 @@ coffee.o: coffee.c coffee.h
 hashtable.o: hashtable.c hashtable.h
 notif.o: notif.c notif.h tcp_file_reader.h
 tcp_file_reader.o: tcp_file_reader.c tcp_file_reader.h
+file_display_cgi.o: file_display_cgi.c file_display_cgi.h http.h
 cgi.o: cgi.c cgi.h
 
 .PHONY : clean

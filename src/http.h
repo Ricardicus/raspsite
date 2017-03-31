@@ -20,6 +20,7 @@ extern "C" {
 #include "hashtable.h"
 #include "logger.h"
 #include "cgi.h"
+#include "file_display_cgi.h"
 
 #define xstr(a) 		#a
 #define str(a)			xstr(a)
@@ -51,10 +52,12 @@ void parse_http_headers(hashtable_t *, char *);
 
 /* HTTP-Headers */
 void output_file_not_found(int);
+void output_internal_server_error(int);
 void output_html_headers(int);
 void output_css_headers(int);
 void output_jpg_headers(int);
 void output_json_headers(int);
+void output_file_transfer_headers(int,char*);
 void output_js_headers(int);
 void output_txt_headers(int);
 

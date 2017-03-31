@@ -20,6 +20,52 @@ void output_js_headers(int socket)
    	write(socket,msg, strlen(msg));
 }
 
+void output_file_transfer_headers(int socket, char *file)
+{
+	/*
+	* Important: the file udner path "file" must be a regular file and exist!
+	*/
+	unsigned sz;
+	struct stat st;
+	char http_line[200], *msg, *ch, *slash;
+	
+	msg = "HTTP/1.1 200 OK\r\n";
+   	write(socket,msg,strlen(msg));
+   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
+   	write(socket,msg, strlen(msg));
+   	msg = "Pragma: no-cache\r\n";
+	write(socket,msg, strlen(msg));
+	msg = "Expires: 0\r\n";
+	write(socket,msg, strlen(msg));
+   	msg = "Content-Type: application/octet-stream\r\n";
+   	write(socket,msg, strlen(msg));
+
+	memset(http_line, '\0', sizeof http_line);
+
+	ch = file;
+	while ( *ch ) {
+		if ( *ch == '/' )
+			slash = ch;
+		++ch;
+	}
+
+	file = slash+1;
+	*slash = '\0';
+
+
+	snprintf(http_line, sizeof(http_line) - 1, "Content-Disposition: attachment; filename=\"%s\"\r\n", file);
+
+   	write(socket,http_line, strlen(http_line));
+
+   	stat(file, &st);
+   	sz = st.st_size;
+
+	memset(http_line, '\0', sizeof http_line);
+	snprintf(http_line, sizeof(http_line) - 1, "Content-Length: %u\r\n\r\n", sz);
+
+   	write(socket,http_line, strlen(http_line));
+}
+
 void output_txt_headers(int socket)
 {
 	char * msg = "HTTP/1.1 200 OK\r\n";
@@ -163,6 +209,30 @@ void output_file_not_found(int socket)
    	write(socket,msg, strlen(msg));
 	return;
 
+}
+
+void output_internal_server_error(int socket)
+{
+	char * msg = "HTTP/1.1 500 Internal server error\r\n";
+   	write(socket,msg,strlen(msg));
+   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
+   	write(socket,msg, strlen(msg));
+   	msg = "Pragma: no-cache\r\n";
+	write(socket,msg, strlen(msg));
+	msg = "Expires: 0\r\n";
+	write(socket,msg, strlen(msg));
+   	msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
+   	write(socket,msg, strlen(msg));
+
+   	msg = "<!DOCTYPE html><body><pre>";
+   	write(socket,msg, strlen(msg));
+   	
+	msg = "Internal server error.";
+   	write(socket,msg, strlen(msg));
+
+	msg = "</pre></body></html>";
+   	write(socket,msg, strlen(msg));
+	return;
 }
 
 /*
@@ -608,6 +678,30 @@ void interpret_and_output(int socket, char * first_line)
 				}
 
 			}
+
+		} else if ( strstr(path, "list.cgi" ) ) {
+			char *list_action_cgi, *list_path_cgi;
+			
+			hashtable_t *display_parameters = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
+			display_parameters->data_also = 1;
+
+			if ( strstr(path, "path=") == NULL ||strstr(path, "action=") == NULL ||strchr(path, '&') == NULL ){
+				printf("HERE\n");
+				output_file_not_found(socket);
+				return;
+			} 
+
+			list_path_cgi = strstr(path, "path=") + 5;
+			list_action_cgi = strstr(path, "action=") + 7;
+
+			*(strchr(path, '&')) = '\0'; // This is already included
+
+			put(display_parameters, strdup("path"), strdup(list_path_cgi));
+			put(display_parameters, strdup("action"), strdup(list_action_cgi));
+
+			file_display_cgi(socket, display_parameters);
+
+			free_hashtable(display_parameters);
 
 		} else {
 			
