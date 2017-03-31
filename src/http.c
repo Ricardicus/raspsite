@@ -108,6 +108,11 @@ void free_http_data(http_data_t ** http_data)
 */
 void output_file_not_found(int socket)
 {
+	unsigned sz;
+	int fd;
+	char *data;
+	struct stat st;
+
 	char * msg = "HTTP/1.1 404 Not Found\r\n";
    	write(socket,msg,strlen(msg));
    	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
@@ -122,15 +127,41 @@ void output_file_not_found(int socket)
    	msg = "<!DOCTYPE html><body><pre>";
    	write(socket,msg, strlen(msg));
    	
-   	FILE * fp = fopen("etc/404.txt", "r");
-   	int c;
-   	while ( (c = fgetc(fp)) != EOF ){
-   		write(socket, &c, 1);
-   	}
-   	fclose(fp);
+   	fd = open("etc/404.txt", O_RDONLY);
 
-   	msg = "</pre></body></html>";
+	stat("etc/404.txt", &st);
+	sz = st.st_size;
+
+   	fd = open("etc/404.txt", O_RDONLY);
+   	
+   	if ( fd < 0 ){
+		// sending a signal that it is no file with that name present.
+		msg = "ERROR!!!?!!! (no std 404 text).";
+   		write(socket,msg, strlen(msg));
+		return;
+	}
+
+	data = malloc(sz+1);
+	if ( data == NULL ){
+		msg = "Memory error + Bad path.";
+   		write(socket,msg, strlen(msg));
+		close(fd);
+		msg = "</pre></body></html>";
+   		write(socket,msg, strlen(msg));
+		return;
+	}
+
+	data[sz] = '\0';
+
+	read( fd, data, sz );
+	write(socket, data, sz);
+
+	close(fd);
+	free(data);
+
+	msg = "</pre></body></html>";
    	write(socket,msg, strlen(msg));
+	return;
 
 }
 
