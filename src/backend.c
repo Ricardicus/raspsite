@@ -19,13 +19,15 @@ void * input_reader_callback(void * data)
 
 int main(int argc, char *argv[])
 {
-	int sockfd, portno;
+	int sockfd, portno, *newsockfd;
 	socklen_t clilen; 
 	time_t raw_time;
 	struct tm * time_info;
-	char client_IP[INET_ADDRSTRLEN];
+	char client_IP[INET_ADDRSTRLEN], *time_heap, *c_ptr, 
+			*time_c, *client_ip_heap;
 	pthread_t input_reader_thread, file_reader_thread;
 	struct sockaddr_in serv_addr, cli_addr;
+	http_data_t * http_data;
 
 	if (argc < 2) {
 		log_error("ERROR, no port provided\n");
@@ -70,29 +72,26 @@ int main(int argc, char *argv[])
 		// Getting time info
 		time ( &raw_time);
 		time_info = localtime( &raw_time );
-		char * time = asctime(time_info);
-		char * c_ptr = time;
+		time_c = asctime(time_info);
 		/* the time contains a '\n'.. */
-		while (*c_ptr){
-			if ( *c_ptr == '\n')
-				*c_ptr = '\0';
-			c_ptr++;
-		}
+		c_ptr = strchr(time_c, '\n');
+		if ( c_ptr != NULL)
+			*c_ptr = '\0';
 
 		// get client IP
 		inet_ntop(AF_INET, &cli_addr.sin_addr ,client_IP, INET_ADDRSTRLEN);
 
 		// heap allocated time
-		char * time_heap = calloc(strlen(time)+1, 1);
-		strcpy(time_heap, time);
+		time_heap = calloc(strlen(time_c)+1, 1);
+		strcpy(time_heap, time_c);
 		// heap allocated client ip
-		char * client_ip_heap = calloc(strlen(client_IP)+1, 1);
+		client_ip_heap = calloc(strlen(client_IP)+1, 1);
 		strcpy(client_ip_heap, client_IP);
 		// sending socket info to newsockfd;
-		int * newsockfd = malloc(sizeof(int));
+		newsockfd = malloc(sizeof(int));
 		*newsockfd = newsockfd_stack;
 
-		http_data_t * http_data = calloc(1, sizeof(http_data_t));
+		http_data = calloc(1, sizeof(http_data_t));
 		http_data->client_ip = client_ip_heap;
 		http_data->accept_time = time_heap;
 		http_data->socket = newsockfd;
