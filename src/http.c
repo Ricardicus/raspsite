@@ -387,6 +387,7 @@ void interpret_and_output(int socket, char * first_line)
 	char *c, *args, *command, *path, 
 		*cleaner, *buffer, *tmp;
 	int cc,n;
+	pid_t pid;
 	hashtable_t * params, *header_params;
 	FILE *fp;
 
@@ -433,8 +434,11 @@ void interpret_and_output(int socket, char * first_line)
 
 		if ( !strcmp(path, "/") ){
  			// Outputting the index file!
-			
-			output_index(socket);
+ 			pid = fork();
+			if ( pid == 0 ){
+				output_index(socket);
+			}
+
    			return;
 		}
 
@@ -450,8 +454,11 @@ void interpret_and_output(int socket, char * first_line)
 			fp = fopen(tmp+1, "r");
 			if ( fp != NULL ){
 				fclose(fp);
-				
-				cgi_py(socket, header_params, path); // Leaving it to the cgi writer to make sense!
+
+				pid = fork();
+				if ( pid == 0 ){
+					cgi_py(socket, header_params, path); // Leaving it to the cgi writer to make sense!
+				}
 
 			} else {
 				output_file_not_found(socket);
@@ -471,7 +478,10 @@ void interpret_and_output(int socket, char * first_line)
 			if ( fp != NULL ){
 				fclose(fp);
 
-				cgi_sh(socket, header_params, path); // Leaving it to the cgi writer to make sense!
+				pid = fork();
+				if ( pid == 0 ){
+					cgi_sh(socket, header_params, path); // Leaving it to the cgi writer to make sense!
+				}
 
 			} else {
 				output_file_not_found(socket);
@@ -560,8 +570,10 @@ void interpret_and_output(int socket, char * first_line)
 
 		} else {
 			
-			output_path(socket, path+1);
-			
+			pid = fork();
+			if ( pid == 0 ){
+				output_path(socket, path+1);
+			}
 		}
 
 		free(buffer);
@@ -667,8 +679,6 @@ void * http_callback(void * http_data_ptr)
    	close(socket);
 
    	free_http_data(&http_data);
-
-//	pthread_kill(pthread_self(), SIGINT);
 
    	return NULL;
 }
