@@ -13,7 +13,7 @@ function list(path) {
 			var doubleDotStat = {};
 			var items = [];
 
-			for ( var i = 1; i < rows.length ; i++ ){
+			for ( var i = 1; i < rows.length -1 ; i++ ){
 
 				var data = rows[i].split(/[ ,]+/);
 				var doubleDot = false;
