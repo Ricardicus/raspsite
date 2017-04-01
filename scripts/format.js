@@ -7,7 +7,6 @@ function pretty_bytes ( data ) {
 	if ( input > comp ) {
 		input = parseInt(input/comp, 10);
 		str = input + " KB";
-			console.log("str: " + str);
 		if ( input > comp ){
 			input = parseInt(input/comp, 10);
 			str = input + " MB";
