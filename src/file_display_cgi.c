@@ -31,7 +31,9 @@ void file_display_cgi(int socket, hashtable_t * params)
 			memset(cmd, '\0', sizeof(cmd) - 1);
 		} 
 
-		pclose(pd);
+		if ( pclose(pd) ) {
+			write(socket, "Error", strlen("Error"));
+		};
 
 	} else if ( !strcmp(action, "download") ){
 
@@ -57,7 +59,7 @@ void file_display_cgi(int socket, hashtable_t * params)
 
 		read(fd, data, sz);
 		write(socket, data, sz);
-		
+
 		free(data);
 		close(fd);
 

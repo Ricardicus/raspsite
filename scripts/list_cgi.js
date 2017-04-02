@@ -6,12 +6,34 @@ function list(path) {
 
 	http_get("/list.cgi?action=list&path=" + path, "text", 
 			function(response){
+
 			var html = "";
 			var rows = response.split('\n');
 
 			var doubleDotFound = false;
 			var doubleDotStat = {};
 			var items = [];
+
+			if ( response == "Error" ) {
+				var doms = path.split("/");
+
+				var url = "/";
+				for ( var n = 1; n < doms.length - 2; n++) {
+					url += doms[n];
+					if ( n != doms.length - 3) 
+						url += "/";
+				}
+				
+				if ( url === 'undefined' ){
+					url = "/";
+				}
+
+				html += '<tr><td>'+ "Not accessible" +'</td><td></td><td>Go back..</td><td><img class="overout" type="dir" path="' + url + 
+				'" src="' + '/style/Arrow_Back.png' + '"></td></tr>';
+				$("#files-table-tbody").html(html);
+				handlers();
+				return;
+			} 
 
 			for ( var i = 1; i < rows.length -1 ; i++ ){
 
