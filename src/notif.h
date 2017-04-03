@@ -16,6 +16,7 @@ extern "C" {
 #include <arpa/inet.h>
 #include <pthread.h>
 #include <time.h>
+#include <stdbool.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <string.h>

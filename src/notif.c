@@ -1,5 +1,16 @@
 #include "notif.h"
 
+/*
+* To shift endianness of received or transmitted bytes
+*/
+static void swap(const void *src, void *dst, size_t sz)
+{
+	size_t i = 0;
+	for (; i<sz; ++i){
+		((char*)dst)[i] = ((char*)src)[sz-1-i];
+	}
+}
+
 int make_contact(const char * host, int port)
 {
 	struct sockaddr_in serv_addr;
@@ -40,6 +51,7 @@ int make_contact(const char * host, int port)
 }
 
 /*
+* 	Protocol uses big-endian byte representation on all fields
 *	
 * 	File sending header format: 
 *			| type | data length |<-- length -->| name length |<-- name -->|<--- data ---->| 
@@ -57,8 +69,15 @@ int output_file(int socket, const char * filepath, char * filename)
 	FILE * fp;
 	long int file_size;
 	int data;
-	char command_ch, size_length_ch, length_ch, response_ch, 
-			name_length_ch, *name_chp;
+	char command_ch, size_length_ch, response_ch, 
+			name_length_ch;
+
+	bool is_little_endian = false;
+
+	{
+		int n = 1;
+		is_little_endian = (*((char*)&n) == 1);
+	}
 
 	if ( strlen(filename) > 255 ){
 		printf("Filename to long. Cannot exceed one byte.");
@@ -82,13 +101,24 @@ int output_file(int socket, const char * filepath, char * filename)
 
 	// Telling the server how many bytes are required to represent the file size
 	size_length_ch = sizeof(file_size);
+
 	write(socket, &size_length_ch, 1);
 
 	// Telling the server just how many bytes are expected to be sent
-	int i = 0;
-	for (; i < size_length_ch; i++ ){			
-		length_ch = (char)(file_size >> i*8);
-		write(socket, &length_ch, 1);
+	if ( is_little_endian ) {
+		// Swapping to big endian
+		long int tmp;
+		swap(&file_size, &tmp, sizeof file_size );
+		file_size = tmp;
+	}
+
+	write(socket, &file_size, size_length_ch);
+
+	if ( is_little_endian ) {
+		// Swapping back to little endian
+		long int tmp;
+		swap(&file_size, &tmp, sizeof file_size );
+		file_size = tmp;
 	}
 
 
@@ -96,12 +126,8 @@ int output_file(int socket, const char * filepath, char * filename)
 	printf("filename is of length: %d\n", name_length_ch);
 	// telling the server how long the name will be
 	write(socket, &name_length_ch, 1);
-
-	name_chp = filename;
-	// telling the server the desired name of the file received
-	while ( *name_chp ){
-		write(socket, name_chp++, 1);
-	}
+	// writing the filename
+	write(socket,filename, name_length_ch);
 
 	// sending the bytes of the file!
 	while ( (data=fgetc(fp)) != EOF) {
@@ -139,6 +165,14 @@ void receive_file(int socket, const char * directory){
 	int32_t size_32 = 0;
 	int64_t size_64 = 0;
 
+	bool is_little_endian;
+
+	{
+		int n = 1;
+		is_little_endian = (*((char*)&n) == 1);
+	}
+
+
 	memset(buffer, '\0', 257);
 
 	if ( strlen(directory) >= 200 ){
@@ -156,14 +190,29 @@ void receive_file(int socket, const char * directory){
 	break;
 	case 2:
 		read(socket, &size_16, 2);
+		if ( is_little_endian ) {
+			int16_t tmp;
+			swap(&size_16, &tmp, sizeof size_16);
+			size_16 = tmp;	
+		}
 		printf("The file size is: %u\n", size_16);
 	break;
 	case 4:
 		read(socket, &size_32, 4);
+		if ( is_little_endian ) {
+			int32_t tmp;
+			swap(&size_32, &tmp, sizeof size_32);
+			size_32 = tmp;	
+		}
 		printf("The file size is: %u\n", size_32);
 	break;
 	case 8:
 		read(socket, &size_64, 8);
+		if ( is_little_endian ) {
+			int32_t tmp;
+			swap(&size_64, &tmp, sizeof size_64);
+			size_64 = tmp;	
+		}
 		printf("The file size is: %llu\n", size_64);
 	break;
 	default:
@@ -177,6 +226,8 @@ void receive_file(int socket, const char * directory){
 
 	// Getting the name of the file
 	read(socket, &buffer, (int)response_ch);	
+
+	printf("Filename: %s\n", buffer);
 
 	memset(filepath, '\0', sizeof(filepath));
 	sprintf(filepath, "%s/%s", directory, buffer);
@@ -192,6 +243,7 @@ void receive_file(int socket, const char * directory){
 			read(socket, &response_ch, 1);
 			fputc(response_ch, fp);
 		}
+
 		fclose(fp);
 
 		response_ch = EVERYTHING_OK;
@@ -224,6 +276,7 @@ void receive_file(int socket, const char * directory){
 		int32_t i = 0;
 
 		for (; i < size_32; ++i ){
+			printf("size_32 read [i: %d]\n", i);
 			read(socket, &response_ch, 1);
 			fputc(response_ch, fp);
 		}
@@ -247,7 +300,6 @@ void receive_file(int socket, const char * directory){
 
 		response_ch = EVERYTHING_OK;
 		write(socket, &response_ch, 1);
-		printf("wrote everything ok\n");
 
 		close(socket);
 		printf("File: %s of %llu bytes successfully received.\n", buffer, size_64);
