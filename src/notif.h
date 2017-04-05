@@ -28,8 +28,9 @@ extern "C" {
 * 	over TCP/IP	on UNIX
 */ 	
 
-// Macros for sending
+// Macros for communication commands
 #define SEND_FILE			1
+#define SEC_SESSION			2
 
 // Macros for receiving
 #define EVERYTHING_OK		1

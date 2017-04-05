@@ -14,6 +14,8 @@ void * tcp_receive_file(void * data)
 	case SEND_FILE:
 		receive_file(op->socket, "downloads"); // socket closed by this function
 	break;
+	case SEC_SESSION:
+		sec_session(op->socket);
 	default:
 	// more to come..
 	break;
