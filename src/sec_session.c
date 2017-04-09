@@ -1,5 +1,11 @@
 #include "sec_session.h"
 
+static char *server_responses[] = (char *[]) { 
+	"Welcome!\nFor help enter 'help'.\n", // Greeting
+	"These are your alternatives: \n* 'help': display this tutorial.\n\
+	* 'shell': enter the shell over this 'secure' channel.\n \
+	* 'quit': exit this session.\n-- More to come (possibly) --\n",
+};
 /*
 * To shift endianness of received or transmitted bytes
 */
@@ -46,7 +52,7 @@ static void initialize_session(rsa_session_t * session, void * symmetric_key, si
 * 
 * * 	Client/Server protocol from now on will look like this:				
 *		| MSG LEN | 	MSG	  |
-*			 4		 MSG LEN	
+*			 8		 MSG LEN	
 *
 * All messages are encrypted with its respective decrypted symmetric key 	
 * using the function 'symetric_key_crypto' in "rsa.c".
@@ -55,10 +61,12 @@ static void initialize_session(rsa_session_t * session, void * symmetric_key, si
 */
 void sec_session(int socket)
 {
-	char cmd, symmetric_key_here[20], *key_len_decode_buffer,
-			*sym_key_over_tcp, *sym_key_of_peer, *key_len_over_tcp;
+	char symmetric_key_here[20], *key_len_decode_buffer,
+			*sym_key_over_tcp, *sym_key_of_peer, *key_len_over_tcp,
+				server_talk[100];
 	rsa_session_t private_session, public_session; // in the public only n and e are known.
-	uint64_t n_over_tcp, e_over_tcp, key_len;
+	uint64_t n_over_tcp, e_over_tcp, key_len, peer_sym_key_len,
+				sz_send, client_server_count = 0;
 
 	bool is_little_endian = false;
 
@@ -110,6 +118,7 @@ void sec_session(int socket)
 
 	sym_key_over_tcp = (char*) malloc(key_len); // allocating space for the encrypted symemtric key to be read
 
+	peer_sym_key_len = key_len / KEY_PADDING;
 	read(socket, sym_key_over_tcp, key_len); // reading the encrypted symmetric key used by the other peer
 
 	sym_key_of_peer = rsa_decode(&public_session, sym_key_over_tcp, key_len); // will take some time..
@@ -118,7 +127,7 @@ void sec_session(int socket)
 	printf("Read decoded symmetric key of peer: %s\n", sym_key_of_peer);
 
 	key_len = KEY_PADDING * sizeof symmetric_key_here;
-	key_len_over_tcp = rsa_encode(&private_session, is_little_endian ? &key_len[0] : &key_len[KEY_PADDING-1], 1);
+	key_len_over_tcp = rsa_encode(&private_session, is_little_endian ? &((char*)key_len)[0] : &((char*)key_len)[KEY_PADDING-1], 1);
 
 	// writing the encoded value of the expected length of the symmetric key
 	write(socket, key_len_over_tcp, 8);
@@ -134,6 +143,57 @@ void sec_session(int socket)
 	* ........... 				More to come next! 			................
 	*/
 
+	// Start by outputting the greeting
+	sz_send = (uint64_t) strlen(server_responses[GREET]);
 
+	if ( is_little_endian ){
+		uint64_t tmp;
+		swap(&sz_send, &tmp, 8);
+		sz_send = tmp;
+	}
+
+	memcpy(server_talk, &sz_send, 8);
+	memcpy(&server_talk[8], &server_responses[GREET], sz_send);
+
+	symetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, sz_send + 8, true);
+	write(socket, server_talk, sz_send + 8); // writing the encrypted version of the greeting
+
+	while ( 1 ) {
+		// refreshing before getting a response
+		memset(server_talk, '\0', sizeof server_talk);
+
+		read(socket, &sz_send, 8); // reading the length of the response
+
+		if ( is_little_endian ){
+			// putting it back to little endian format
+			uint64_t tmp;
+			swap(&sz_send, &tmp, 8);
+			sz_send = tmp;
+		}
+
+		if ( sz_send > MAX_MSG_LEN ){
+			printf("Read the length: %" PRIu64 " which is too large. Session interrupted.\n", sz_send);
+			write(socket, "error", 5);
+			close(socket);
+			return; 
+		}
+
+		read(socket, server_talk, sz_send);
+		symetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, sz_send + 8, false);
+
+		printf("The peer wrote the message: \"%s\".", server_talk);
+
+		if ( strstr(server_talk, "quit") != NULL ){
+			// Session is ended
+			break;
+		}
+
+		++client_server_count;
+	}
+
+
+
+
+	close(socket);
 	free(sym_key_of_peer); // Used to decode the messages sent from the peer during this session, it will no longer be needed leaving this function.
 }
