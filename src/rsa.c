@@ -65,22 +65,6 @@ static uint64_t inverse_euclid_extended(uint64_t a, uint64_t p) {
     return pos ? old : (p - old);
 }
 
-static uint64_t invert_mod(uint64_t a, uint64_t p) {
-    uint64_t new = 1, old = 0, q = p, r, h;
-    int pos = 0;
-    while (a > 0) {
-        r = q%a;
-        q = q/a;
-        h = q*new + old;
-        old = new;
-        new = h;
-        q = a;
-        a = r;
-        pos = !pos;
-    }
-    return pos ? old : (p - old);
-}
-
 static int is_even(uint64_t a) {
 	return (a & 1) == 0;
 }
@@ -246,15 +230,15 @@ rsa_encode(rsa_session_t* session, void * msg, size_t sz) {
 *
 * The function returns a byte string that must be freed by the user. 
 * It contains the data in its original order.
-* the size of the output data will be 8 times smaller than the input datas size
+* the size of the output data will be KEY_PADDING times smaller than the input datas size
 * (exluding the null terminating byte).
 *
 * 	params: 
 *		@session - coefficients for decryption (n and d set, rest not used)
 *		@msg - Pointer to the first occurence of the data to be decoded
-*			   It must be represented with a size of a multiple of 4, and it must 
+*			   It must be represented with a size of a multiple of KEY_PADDING, and it must 
 *			   also be in big-endian format (as output is from the rsa_encrypt method above..).
-*		@sz - the number of bytes to be dencoded
+*		@sz - the number of bytes to be decoded
 *	
 *	returns:
 *		on succes - null terminated string of the data that is decoded
@@ -266,7 +250,7 @@ rsa_decode(rsa_session_t* session, void * msg, size_t sz)
 	uint64_t n, d,data_dec_lu, data_raw, c=0;
 	char *output;
 	size_t output_sz,i=0;
-	int indx, q;
+	int q;
 
 	if ( sz % KEY_PADDING != 0) {
 		fprintf(stderr,"[%s] size of data must be a multiple of %d!\n", __func__, KEY_PADDING);
@@ -335,7 +319,7 @@ rsa_decode(rsa_session_t* session, void * msg, size_t sz)
 void 
 symetric_key_crypto(void* key, size_t key_size, void * data, size_t data_size, bool encrypt)
 {
-	char prev_riddler[2], *ch, riddler; 
+	char prev_riddler[2], riddler; 
 	size_t i = 0;
 	int pw, c, toggle;
 

@@ -10,10 +10,12 @@ extern "C" {
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
+#include <inttypes.h>
 #include "rsa.h"
 
 #define INITIALIZE		1
 #define CONVERSATE		2 
+#define MAX_SYM_KEY_LEN	255
 
 void sec_session(int);
 
