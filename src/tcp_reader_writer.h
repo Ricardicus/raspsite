@@ -35,7 +35,7 @@ typedef struct tcp_receive_operation_t {
 } tcp_receive_operation_t;
 
 void * file_receiver_thread_callback(void *);
-void * tcp_receive_file(void *);
+void * tcp_reader_writer_cb(void *);
 
 #ifdef __cplusplus
 }

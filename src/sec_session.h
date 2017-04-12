@@ -27,7 +27,8 @@ typedef enum response_alternatives_t {
 	ALTERNATIVES = 1
 } response_alternatives_t;
 
-void sec_session(int);
+void sec_session_server(int);
+void sec_session_client(int);
 
 #endif
 

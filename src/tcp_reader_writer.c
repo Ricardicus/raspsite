@@ -1,6 +1,6 @@
-#include "tcp_file_reader.h"
+#include "tcp_reader_writer.h"
 
-void * tcp_receive_file(void * data)
+void * tcp_reader_writer_cb(void * data)
 {
 	char command;
 	tcp_receive_operation_t * op = (tcp_receive_operation_t *) data;
@@ -15,7 +15,7 @@ void * tcp_receive_file(void * data)
 		receive_file(op->socket, "downloads"); // socket closed by this function
 	break;
 	case SEC_SESSION:
-		sec_session(op->socket);
+		sec_session_server(op->socket);
 	default:
 	// more to come..
 	break;
@@ -69,7 +69,7 @@ void * file_receiver_thread_callback(void * data)
 		op->socket = newsockfd_stack;
 		strcpy(op->client_ip, client_IP);
 		
-		pthread_create(&callback_thread, NULL, tcp_receive_file, op);
+		pthread_create(&callback_thread, NULL, tcp_reader_writer_cb, op);
 
 	}
 

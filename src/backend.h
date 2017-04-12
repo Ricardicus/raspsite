@@ -18,7 +18,7 @@ extern "C" {
 #include "snakegame.h"
 #include "coffee.h"
 #include "logger.h"
-#include "tcp_file_reader.h"
+#include "tcp_reader_writer.h"
 
 #ifdef __cplusplus
 }

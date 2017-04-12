@@ -59,7 +59,7 @@ static void initialize_session(rsa_session_t * session, void * symmetric_key, si
 *
 * =======================================================
 */
-void sec_session(int socket)
+void sec_session_server(int socket)
 {
 	char symmetric_key_here[20], *key_len_decode_buffer,
 			*sym_key_over_tcp, *sym_key_of_peer, *key_len_over_tcp,
