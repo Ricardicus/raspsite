@@ -13,16 +13,14 @@ extern "C" {
 #include <stdbool.h>
 #include <inttypes.h>
 #include "rsa.h"
-#include "notif.h"
 
 #define INITIALIZE		1
 #define CONVERSATE		2 
 
-#define MAX_RESPONSES 		100
-#define MAX_SYM_KEY_LEN		255
-#define MAX_DATA_LEN		255
-#define MAX_MSG_LEN			199
-#define STNDRD_SYM_KEY_LEN	8
+#define MAX_RESPONSES 	100
+#define MAX_SYM_KEY_LEN	255
+#define MAX_DATA_LEN	255
+#define MAX_MSG_LEN		199
 
 
 typedef enum response_alternatives_t {

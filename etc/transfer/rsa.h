@@ -32,10 +32,10 @@ typedef struct rsa_session_t {
 void 
 generate_rsa_keys(rsa_session_t*);
 
-unsigned char *
+char *
 rsa_encode(rsa_session_t*, void *, size_t);
 
-unsigned char *
+char *
 rsa_decode(rsa_session_t*, void *, size_t);
 
 void 

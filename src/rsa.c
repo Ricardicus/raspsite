@@ -2,7 +2,7 @@
 
 static prime_pair_t * generate_prime_pair(const char * path){
 	FILE *fp, *pr;
-	char number_buffer[20], cmd[100];
+	char number_buffer[20], cmd[200];
 	uint64_t limit, index_one, index_two, i;
 
 	time_t t;
@@ -115,13 +115,40 @@ generate_rsa_keys(rsa_session_t* session){
 	uint64_t lambda, i = 2, e = 0, limit, c = 0; // e is public, d is kept private
 	uint64_t n, tmp1, tmp2;
 
+	char *pwd, *slash;
+
 	prime_pair_t * pair;
 
-	/*
-	* Generate the primes .....
+	/* 
+	* This is called from the 'session' executable located under
+	* 'etc/transfer' as well as from the root directory in the 'backend' server program.
+	* The primes are located under 'etc/primes' why we need to make a distinciton betwee
+	* these two cases that depend on the current working directory. 
 	*/
 
-	pair = generate_prime_pair("etc/primes/primes.txt"); // reads from the primes..
+	pwd = getenv("PWD");
+
+	if ( strstr(pwd, "/transfer") != NULL ) {
+		/*
+		* Generate the primes ..... 
+		* Reached from the transfer dir.
+		*/
+		char path_to_primes[100];
+		memset(path_to_primes, '\0', sizeof path_to_primes);
+		memcpy(path_to_primes, pwd, strlen(pwd));
+		slash = strstr(path_to_primes, "/transfer");
+		*slash = '\0';
+		sprintf(path_to_primes, "%s/primes/primes.txt", path_to_primes);
+
+		pair = generate_prime_pair(path_to_primes); // reads from the primes..
+	} else {
+		/*
+		* Generate the primes ..... 
+		* Reached from the backend dir.
+		*/
+		pair = generate_prime_pair("etc/primes/primes.txt"); // reads from the primes..
+	}
+
 	prime_q = pair->q, prime_p = pair->p; 
 	free(pair);
 
@@ -150,6 +177,8 @@ generate_rsa_keys(rsa_session_t* session){
 	session->e = e;
 	session->d = d;
 
+	printf("[%s] n = %llu, e = %llu, d = %llu\n", __func__, n, e, d);
+
 }
 
 /*
@@ -168,13 +197,13 @@ generate_rsa_keys(rsa_session_t* session){
 *		on succes - null terminated string of the data that is encoded
 *		on failure- NULL
 */
-char *
+unsigned char *
 rsa_encode(rsa_session_t* session, void * msg, size_t sz) {
 
 	uint64_t n, e,data_enc_lu, c=0;
-	char *output, data_raw;
-	size_t output_sz,i=0;
-	int indx;
+	unsigned char *output, data_raw;
+	size_t output_sz;
+	int indx, i=0;
 
 	bool is_little_endian = false;
 
@@ -188,19 +217,17 @@ rsa_encode(rsa_session_t* session, void * msg, size_t sz) {
 
 	output_sz = sz*KEY_PADDING+1;
 
-	output = malloc(output_sz);
+	output = calloc(output_sz,1);
 
 	if ( output == NULL ){
-		fprintf(stderr, "Malloc failed\n");
+		fprintf(stderr, "[%s] Calloc failed\n", __func__);
 		return NULL;
 	}
 
-	memset(output, '\0', output_sz);
-
 	for (; i<sz ; ++i) {
-		
+
 		data_raw = ((char*)msg)[i];
-		data_enc_lu = 0, data_enc_lu = data_raw;
+		data_enc_lu = 0, data_enc_lu += data_raw;
 
 		c = 2;
 		uint64_t k = data_enc_lu;
@@ -208,8 +235,6 @@ rsa_encode(rsa_session_t* session, void * msg, size_t sz) {
 			data_enc_lu = (data_enc_lu * k) % n;
 			++c;
 		}
-
-		printf("data_enc_lu (%zu): [%llu]\n", i, data_enc_lu);
 
 		indx = 0;
 		for (; indx < KEY_PADDING; ++indx ){	
@@ -244,11 +269,11 @@ rsa_encode(rsa_session_t* session, void * msg, size_t sz) {
 *		on succes - null terminated string of the data that is decoded
 *		on failure- NULL
 */
-char *
+unsigned char *
 rsa_decode(rsa_session_t* session, void * msg, size_t sz)
 {
 	uint64_t n, d,data_dec_lu, data_raw, c=0;
-	char *output;
+	unsigned char *output;
 	size_t output_sz,i=0;
 	int q;
 
@@ -270,7 +295,6 @@ rsa_decode(rsa_session_t* session, void * msg, size_t sz)
 	output_sz = sz/KEY_PADDING+1;
 
 	output = malloc(output_sz);
-	printf("[%s] malloc %zu bytes...\n",__func__, output_sz);
 	if ( output == NULL ){
 		fprintf(stderr, "Malloc failed\n");
 		return NULL;
@@ -282,12 +306,10 @@ rsa_decode(rsa_session_t* session, void * msg, size_t sz)
 
 		q = 0;
 		for (; q<KEY_PADDING; ++q){
-			((char*)&data_raw)[q] = is_little_endian ? ((char*)msg)[i + KEY_PADDING-1-q] : ((char*)msg)[i + q];
+			((unsigned char*)&data_raw)[q] = is_little_endian ? ((unsigned char*)msg)[i + KEY_PADDING-1-q] : ((unsigned char*)msg)[i + q];
 		}
 
 		data_dec_lu = data_raw;
-
-		printf("data_dec_lu (%zu): [%llu]\n", i/KEY_PADDING, data_dec_lu);
 
 		c = 2;
 		uint64_t k = data_dec_lu;
@@ -297,7 +319,7 @@ rsa_decode(rsa_session_t* session, void * msg, size_t sz)
 			++c;
 		}
 
-		output[i/KEY_PADDING] = is_little_endian ? ((char*)&data_dec_lu)[0] : ((char*)&data_dec_lu)[KEY_PADDING-1];
+		output[i/KEY_PADDING] = is_little_endian ? ((unsigned char*)&data_dec_lu)[0] : ((unsigned char*)&data_dec_lu)[KEY_PADDING-1];
 
 	}
 
@@ -317,9 +339,9 @@ rsa_decode(rsa_session_t* session, void * msg, size_t sz)
 *	@encrypt - If true then encryption should be performed else decryption is performed.
 */
 void 
-symetric_key_crypto(void* key, size_t key_size, void * data, size_t data_size, bool encrypt)
+symmetric_key_crypto(void* key, size_t key_size, void * data, size_t data_size, bool encrypt)
 {
-	char prev_riddler[2], riddler; 
+	unsigned char prev_riddler[2], riddler; 
 	size_t i = 0;
 	int pw, c, toggle;
 
@@ -332,7 +354,7 @@ symetric_key_crypto(void* key, size_t key_size, void * data, size_t data_size, b
 
 	while ( i < data_size ) {
 
-		riddler = ((char*)key)[i % key_size];
+		riddler = ((unsigned char*)key)[i % key_size];
 
 		int pw_c = pw;
 		while( pw_c > 0 ){
@@ -347,9 +369,9 @@ symetric_key_crypto(void* key, size_t key_size, void * data, size_t data_size, b
 			pw += toggle;
 
 		// the old value
-		c = ((char* )data)[i]; 
+		c = ((unsigned char* )data)[i]; 
 		// setting the new value
-		((char*) data)[i] = ( encrypt == true ? c + riddler + prev_riddler[0] + prev_riddler[1]
+		((unsigned char*) data)[i] = ( encrypt == true ? c + riddler + prev_riddler[0] + prev_riddler[1]
 			: c - riddler - prev_riddler[0] - prev_riddler[1]);
 	
 		prev_riddler[0] = prev_riddler[1];
@@ -369,7 +391,7 @@ generate_symmetric_key(void * buffer, size_t sz){
 
 	while ( i < sz ) {
 
-		((char*)buffer)[i] = rand() % 256; // Random values ...
+		((unsigned char*)buffer)[i] = rand() % 256; // Random values ...
 
 		++i;
 	}
