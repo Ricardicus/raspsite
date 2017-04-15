@@ -63,10 +63,11 @@ void sec_session_server(int socket)
 {
 	unsigned char symmetric_key_here[STNDRD_SYM_KEY_LEN], *key_len_decode_buffer,
 			*sym_key_over_tcp, *sym_key_of_peer, *key_len_over_tcp, peer_key_len_over_tcp[8],
-				server_talk[MAX_DATA_LEN + 1];
+				server_talk[MAX_DATA_LEN + 1], read_write_buffer[MAX_DATA_LEN];
 	rsa_session_t private_session, public_session; // in the public only n and e are known.
 	uint64_t n_over_tcp, e_over_tcp, key_len, peer_sym_key_len,
 				sz_send, msg_len;
+	int ctrl;
 
 	bool is_little_endian = false;
 
@@ -78,7 +79,17 @@ void sec_session_server(int socket)
 	initialize_session(&private_session, symmetric_key_here, sizeof symmetric_key_here); // this process might take some time (not to long though)
 
 	// Getting the RSA public keys of the public session
-	read(socket, &n_over_tcp, 8), read(socket, &e_over_tcp, 8);
+	memset(read_write_buffer, '\0', MAX_DATA_LEN);
+	ctrl = read(socket, read_write_buffer, 2*KEY_PADDING);
+
+	if ( ctrl != 2*KEY_PADDING ) {
+		log_error("Attempted to read %d bytes, got %d.\n", 2*KEY_PADDING, ctrl);
+		close(socket);
+		return;
+	}
+
+	memcpy(&n_over_tcp, read_write_buffer, KEY_PADDING);
+	memcpy(&e_over_tcp, read_write_buffer + KEY_PADDING, KEY_PADDING);
 
 	if ( is_little_endian == true ) {
 		// making all the RSA coefficients appear over TCP in big endian order
@@ -106,23 +117,52 @@ void sec_session_server(int socket)
 	}
 
 	// Sending the RSA public keys of the private session
-	write(socket, &n_over_tcp, 8), write(socket, &e_over_tcp, 8);
+	memset(read_write_buffer, '\0', sizeof read_write_buffer);
+	memcpy(read_write_buffer, &n_over_tcp, 8);
+	memcpy(read_write_buffer + KEY_PADDING, &e_over_tcp, 8);
+
+	ctrl = write(socket, read_write_buffer, 2 * KEY_PADDING);
+
+	if ( ctrl != 2 * KEY_PADDING ) {
+		log_error("Attempted to write %d bytes, wrote %d.\n", 2 * KEY_PADDING, ctrl);
+		close(socket);
+		return;
+	}
 
 	key_len = KEY_PADDING * sizeof(symmetric_key_here);
 
 	key_len_over_tcp = rsa_encode(&public_session, is_little_endian ? &((unsigned char*)&key_len)[0] : &((unsigned char*)&key_len)[KEY_PADDING-1], 1);
 
 	// writing the encoded value of the expected length of the symmetric key
-	write(socket, key_len_over_tcp, 8);
+	ctrl = write(socket, key_len_over_tcp, KEY_PADDING);
 	free(key_len_over_tcp);
+
+	if ( ctrl != KEY_PADDING ) {
+		log_error("Attempted to write %d bytes, wrote %d.\n", KEY_PADDING, ctrl);
+		close(socket);
+		return;
+	}
+
 
 	// writing the encoded version of the symmetric key
 	sym_key_over_tcp = rsa_encode(&public_session, symmetric_key_here , sizeof symmetric_key_here );
-	write(socket, sym_key_over_tcp, key_len);
+	ctrl = write(socket, sym_key_over_tcp, key_len);
 	free(sym_key_over_tcp);
 
+	if ( ctrl != key_len ) {
+		log_error("Attempted to write %llu bytes, wrote %d.\n", key_len, ctrl);
+		close(socket);
+		return;
+	}
+
 	// Reading the encrypted value of the length of the symmetric key
-	read(socket, peer_key_len_over_tcp, 8);
+	ctrl = read(socket, peer_key_len_over_tcp, KEY_PADDING);
+
+	if ( ctrl != KEY_PADDING ) {
+		log_error("Attempted to read %d bytes, got %d.\n", KEY_PADDING, ctrl);
+		close(socket);
+		return;
+	}
 
 	// Decoding the key length
 	key_len_decode_buffer = rsa_decode(&private_session, peer_key_len_over_tcp, sizeof peer_key_len_over_tcp ); // might take some time
@@ -132,7 +172,6 @@ void sec_session_server(int socket)
 
 	if ( key_len > MAX_SYM_KEY_LEN ) {
 		printf("Read key length: %" PRIu64 " too large. Session interrupted.\n", key_len);
-		write(socket, "error", 5);
 		close(socket);
 		return; 
 	}
@@ -140,7 +179,14 @@ void sec_session_server(int socket)
 	sym_key_over_tcp = (unsigned char*) malloc(key_len); // allocating space for the encrypted symemtric key to be read
 
 	peer_sym_key_len = key_len / KEY_PADDING;
-	read(socket, sym_key_over_tcp, key_len); // reading the encrypted symmetric key used by the other peer
+	ctrl = read(socket, sym_key_over_tcp, key_len); // reading the encrypted symmetric key used by the other peer
+
+	if ( ctrl != key_len ) {
+		log_error("Attempted to read %llu bytes, got %d.\n", key_len, ctrl);
+		free(sym_key_over_tcp);
+		close(socket);
+		return;
+	}
 
 	// Decoding the symmetric key of the client
 	sym_key_of_peer = rsa_decode(&private_session, sym_key_over_tcp, key_len); // will take some time..
@@ -162,12 +208,19 @@ void sec_session_server(int socket)
 		sz_send = tmp;
 	}
 
-	memcpy(server_talk, &sz_send, 8);
-	memcpy(server_talk + 8, server_responses[GREET], msg_len);
+	memcpy(server_talk, &sz_send, KEY_PADDING);
+	memcpy(server_talk + KEY_PADDING, server_responses[GREET], msg_len);
 
 	symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
 
-	write(socket, server_talk, msg_len + 8); // writing the encrypted version of the greeting
+	ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+
+	if ( ctrl != msg_len + KEY_PADDING ) {
+		log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+		free(sym_key_of_peer);
+		close(socket);
+		return;
+	}
 
 	/*
 	* More to come from here on out! :) 
@@ -182,10 +235,11 @@ void sec_session_client(int socket)
 {
 	unsigned char symmetric_key_here[STNDRD_SYM_KEY_LEN], *key_len_decode_buffer,
 			*sym_key_over_tcp, *sym_key_of_peer, key_len_over_tcp[8], *peer_key_len_over_tcp,
-				server_talk[MAX_DATA_LEN + 1], cmd;
+				server_talk[MAX_DATA_LEN + 1], cmd, read_write_buffer[MAX_DATA_LEN];
 	rsa_session_t private_session, public_session; // in the public only n and e are known.
 	uint64_t n_over_tcp, e_over_tcp, key_len, peer_sym_key_len,
 				sz_send;
+	int ctrl;
 
 	bool is_little_endian = false;
 
@@ -211,13 +265,34 @@ void sec_session_client(int socket)
 
 	// Writing the command of sec-server initialization
 	cmd = SEC_SESSION;
-	write(socket, &cmd, 1);
 
-	// writing the RSA public keys of the private session
-	write(socket, &n_over_tcp, 8), write(socket, &e_over_tcp, 8);
+	memset(read_write_buffer, '\0', sizeof read_write_buffer);
+	
+	memcpy(read_write_buffer, &cmd, 1);
+	memcpy(read_write_buffer + 1, &n_over_tcp, KEY_PADDING);
+	memcpy(read_write_buffer + KEY_PADDING + 1, &e_over_tcp, KEY_PADDING);
+
+	// writing the command as well as the RSA public keys of the private session
+	ctrl = write(socket, read_write_buffer, KEY_PADDING*2 + 1);
+
+	if ( ctrl != 2 * KEY_PADDING + 1 ) {
+		log_error("Attempted to write %d bytes, wrote %d.\n", 2 * KEY_PADDING + 1, ctrl);
+		close(socket);
+		return;
+	}
 
 	// Getting the RSA public keys from the server
-	read(socket, &n_over_tcp, 8), read(socket, &e_over_tcp, 8);
+	memset(read_write_buffer, '\0', sizeof read_write_buffer);
+	ctrl = read(socket, read_write_buffer, KEY_PADDING * 2);
+
+	if ( ctrl != 2 * KEY_PADDING ) {
+		log_error("Attempted to read %d bytes, got %d.\n", 2 * KEY_PADDING, ctrl);
+		close(socket);
+		return;
+	}
+
+	memcpy(&n_over_tcp, read_write_buffer, KEY_PADDING);
+	memcpy(&e_over_tcp, read_write_buffer + KEY_PADDING, KEY_PADDING);
 
 	if ( is_little_endian == true ) {
 		// making all the RSA coefficients to be stored in little endian order
@@ -233,7 +308,13 @@ void sec_session_client(int socket)
 	}
 
 	// Reading the encrypted value of the length of the symmetric key
-	read(socket, key_len_over_tcp, KEY_PADDING );
+	ctrl = read(socket, key_len_over_tcp, KEY_PADDING );
+
+	if ( ctrl != KEY_PADDING ) {
+		log_error("Attempted to read %d bytes, got %d.\n", KEY_PADDING, ctrl);
+		close(socket);
+		return;
+	}
 
 	// Decoding the key length
 	key_len_decode_buffer = rsa_decode(&private_session, key_len_over_tcp, KEY_PADDING ); // might take some time
@@ -243,7 +324,6 @@ void sec_session_client(int socket)
 
 	if ( key_len > MAX_SYM_KEY_LEN ) {
 		printf("Read key length: %" PRIu64 " too large. Session interrupted.\n", key_len);
-		write(socket, "error", 5);
 		close(socket);
 		return; 
 	}
@@ -251,7 +331,13 @@ void sec_session_client(int socket)
 	sym_key_over_tcp = (unsigned char*) malloc(key_len); // allocating space for the encrypted symemtric key to be read
 
 	peer_sym_key_len = key_len / KEY_PADDING;
-	read(socket, sym_key_over_tcp, key_len); // reading the encrypted symmetric key used by the server
+	ctrl = read(socket, sym_key_over_tcp, key_len); // reading the encrypted symmetric key used by the server
+
+	if ( ctrl != key_len ) {
+		log_error("Attempted to read %llu bytes, got %d.\n", key_len, ctrl);
+		close(socket);
+		return;
+	}
 
 	// Decoding the symmetric key of the client
 	sym_key_of_peer = rsa_decode(&private_session, sym_key_over_tcp, key_len); // will take some time..
@@ -262,19 +348,42 @@ void sec_session_client(int socket)
 	peer_key_len_over_tcp = rsa_encode(&public_session, is_little_endian ? &((unsigned char*)&key_len)[0] : &((unsigned char*)&key_len)[KEY_PADDING-1], 1);
 
 	// writing the encoded value of the expected length of the symmetric key
-	write(socket, peer_key_len_over_tcp, 8);
+	ctrl = write(socket, peer_key_len_over_tcp, KEY_PADDING);
 	free(peer_key_len_over_tcp);
+
+	if ( ctrl != KEY_PADDING ) {
+		log_error("Attempted to write %d bytes, wrote %d.\n", KEY_PADDING, ctrl);
+		free(sym_key_of_peer);
+		close(socket);
+		return;
+	}
 
 	// writing the encoded version of the symmetric key
 	sym_key_over_tcp = rsa_encode(&public_session, symmetric_key_here , sizeof symmetric_key_here );
-	write(socket, sym_key_over_tcp, sizeof(symmetric_key_here) * KEY_PADDING );
+	
+	ctrl = write(socket, sym_key_over_tcp, sizeof(symmetric_key_here) * KEY_PADDING );
 	free(sym_key_over_tcp);
+
+	if ( ctrl != sizeof(symmetric_key_here) * KEY_PADDING ) {
+		log_error("Attempted to write %lu bytes, got %d.\n", sizeof(symmetric_key_here) * KEY_PADDING , ctrl);
+		free(sym_key_of_peer);
+		close(socket);
+		return;
+	}
+
 
 // ================================ Connection is established! All parameters have been configured. ================================ //
 	printf("Connection is established!\n");
 
 	memset(server_talk, '\0', sizeof server_talk);
-	read(socket, server_talk, 8); // Get the encrypted length of the message to be passed..
+	ctrl = read(socket, server_talk, KEY_PADDING); // Get the encrypted length of the message to be passed..
+
+	if ( ctrl != KEY_PADDING ) {
+		log_error("Attempted to read %d bytes, got %d.\n", KEY_PADDING, ctrl);
+		free(sym_key_of_peer);
+		close(socket);
+		return;
+	}
 
 	symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, 8, DECRYPT);
 
@@ -297,7 +406,14 @@ void sec_session_client(int socket)
 
 	symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, 8, ENCRYPT);
 
-	read(socket, server_talk + 8, sz_send);
+	ctrl = read(socket, server_talk + 8, sz_send);
+
+	if ( ctrl != sz_send ) {
+		log_error("Attempted to read %llu bytes, got %d.\n", sz_send, ctrl);
+		free(sym_key_of_peer);
+		close(socket);
+		return;
+	}
 
 	symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, sz_send + 8, DECRYPT);
 
