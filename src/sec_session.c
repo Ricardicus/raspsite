@@ -1,10 +1,10 @@
 #include "sec_session.h"
 
 static char *server_responses[] = (char *[]) { 
-	"Welcome!\nFor help enter 'help'.", // Greeting
+	"Welcome!\nFor help enter 'help'.\n", // Greeting
 	"These are your alternatives: \n* 'help': display this tutorial.\n\
 	* 'shell': enter the shell over this 'secure' channel.\n \
-	* 'quit': exit this session.\n-- More to come (possibly) --",
+	* 'quit': exit this session.\n-- More to come (possibly) --\n",
 };
 /*
 * To shift endianness of received or transmitted bytes
@@ -63,7 +63,8 @@ void sec_session_server(int socket)
 {
 	unsigned char symmetric_key_here[STNDRD_SYM_KEY_LEN], *key_len_decode_buffer,
 			*sym_key_over_tcp, *sym_key_of_peer, *key_len_over_tcp, peer_key_len_over_tcp[8],
-				server_talk[MAX_DATA_LEN + 1], read_write_buffer[MAX_DATA_LEN];
+				read_write_buffer[MAX_DATA_LEN];
+	char server_talk[MAX_DATA_LEN + 1];
 	rsa_session_t private_session, public_session; // in the public only n and e are known.
 	uint64_t n_over_tcp, e_over_tcp, key_len, peer_sym_key_len,
 				sz_send, msg_len;
@@ -197,7 +198,7 @@ void sec_session_server(int socket)
 	* ........... 				More to come next! 			................
 	*/
 
-	printf("Connection initalized by client is established!\n");
+	log("Connection initalized by client is established!\n");
 
 	// Start by outputting the greeting
 	msg_len = (uint64_t) strlen(server_responses[GREET]), sz_send = msg_len;
@@ -227,18 +228,101 @@ void sec_session_server(int socket)
 	* We have established the secure communication channel!
 	*/
 
+	while ( 1 ) {
+
+		memset(server_talk, '\0', MAX_DATA_LEN + 1);
+
+		ctrl = read(socket, server_talk, KEY_PADDING); // Get the encrypted length of the message to be passed..
+
+		if ( ctrl == 0 ) {
+			goto end;
+		} else if ( ctrl != KEY_PADDING ) {
+			log_error("Attempted to read %d bytes, got %d.\n", KEY_PADDING, ctrl);
+			goto end;
+		}
+
+		symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, KEY_PADDING, DECRYPT);
+
+		if ( is_little_endian ){
+			uint64_t tmp = 0;
+			swap(server_talk, &tmp, KEY_PADDING);
+			sz_send = tmp;
+		} else {
+			uint64_t tmp = 0;
+			memcpy(&tmp, server_talk, KEY_PADDING);
+			sz_send = tmp;
+		}
+
+		if ( sz_send > 255 ){
+			free(sym_key_of_peer);
+			close(socket);
+			printf("[%s] ERROR AT: %d\n", __func__, __LINE__);
+			return;
+		}
+
+		symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, KEY_PADDING, ENCRYPT);
+
+		ctrl = read(socket, server_talk + KEY_PADDING, sz_send);
+
+		if ( ctrl != sz_send ) {
+			log_error("Attempted to read %llu bytes, got %d.\n", sz_send, ctrl);
+			free(sym_key_of_peer);
+			close(socket);
+			return;
+		}
+
+		symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, sz_send + 8, DECRYPT);	
+
+		printf("received the message: %s\n", server_talk + KEY_PADDING);
+
+		if ( strstr(server_talk + KEY_PADDING, "help") != NULL ) {
+					// Start by outputting the greeting
+			memset(server_talk, '\0', sizeof server_talk);
+
+			msg_len = (uint64_t) strlen(server_responses[ALTERNATIVES]), sz_send = msg_len;
+
+			if ( is_little_endian ) {
+				uint64_t tmp;
+				swap(&sz_send, &tmp, 8);
+				sz_send = tmp;
+			}
+
+			memcpy(server_talk, &sz_send, KEY_PADDING);
+			memcpy(server_talk + KEY_PADDING, server_responses[ALTERNATIVES], msg_len);
+
+			symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
+
+			ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+
+			if ( ctrl != msg_len + KEY_PADDING ) {
+				log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+				free(sym_key_of_peer);
+				close(socket);
+				return;
+			}
+
+		}
+
+
+	}
+
+end:
+
 	close(socket);
 	free(sym_key_of_peer); // Used to decode the messages sent from the peer during this session, it will no longer be needed leaving this function.
+	log("Sec session closed!\n");
+
 }
 
 void sec_session_client(int socket)
 {
 	unsigned char symmetric_key_here[STNDRD_SYM_KEY_LEN], *key_len_decode_buffer,
 			*sym_key_over_tcp, *sym_key_of_peer, key_len_over_tcp[8], *peer_key_len_over_tcp,
-				server_talk[MAX_DATA_LEN + 1], cmd, read_write_buffer[MAX_DATA_LEN];
+			 	cmd, read_write_buffer[MAX_DATA_LEN];
+	char server_talk[MAX_DATA_LEN + 1], input_buffer[MAX_DATA_LEN + 1];
 	rsa_session_t private_session, public_session; // in the public only n and e are known.
 	uint64_t n_over_tcp, e_over_tcp, key_len, peer_sym_key_len,
-				sz_send;
+				sz_send, msg_len;
 	int ctrl;
 
 	bool is_little_endian = false;
@@ -273,6 +357,7 @@ void sec_session_client(int socket)
 	memcpy(read_write_buffer + KEY_PADDING + 1, &e_over_tcp, KEY_PADDING);
 
 	// writing the command as well as the RSA public keys of the private session
+	printf("Writing the public RSA keys to the server...\n");
 	ctrl = write(socket, read_write_buffer, KEY_PADDING*2 + 1);
 
 	if ( ctrl != 2 * KEY_PADDING + 1 ) {
@@ -308,6 +393,7 @@ void sec_session_client(int socket)
 	}
 
 	// Reading the encrypted value of the length of the symmetric key
+	printf("Reading the public RSA keys from the server...\n");
 	ctrl = read(socket, key_len_over_tcp, KEY_PADDING );
 
 	if ( ctrl != KEY_PADDING ) {
@@ -331,6 +417,7 @@ void sec_session_client(int socket)
 	sym_key_over_tcp = (unsigned char*) malloc(key_len); // allocating space for the encrypted symemtric key to be read
 
 	peer_sym_key_len = key_len / KEY_PADDING;
+	printf("Reading the encrypted symmetric key of the server...\n");
 	ctrl = read(socket, sym_key_over_tcp, key_len); // reading the encrypted symmetric key used by the server
 
 	if ( ctrl != key_len ) {
@@ -348,6 +435,8 @@ void sec_session_client(int socket)
 	peer_key_len_over_tcp = rsa_encode(&public_session, is_little_endian ? &((unsigned char*)&key_len)[0] : &((unsigned char*)&key_len)[KEY_PADDING-1], 1);
 
 	// writing the encoded value of the expected length of the symmetric key
+	printf("Sending the encrypted symmetric key used by us to the server...\n");
+
 	ctrl = write(socket, peer_key_len_over_tcp, KEY_PADDING);
 	free(peer_key_len_over_tcp);
 
@@ -373,53 +462,92 @@ void sec_session_client(int socket)
 
 
 // ================================ Connection is established! All parameters have been configured. ================================ //
-	printf("Connection is established!\n");
+	printf(" ================= Connection established! =================\n");
 
-	memset(server_talk, '\0', sizeof server_talk);
-	ctrl = read(socket, server_talk, KEY_PADDING); // Get the encrypted length of the message to be passed..
+	while ( 1 ) {
 
-	if ( ctrl != KEY_PADDING ) {
-		log_error("Attempted to read %d bytes, got %d.\n", KEY_PADDING, ctrl);
-		free(sym_key_of_peer);
-		close(socket);
-		return;
+		memset(server_talk, '\0', sizeof server_talk);
+		memset(input_buffer, '\0', sizeof input_buffer);
+
+		ctrl = read(socket, server_talk, KEY_PADDING); // Get the encrypted length of the message to be passed..
+
+		if ( ctrl != KEY_PADDING ) {
+			log_error("Attempted to read %d bytes, got %d.\n", KEY_PADDING, ctrl);
+			free(sym_key_of_peer);
+			close(socket);
+			return;
+		}
+
+		symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, 8, DECRYPT);
+
+		if ( is_little_endian ){
+			uint64_t tmp = 0;
+			swap(server_talk, &tmp, 8);
+			sz_send = tmp;
+		} else {
+			uint64_t tmp = 0;
+			memcpy(&tmp, server_talk, 8);
+			sz_send = tmp;
+		}
+
+		if ( sz_send > 255 ){
+			free(sym_key_of_peer);
+			close(socket);
+			printf("[%s] ERROR AT: %d\n", __func__, __LINE__);
+			return;
+		}
+
+		symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, 8, ENCRYPT);
+
+		ctrl = read(socket, server_talk + 8, sz_send);
+
+		if ( ctrl != sz_send ) {
+			log_error("Attempted to read %llu bytes, got %d.\n", sz_send, ctrl);
+			free(sym_key_of_peer);
+			close(socket);
+			return;
+		}
+
+		symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, sz_send + 8, DECRYPT);
+
+		printf("%s>>", server_talk + 8);
+
+		// Read user input
+		fgets(input_buffer, MAX_DATA_LEN, stdin);
+
+		if ( strstr(input_buffer, "quit") != NULL ) {
+			printf("Connection closed!\n");
+			goto end;
+		} else {
+						// Start by outputting the greeting
+			msg_len = (uint64_t) strlen(input_buffer), sz_send = msg_len;
+
+			if ( is_little_endian ) {
+				uint64_t tmp;
+				swap(&sz_send, &tmp, 8);
+				sz_send = tmp;
+			}
+
+			memcpy(server_talk, &sz_send, KEY_PADDING);
+			memcpy(server_talk + KEY_PADDING, input_buffer, msg_len);
+
+			symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
+
+			ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+
+			if ( ctrl != msg_len + KEY_PADDING ) {
+				log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+				printf("Unexpected error: Failed to output the data to the server. Server not responding.\n");
+				goto end;
+			}
+
+		}
+
+
+
 	}
 
-	symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, 8, DECRYPT);
-
-	if ( is_little_endian ){
-		uint64_t tmp = 0;
-		swap(server_talk, &tmp, 8);
-		sz_send = tmp;
-	} else {
-		uint64_t tmp = 0;
-		memcpy(&tmp, server_talk, 8);
-		sz_send = tmp;
-	}
-
-	if ( sz_send > 255 ){
-		free(sym_key_of_peer);
-		close(socket);
-		printf("[%s] ERROR AT: %d\n", __func__, __LINE__);
-		return;
-	}
-
-	symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, 8, ENCRYPT);
-
-	ctrl = read(socket, server_talk + 8, sz_send);
-
-	if ( ctrl != sz_send ) {
-		log_error("Attempted to read %llu bytes, got %d.\n", sz_send, ctrl);
-		free(sym_key_of_peer);
-		close(socket);
-		return;
-	}
-
-	symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, sz_send + 8, DECRYPT);
-
-	printf("CLIENT RECEIEVED THE FOLLOWING MESSAGE FROM THE SERVER:\n");
-	printf("%s\n", server_talk + 8);
-
+end:
 	close(socket);
 	free(sym_key_of_peer); // Used to decode the messages sent from the peer during this session, it will no longer be needed leaving this function.
 }

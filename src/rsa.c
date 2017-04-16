@@ -138,7 +138,7 @@ generate_rsa_keys(rsa_session_t* session){
 		memcpy(path_to_primes, pwd, strlen(pwd));
 		slash = strstr(path_to_primes, "/transfer");
 		*slash = '\0';
-		sprintf(path_to_primes, "%s/primes/primes.txt", path_to_primes);
+		sprintf(path_to_primes, "%s/primes/primes_sieved.txt", path_to_primes);
 
 		pair = generate_prime_pair(path_to_primes); // reads from the primes..
 	} else {
@@ -146,7 +146,7 @@ generate_rsa_keys(rsa_session_t* session){
 		* Generate the primes ..... 
 		* Reached from the backend dir.
 		*/
-		pair = generate_prime_pair("etc/primes/primes.txt"); // reads from the primes..
+		pair = generate_prime_pair("etc/primes/primes_sieved.txt"); // reads from the selected primes..
 	}
 
 	prime_q = pair->q, prime_p = pair->p; 
