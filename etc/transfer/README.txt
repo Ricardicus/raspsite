@@ -5,11 +5,11 @@ FTP protocol. The session program can set up a TCP connection and use my own SSH
 protocol implemented on the server side.
 
 Set up:
-	1. Compile the program with the command ”make” in this directory.
+	Compile the program with the command ”make” in this directory.
 Write program:
-	1. Run the program accordingly ”./write [server-IP] [file name] [received file name]”
+	Run the program accordingly ”./write [server-IP] [file name] [received file name]”
 Session program:
-	1. Run the program accordingly ”./session [server-IP]”
+	Run the program accordingly ”./session [server-IP]”
 
 [server-IP]: the IP of the server running the raspserver
 [file name]: The name of the file you want to send (argument will be passed to ’fopen’)
