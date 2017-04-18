@@ -27,7 +27,8 @@ extern "C" {
 
 typedef enum response_alternatives_t {
 	GREET = 0,
-	ALTERNATIVES = 1
+	ALTERNATIVES = 1,
+	MISUNDERSTOOD = 2,
 } response_alternatives_t;
 
 void sec_session_server(int);

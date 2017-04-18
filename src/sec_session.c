@@ -2,9 +2,11 @@
 
 static char *server_responses[] = (char *[]) { 
 	"Welcome!\nFor help enter 'help'.\n", // Greeting
-	"These are your alternatives: \n* 'help': display this tutorial.\n\
+	"These are your alternatives: \n\
+	* 'help': display this tutorial.\n\
 	* 'shell': enter the shell over this 'secure' channel.\n \
 	* 'quit': exit this session.\n-- More to come (possibly) --\n",
+	"Could not interpret that command. For help enter 'help'.\n"
 };
 /*
 * To shift endianness of received or transmitted bytes
@@ -24,7 +26,6 @@ static void initialize_session(rsa_session_t * session, void * symmetric_key, si
 
 	// Generate the random symmetric key
 	generate_symmetric_key(symmetric_key, key_size);
-
 }
 
 /*
@@ -64,13 +65,13 @@ void sec_session_server(int socket)
 	unsigned char symmetric_key_here[STNDRD_SYM_KEY_LEN], *key_len_decode_buffer,
 			*sym_key_over_tcp, *sym_key_of_peer, *key_len_over_tcp, peer_key_len_over_tcp[8],
 				read_write_buffer[MAX_DATA_LEN];
-	char server_talk[MAX_DATA_LEN + 1];
+	char server_talk[MAX_DATA_LEN + KEY_PADDING + 1], oldpwd[200];
 	rsa_session_t private_session, public_session; // in the public only n and e are known.
 	uint64_t n_over_tcp, e_over_tcp, key_len, peer_sym_key_len,
 				sz_send, msg_len;
 	int ctrl;
 
-	bool is_little_endian = false;
+	bool is_little_endian = false, shell_activated = false;
 
 	{
 		int n = 1;
@@ -273,36 +274,260 @@ void sec_session_server(int socket)
 
 		symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, sz_send + 8, DECRYPT);	
 
-		printf("received the message: %s\n", server_talk + KEY_PADDING);
+		printf("received the message: %s", server_talk + KEY_PADDING);
 
-		if ( strstr(server_talk + KEY_PADDING, "help") != NULL ) {
-					// Start by outputting the greeting
-			memset(server_talk, '\0', sizeof server_talk);
+		if ( shell_activated == false ) {
+			// The course of action when not in shell mode
 
-			msg_len = (uint64_t) strlen(server_responses[ALTERNATIVES]), sz_send = msg_len;
+			if ( strstr(server_talk + KEY_PADDING, "help") != NULL ) {
+				// Output the alternatives
+				memset(server_talk, '\0', sizeof server_talk);
 
-			if ( is_little_endian ) {
-				uint64_t tmp;
-				swap(&sz_send, &tmp, 8);
-				sz_send = tmp;
+				msg_len = (uint64_t) strlen(server_responses[ALTERNATIVES]), sz_send = msg_len;
+
+				if ( is_little_endian ) {
+					uint64_t tmp;
+					swap(&sz_send, &tmp, 8);
+					sz_send = tmp;
+				}
+
+				memcpy(server_talk, &sz_send, KEY_PADDING);
+				memcpy(server_talk + KEY_PADDING, server_responses[ALTERNATIVES], msg_len);
+
+				symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
+
+				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+
+				if ( ctrl != msg_len + KEY_PADDING ) {
+					log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+					free(sym_key_of_peer);
+					close(socket);
+					return;
+				}
+
+			} else if ( strstr(server_talk + KEY_PADDING, "shell") != NULL ) {
+				// Output the alternatives
+				memset(server_talk, '\0', sizeof server_talk);
+				char * msg = "========== SHELL MODE ACTIVATED ('quit' still works) !! =========\n";
+
+				msg_len = (uint64_t) strlen(msg), sz_send = msg_len;
+
+				if ( is_little_endian ) {
+					uint64_t tmp;
+					swap(&sz_send, &tmp, 8);
+					sz_send = tmp;
+				}
+
+				memcpy(server_talk, &sz_send, KEY_PADDING);
+				memcpy(server_talk + KEY_PADDING, msg, msg_len);
+
+				symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
+
+				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+
+				if ( ctrl != msg_len + KEY_PADDING ) {
+					log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+					free(sym_key_of_peer);
+					close(socket);
+					return;
+				}
+
+				shell_activated = true;
+
+			} else {
+				// Failed to interpret the input from the client the alternatives
+				memset(server_talk, '\0', sizeof server_talk);
+
+				msg_len = (uint64_t) strlen(server_responses[MISUNDERSTOOD]), sz_send = msg_len;
+
+				if ( is_little_endian ) {
+					uint64_t tmp;
+					swap(&sz_send, &tmp, 8);
+					sz_send = tmp;
+				}
+
+				memcpy(server_talk, &sz_send, KEY_PADDING);
+				memcpy(server_talk + KEY_PADDING, server_responses[MISUNDERSTOOD], msg_len);
+
+				symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
+
+				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+
+				if ( ctrl != msg_len + KEY_PADDING ) {
+					log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+					free(sym_key_of_peer);
+					close(socket);
+					return;
+				}
 			}
+		} else {
 
-			memcpy(server_talk, &sz_send, KEY_PADDING);
-			memcpy(server_talk + KEY_PADDING, server_responses[ALTERNATIVES], msg_len);
+			if ( !strncmp(server_talk + KEY_PADDING, "cd ", 3) ||!strncmp(server_talk + KEY_PADDING, "cd\n", 3) ) {
+				/* This will be a unique case, since cd is no binary (shell built in) */
+				memset(oldpwd, '\0', sizeof oldpwd);
 
-			symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
+				int argc = 1, cd_error=0;
+				char *search, *c;
 
-			ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+				c = strchr(server_talk + KEY_PADDING, '\n');
 
-			if ( ctrl != msg_len + KEY_PADDING ) {
-				log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
-				free(sym_key_of_peer);
-				close(socket);
-				return;
+				if ( c != NULL )
+					*c = '\0';
+
+				c = strchr(server_talk+KEY_PADDING, ' ');
+				search = c;
+
+				if (search != NULL ){
+					while( *search == ' ' )
+						++search;
+				}
+
+				if ( argc == 1 ){
+					snprintf(oldpwd, sizeof oldpwd, "%s", getenv("PWD"));
+					char * home = getenv("HOME");
+					chdir(home);
+					setenv("PWD", home, 1);
+					setenv("OLDPWD", oldpwd, 1);
+				} else if ( argc > 1 && strncmp(search, "-", 1) == 0) {
+					char *pwd = getenv("PWD");
+					snprintf(oldpwd, sizeof oldpwd, "%s", getenv("OLDPWD"));
+			//		printf("Attempting to change to: %s\n", oldpwd);
+					if (chdir(oldpwd)) {
+						cd_error = 1;
+					}
+					setenv("OLDPWD", pwd, 1);
+					setenv("PWD", oldpwd, 1);
+					printf("%s\n", oldpwd);
+				} else if ( argc > 1 && chdir(search) == 0) {
+					setenv("OLDPWD", getenv("PWD"), 1);
+					char pwd_string[MAX_DATA_LEN];
+					memset(pwd_string, 0, sizeof pwd_string);
+					getwd(pwd_string);
+					setenv("PWD", pwd_string, 1);
+				} else {
+					cd_error = 1;
+				}
+				
+				if ( cd_error == 1 ){
+					// Failed to interpret the input from the client the alternatives
+					memset(server_talk, '\0', sizeof server_talk);
+
+					char *msg = "error on cd: could not change directory.\n";
+					msg_len = (uint64_t) strlen(msg), sz_send = msg_len;
+
+					if ( is_little_endian ) {
+						uint64_t tmp;
+						swap(&sz_send, &tmp, 8);
+						sz_send = tmp;
+					}
+
+					memcpy(server_talk, &sz_send, KEY_PADDING);
+					memcpy(server_talk + KEY_PADDING, msg, msg_len);
+
+					symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
+
+					ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+
+					if ( ctrl != msg_len + KEY_PADDING ) {
+						log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+						free(sym_key_of_peer);
+						close(socket);
+						return;
+					}
+
+				} else {
+					// Failed to interpret the input from the client the alternatives
+					memset(server_talk, '\0', sizeof server_talk);
+
+					char *msg = getenv("PWD");
+					msg_len = (uint64_t) strlen(msg), sz_send = msg_len;
+
+					if ( is_little_endian ) {
+						uint64_t tmp;
+						swap(&sz_send, &tmp, 8);
+						sz_send = tmp;
+					}
+
+					memcpy(server_talk, &sz_send, KEY_PADDING);
+					memcpy(server_talk + KEY_PADDING, msg, msg_len);
+					memcpy(server_talk + KEY_PADDING + msg_len, "\n", 1);
+
+					symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 1 + 8, ENCRYPT);
+
+					ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+
+					if ( ctrl != msg_len + KEY_PADDING ) {
+						log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+						free(sym_key_of_peer);
+						close(socket);
+						return;
+					}
+
+				}
+
+			} else {
+				// Will output whatever comes from the command in popen!!!
+				char output_from_command[MAX_DATA_LEN+1], output_buffer[MAX_DATA_LEN+1], *c;
+				int status;
+				size_t count = 0, stored = 0, output_len;
+				FILE *process;
+
+				memset(output_buffer, '\0', sizeof output_buffer);
+				memset(output_from_command, '\0', sizeof output_from_command);
+
+				c = strchr(server_talk + KEY_PADDING, '\n');
+				
+				if ( c != NULL )
+					*c = '\0';
+
+				process = popen(server_talk + KEY_PADDING, "r");
+
+				while ( fgets(output_buffer, MAX_DATA_LEN, process) != NULL ){
+					output_len = strlen(output_buffer);
+					count = 0;
+					if ( stored + output_len >= MAX_DATA_LEN ){
+						while ( stored < MAX_DATA_LEN - 1){
+							output_from_command[stored++] = output_buffer[count++];
+						}
+						break;
+					} else {
+						memcpy(output_from_command + stored, output_buffer, output_len);
+						stored += output_len;
+					}
+				}
+
+				status = pclose(process);
+
+				if ( status ) {
+					// Error...
+					memset(output_from_command, '\0', sizeof output_from_command);
+					sprintf(output_from_command, "Error: That command did not work to well.\n");
+				} 
+
+				msg_len = (uint64_t) strlen(output_from_command), sz_send = msg_len;
+
+				if ( is_little_endian ) {
+					uint64_t tmp;
+					swap(&sz_send, &tmp, 8);
+					sz_send = tmp;
+				}
+
+				memcpy(server_talk, &sz_send, KEY_PADDING);
+				memcpy(server_talk + KEY_PADDING, output_from_command, msg_len);
+				memcpy(server_talk + KEY_PADDING + msg_len, "\n", 1);
+
+				symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
+
+				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+
+				if ( ctrl != msg_len + KEY_PADDING ) {
+					log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+					free(sym_key_of_peer);
+					close(socket);
+					return;
+				}
 			}
-
 		}
-
 
 	}
 
@@ -542,8 +767,6 @@ void sec_session_client(int socket)
 			}
 
 		}
-
-
 
 	}
 
