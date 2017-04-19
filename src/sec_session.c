@@ -44,12 +44,12 @@ static void initialize_session(rsa_session_t * session, void * symmetric_key, si
 		its symmetric key encrypted using the clients rsa coefficient:
 *		| RSA N | RSA E | KEY LEN (encrypted) |  KEY (encrypted) 	|
 * Bytes:
-*			8		8		8					KEY LEN (1-255) * 8
+*			8		8		8					KEY LEN * 8
 * 3. 	Client sends its symmetric key encrypted using the servers 
 *		rsa coefficients:
 *		| KEY LEN (encrypted)| KEY (encrypted) |
 * Bytes:
-*			8		KEY LEN (1-255)
+*			8		KEY LEN 
 * 
 * * 	Client/Server protocol from now on will look like this:				
 *		| MSG LEN | 	MSG	  |
@@ -254,7 +254,7 @@ void sec_session_server(int socket)
 			sz_send = tmp;
 		}
 
-		if ( sz_send > 255 ){
+		if ( sz_send > MAX_DATA_LEN ){
 			free(sym_key_of_peer);
 			close(socket);
 			printf("[%s] ERROR AT: %d\n", __func__, __LINE__);
@@ -308,7 +308,7 @@ void sec_session_server(int socket)
 			} else if ( strstr(server_talk + KEY_PADDING, "shell") != NULL ) {
 				// Output the alternatives
 				memset(server_talk, '\0', sizeof server_talk);
-				char * msg = "========== SHELL MODE ACTIVATED ('quit' still works) !! =========\n";
+				char * msg = " ========== SHELL MODE ACTIVATED ('quit' still works) !! =========\n";
 
 				msg_len = (uint64_t) strlen(msg), sz_send = msg_len;
 
@@ -380,6 +380,10 @@ void sec_session_server(int socket)
 				if (search != NULL ){
 					while( *search == ' ' )
 						++search;
+					if ( *search ) {
+						// There are two arguments
+						argc = 2;
+					}
 				}
 
 				if ( argc == 1 ){
@@ -440,7 +444,9 @@ void sec_session_server(int socket)
 					memset(server_talk, '\0', sizeof server_talk);
 
 					char *msg = getenv("PWD");
-					msg_len = (uint64_t) strlen(msg), sz_send = msg_len;
+
+
+					msg_len = (uint64_t) strlen(msg) + 1, sz_send = msg_len; // add one for line feed
 
 					if ( is_little_endian ) {
 						uint64_t tmp;
@@ -449,14 +455,13 @@ void sec_session_server(int socket)
 					}
 
 					memcpy(server_talk, &sz_send, KEY_PADDING);
-					memcpy(server_talk + KEY_PADDING, msg, msg_len);
-					memcpy(server_talk + KEY_PADDING + msg_len, "\n", 1);
+					sprintf(server_talk + KEY_PADDING, "%s\n", msg);
 
-					symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 1 + 8, ENCRYPT);
+					symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + KEY_PADDING, ENCRYPT);
 
 					ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
 
-					if ( ctrl != msg_len + KEY_PADDING ) {
+					if ( ctrl != msg_len + KEY_PADDING) {
 						log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
 						free(sym_key_of_peer);
 						close(socket);
@@ -513,10 +518,9 @@ void sec_session_server(int socket)
 				}
 
 				memcpy(server_talk, &sz_send, KEY_PADDING);
-				memcpy(server_talk + KEY_PADDING, output_from_command, msg_len);
-				memcpy(server_talk + KEY_PADDING + msg_len, "\n", 1);
+				sprintf(server_talk + KEY_PADDING, "%s", output_from_command);
 
-				symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
+				symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + KEY_PADDING, ENCRYPT);
 
 				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
 
@@ -715,7 +719,7 @@ void sec_session_client(int socket)
 			sz_send = tmp;
 		}
 
-		if ( sz_send > 255 ){
+		if ( sz_send > MAX_DATA_LEN ){
 			free(sym_key_of_peer);
 			close(socket);
 			printf("[%s] ERROR AT: %d\n", __func__, __LINE__);

@@ -20,7 +20,7 @@ extern "C" {
 
 #define MAX_RESPONSES 		100
 #define MAX_SYM_KEY_LEN		255
-#define MAX_DATA_LEN		255
+#define MAX_DATA_LEN		1024
 #define MAX_MSG_LEN			199
 #define STNDRD_SYM_KEY_LEN	8
 
