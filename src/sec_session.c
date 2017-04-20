@@ -122,8 +122,8 @@ void sec_session_server(int socket)
 
 	// Sending the RSA public keys of the private session
 	memset(read_write_buffer, '\0', sizeof read_write_buffer);
-	memcpy(read_write_buffer, &n_over_tcp, 8);
-	memcpy(read_write_buffer + KEY_PADDING, &e_over_tcp, 8);
+	memcpy(read_write_buffer, &n_over_tcp, KEY_PADDING);
+	memcpy(read_write_buffer + KEY_PADDING, &e_over_tcp, KEY_PADDING);
 
 	ctrl = write(socket, read_write_buffer, 2 * KEY_PADDING);
 
@@ -192,9 +192,13 @@ void sec_session_server(int socket)
 		return;
 	}
 
+	printf("Decoding (Might take time)\n");
+
 	// Decoding the symmetric key of the client
 	sym_key_of_peer = rsa_decode(&private_session, sym_key_over_tcp, key_len); // will take some time..
 	free(sym_key_over_tcp); // freeing this now
+
+	printf("Decoded!\n");
 
 	/*
 	* All parameters are transferred and the secure connection is established.
@@ -233,13 +237,15 @@ void sec_session_server(int socket)
 
 	while ( 1 ) {
 
-		memset(server_talk, '\0', MAX_DATA_LEN + 1);
+		memset(server_talk, '\0', sizeof server_talk);
 
 		ctrl = read(socket, server_talk, KEY_PADDING); // Get the encrypted length of the message to be passed..
 
 		if ( ctrl == 0 ) {
+			printf("[%s].%d Interrupted session!\n", __func__, __LINE__);
 			goto end;
 		} else if ( ctrl != KEY_PADDING ) {
+			printf("[%s].%d Interrupted session!\n", __func__, __LINE__);
 			log_error("Attempted to read %d bytes, got %d.\n", KEY_PADDING, ctrl);
 			goto end;
 		}
@@ -274,7 +280,7 @@ void sec_session_server(int socket)
 			return;
 		}
 
-		symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, sz_send + 8, DECRYPT);	
+		symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, sz_send + KEY_PADDING, DECRYPT);	
 
 		printf("received the message: %s", server_talk + KEY_PADDING);
 
@@ -489,7 +495,7 @@ void sec_session_server(int socket)
 					memcpy(server_talk, &sz_send, KEY_PADDING);
 					memcpy(server_talk + KEY_PADDING, msg, msg_len);
 
-					symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
+					symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + KEY_PADDING, ENCRYPT);
 
 					ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
 
@@ -505,7 +511,6 @@ void sec_session_server(int socket)
 					memset(server_talk, '\0', sizeof server_talk);
 
 					char *msg = getenv("PWD");
-
 
 					msg_len = (uint64_t) strlen(msg) + 1, sz_send = msg_len; // add one for line feed
 
