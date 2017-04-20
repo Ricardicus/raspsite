@@ -6,8 +6,10 @@ static char *server_responses[] = (char *[]) {
 	* 'help': display this tutorial.\n\
 	* 'shell': enter the shell over this 'secure' channel.\n \
 	* 'quit': exit this session.\n-- More to come (possibly) --\n",
-	"Could not interpret that command. For help enter 'help'.\n"
+	"Could not interpret that command. For help enter 'help'.\n",
+	"Enter user credentials. You need to authenticate yourself.\n"
 };
+
 /*
 * To shift endianness of received or transmitted bytes
 */
@@ -22,7 +24,7 @@ static void swap(const void *src, void *dst, size_t sz)
 static void initialize_session(rsa_session_t * session, void * symmetric_key, size_t key_size)
 {
 	// Generate the RSA keys
-	generate_rsa_keys(session);
+	generate_rsa_keys(session);	
 
 	// Generate the random symmetric key
 	generate_symmetric_key(symmetric_key, key_size);
@@ -71,7 +73,7 @@ void sec_session_server(int socket)
 				sz_send, msg_len;
 	int ctrl;
 
-	bool is_little_endian = false, shell_activated = false;
+	bool is_little_endian = false, shell_activated = false, is_authenticated = false;
 
 	{
 		int n = 1;
@@ -202,7 +204,7 @@ void sec_session_server(int socket)
 	log("Connection initalized by client is established!\n");
 
 	// Start by outputting the greeting
-	msg_len = (uint64_t) strlen(server_responses[GREET]), sz_send = msg_len;
+	msg_len = (uint64_t) strlen(server_responses[AUTHENTICATE]), sz_send = msg_len;
 
 	if ( is_little_endian ) {
 		uint64_t tmp;
@@ -211,7 +213,7 @@ void sec_session_server(int socket)
 	}
 
 	memcpy(server_talk, &sz_send, KEY_PADDING);
-	memcpy(server_talk + KEY_PADDING, server_responses[GREET], msg_len);
+	memcpy(server_talk + KEY_PADDING, server_responses[AUTHENTICATE], msg_len);
 
 	symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
 
@@ -276,7 +278,66 @@ void sec_session_server(int socket)
 
 		printf("received the message: %s", server_talk + KEY_PADDING);
 
-		if ( shell_activated == false ) {
+		if ( is_authenticated == false ) {
+
+			if ( strstr(server_talk + KEY_PADDING, STANDARD_USER_PASSWORD ) == NULL ){
+				// Output the need for authentication
+				memset(server_talk, '\0', sizeof server_talk);
+
+				msg_len = (uint64_t) strlen(server_responses[AUTHENTICATE]), sz_send = msg_len;
+
+				if ( is_little_endian ) {
+					uint64_t tmp;
+					swap(&sz_send, &tmp, 8);
+					sz_send = tmp;
+				}
+
+				memcpy(server_talk, &sz_send, KEY_PADDING);
+				memcpy(server_talk + KEY_PADDING, server_responses[AUTHENTICATE], msg_len);
+
+				symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
+
+				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+
+				if ( ctrl != msg_len + KEY_PADDING ) {
+					log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+					free(sym_key_of_peer);
+					close(socket);
+					return;
+				}
+			} else {
+				// Output the greeting
+				memset(server_talk, '\0', sizeof server_talk);
+
+				msg_len = (uint64_t) strlen(server_responses[GREET]), sz_send = msg_len;
+
+				if ( is_little_endian ) {
+					uint64_t tmp;
+					swap(&sz_send, &tmp, 8);
+					sz_send = tmp;
+				}
+
+				memcpy(server_talk, &sz_send, KEY_PADDING);
+				memcpy(server_talk + KEY_PADDING, server_responses[GREET], msg_len);
+
+				symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + 8, ENCRYPT);
+
+				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+
+				if ( ctrl != msg_len + KEY_PADDING ) {
+					log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+					free(sym_key_of_peer);
+					close(socket);
+					return;
+				}
+
+				is_authenticated = true;
+
+			}
+
+
+
+		} else if ( shell_activated == false ) {
 			// The course of action when not in shell mode
 
 			if ( strstr(server_talk + KEY_PADDING, "help") != NULL ) {

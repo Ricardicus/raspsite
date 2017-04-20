@@ -12,6 +12,7 @@ extern "C" {
 #include <time.h>
 #include <stdbool.h>
 #include <inttypes.h>
+#include "password.h"
 #include "rsa.h"
 #include "notif.h"
 
@@ -29,6 +30,7 @@ typedef enum response_alternatives_t {
 	GREET = 0,
 	ALTERNATIVES = 1,
 	MISUNDERSTOOD = 2,
+	AUTHENTICATE = 3,
 } response_alternatives_t;
 
 void sec_session_server(int);
