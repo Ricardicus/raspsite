@@ -243,6 +243,8 @@ void sec_session_server(int socket)
 
 		if ( ctrl == 0 ) {
 			printf("[%s].%d Interrupted session!\n", __func__, __LINE__);
+			free(sym_key_of_peer);
+			return;
 			goto end;
 		} else if ( ctrl != KEY_PADDING ) {
 			printf("[%s].%d Interrupted session!\n", __func__, __LINE__);
@@ -340,8 +342,6 @@ void sec_session_server(int socket)
 				is_authenticated = true;
 
 			}
-
-
 
 		} else if ( shell_activated == false ) {
 			// The course of action when not in shell mode
@@ -554,17 +554,51 @@ void sec_session_server(int socket)
 				process = popen(server_talk + KEY_PADDING, "r");
 
 				while ( fgets(output_buffer, MAX_DATA_LEN, process) != NULL ){
+
 					output_len = strlen(output_buffer);
 					count = 0;
+
 					if ( stored + output_len >= MAX_DATA_LEN ){
-						while ( stored < MAX_DATA_LEN - 1){
+
+						while ( stored < MAX_DATA_LEN ){
 							output_from_command[stored++] = output_buffer[count++];
 						}
-						break;
+
+						msg_len = (uint64_t) strlen(output_from_command), sz_send = msg_len;
+
+						if ( is_little_endian ) {
+							uint64_t tmp;
+							swap(&sz_send, &tmp, 8);
+							sz_send = tmp;
+						}
+
+						memcpy(server_talk, &sz_send, KEY_PADDING);
+						sprintf(server_talk + KEY_PADDING, "%s", output_from_command);
+
+						symmetric_key_crypto(symmetric_key_here, sizeof symmetric_key_here, server_talk, msg_len + KEY_PADDING, ENCRYPT);
+
+						ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
+
+						if ( ctrl != msg_len + KEY_PADDING ) {
+							log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+							free(sym_key_of_peer);
+							close(socket);
+							return;
+						}
+
+						memset(output_from_command, '\0', sizeof output_from_command);
+
+						memcpy(output_from_command, &output_buffer[count], strlen(&output_buffer[count]));
+
+						stored = strlen(&output_buffer[count]);
+
 					} else {
+
 						memcpy(output_from_command + stored, output_buffer, output_len);
 						stored += output_len;
+					
 					}
+				
 				}
 
 				status = pclose(process);
@@ -805,7 +839,58 @@ void sec_session_client(int socket)
 
 		symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, sz_send + 8, DECRYPT);
 
-		printf("%s>>", server_talk + 8);
+		printf("%s", server_talk + KEY_PADDING);
+
+		while ( sz_send == MAX_DATA_LEN ) {
+
+			memset(server_talk, '\0', sizeof server_talk);
+
+			ctrl = read(socket, server_talk, KEY_PADDING); // Get the encrypted length of the message to be passed..
+
+			if ( ctrl != KEY_PADDING ) {
+				log_error("Attempted to read %d bytes, got %d.\n", KEY_PADDING, ctrl);
+				free(sym_key_of_peer);
+				close(socket);
+				return;
+			}
+
+			symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, KEY_PADDING, DECRYPT);
+
+			if ( is_little_endian ){
+				uint64_t tmp = 0;
+				swap(server_talk, &tmp, 8);
+				sz_send = tmp;
+			} else {
+				uint64_t tmp = 0;
+				memcpy(&tmp, server_talk, 8);
+				sz_send = tmp;
+			}
+
+			if ( sz_send > MAX_DATA_LEN ){
+				free(sym_key_of_peer);
+				close(socket);
+				printf("[%s] ERROR AT: %d\n", __func__, __LINE__);
+				return;
+			}
+
+			symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, KEY_PADDING, ENCRYPT);
+
+			ctrl = read(socket, server_talk + KEY_PADDING, sz_send);
+
+			if ( ctrl != sz_send ) {
+				log_error("Attempted to read %llu bytes, got %d.\n", sz_send, ctrl);
+				free(sym_key_of_peer);
+				close(socket);
+				return;
+			}
+
+			symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, sz_send + KEY_PADDING, DECRYPT);
+
+			printf("%s", server_talk + KEY_PADDING);
+
+		}
+
+		printf(">>");
 
 		// Read user input
 		fgets(input_buffer, MAX_DATA_LEN, stdin);
