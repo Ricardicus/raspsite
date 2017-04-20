@@ -729,6 +729,7 @@ void interpret_and_output(int socket, char * first_line)
 
 			auth_decoded = base64_decode(auth + 6, strlen(auth) - strlen("Basic "), &out_len);
 
+			printf("auth_decoded: %s\n", auth_decoded);
 			if ( strcmp((char*)auth_decoded, STANDARD_USER_PASSWORD) ){
 				// Wrong user or password or both given!
 				output_authenticate_headers(socket);
