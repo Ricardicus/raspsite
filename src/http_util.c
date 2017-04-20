@@ -59,7 +59,7 @@ unsigned char *base64_decode(const char *data,
     if (data[input_length - 1] == '=') (*output_length)--;
     if (data[input_length - 2] == '=') (*output_length)--;
 
-    unsigned char *decoded_data = malloc(*output_length);
+    unsigned char *decoded_data = calloc(*output_length,1);
     if (decoded_data == NULL) return NULL;
 
     for (i = 0, j = 0; i < input_length;) {
