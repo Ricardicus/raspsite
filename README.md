@@ -5,6 +5,11 @@ The website includes different stuff.
 For now it can be used as a cipher, play games or 
 some sort of coffee monitor I haven't figured out what to do with yet..
 
+# Remote Shell
+This server will host an encrypted remote shell on port 8081 that one can use 
+with the program "session" found under etc/transfer. Consult etc/transfer/README.md 
+for further instructions!
+
 # Install
 
 1. SSH into the raspberry pi
