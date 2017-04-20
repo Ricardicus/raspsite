@@ -10,6 +10,8 @@ extern "C" {
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <inttypes.h>
 
 #define KEY_PADDING			8
 

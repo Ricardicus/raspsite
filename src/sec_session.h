@@ -12,6 +12,7 @@ extern "C" {
 #include <time.h>
 #include <stdbool.h>
 #include <inttypes.h>
+#include <stdint.h>
 #include "password.h"
 #include "rsa.h"
 #include "notif.h"

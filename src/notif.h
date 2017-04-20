@@ -20,6 +20,8 @@ extern "C" {
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <string.h>
+#include <stdint.h>
+#include <inttypes.h>
 #include "logger.h"
 
 /*
