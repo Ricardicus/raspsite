@@ -36,6 +36,7 @@ void * file_receiver_thread_callback(void * data)
 
 	char client_IP[INET_ADDRSTRLEN];
 	struct sockaddr_in serv_addr, cli_addr;
+    struct timeval timeout;     
 
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0){ 
@@ -43,11 +44,31 @@ void * file_receiver_thread_callback(void * data)
 		return NULL;
 	}
 
+ 
+    timeout.tv_sec = 120;
+    timeout.tv_usec = 0;
+
+    if (setsockopt (sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,
+                sizeof(timeout)) < 0){
+    	log_error("%s.%d setsockopt failed\n", __func__, __LINE__);
+		return NULL;
+    }
+
+    if (setsockopt (sockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
+                sizeof(timeout)) < 0){
+    	log_error("%s.%d setsockopt failed\n", __func__, __LINE__);
+		return NULL;
+    }
+
+
 	bzero((char *) &serv_addr, sizeof(serv_addr));
 	portno = FILE_RECEIVE_PORT;
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
 	serv_addr.sin_port = htons(portno);
+
+
+
 
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
 		log_error("%s ERROR on file receive binding\n", __func__);
