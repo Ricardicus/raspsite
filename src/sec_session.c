@@ -276,7 +276,7 @@ void sec_session_server(int socket)
 		ctrl = read(socket, server_talk + KEY_PADDING, sz_send);
 
 		if ( ctrl != sz_send ) {
-			log_error("Attempted to read %llu bytes, got %d.\n", sz_send, ctrl);
+			log_error("Attempted to read %" PRIu64 " bytes, got %d.\n", sz_send, ctrl);
 			free(sym_key_of_peer);
 			close(socket);
 			return;
@@ -308,7 +308,7 @@ void sec_session_server(int socket)
 				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
 
 				if ( ctrl != msg_len + KEY_PADDING ) {
-					log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+					log_error("Attempted to write %" PRIu64 " bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
 					free(sym_key_of_peer);
 					close(socket);
 					return;
@@ -333,7 +333,7 @@ void sec_session_server(int socket)
 				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
 
 				if ( ctrl != msg_len + KEY_PADDING ) {
-					log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+					log_error("Attempted to write %" PRIu64 " bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
 					free(sym_key_of_peer);
 					close(socket);
 					return;
@@ -342,6 +342,8 @@ void sec_session_server(int socket)
 				is_authenticated = true;
 
 			}
+
+
 
 		} else if ( shell_activated == false ) {
 			// The course of action when not in shell mode
@@ -366,7 +368,7 @@ void sec_session_server(int socket)
 				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
 
 				if ( ctrl != msg_len + KEY_PADDING ) {
-					log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+					log_error("Attempted to write %" PRIu64 " bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
 					free(sym_key_of_peer);
 					close(socket);
 					return;
@@ -393,7 +395,7 @@ void sec_session_server(int socket)
 				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
 
 				if ( ctrl != msg_len + KEY_PADDING ) {
-					log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+					log_error("Attempted to write %" PRIu64 " bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
 					free(sym_key_of_peer);
 					close(socket);
 					return;
@@ -421,7 +423,7 @@ void sec_session_server(int socket)
 				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
 
 				if ( ctrl != msg_len + KEY_PADDING ) {
-					log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+					log_error("Attempted to write %" PRIu64 " bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
 					free(sym_key_of_peer);
 					close(socket);
 					return;
@@ -500,7 +502,7 @@ void sec_session_server(int socket)
 					ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
 
 					if ( ctrl != msg_len + KEY_PADDING ) {
-						log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+						log_error("Attempted to write %" PRIu64 " bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
 						free(sym_key_of_peer);
 						close(socket);
 						return;
@@ -528,7 +530,7 @@ void sec_session_server(int socket)
 					ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
 
 					if ( ctrl != msg_len + KEY_PADDING) {
-						log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+						log_error("Attempted to write %" PRIu64 " bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
 						free(sym_key_of_peer);
 						close(socket);
 						return;
@@ -580,7 +582,7 @@ void sec_session_server(int socket)
 						ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
 
 						if ( ctrl != msg_len + KEY_PADDING ) {
-							log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+							log_error("Attempted to write %" PRIu64 " bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
 							free(sym_key_of_peer);
 							close(socket);
 							return;
@@ -625,7 +627,7 @@ void sec_session_server(int socket)
 				ctrl = write(socket, server_talk, msg_len + KEY_PADDING); // writing the encrypted version of the greeting
 
 				if ( ctrl != msg_len + KEY_PADDING ) {
-					log_error("Attempted to write %llu bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
+					log_error("Attempted to write %" PRIu64 " bytes, wrote %d.\n", msg_len + KEY_PADDING , ctrl);
 					free(sym_key_of_peer);
 					close(socket);
 					return;
@@ -750,7 +752,7 @@ void sec_session_client(int socket)
 	ctrl = read(socket, sym_key_over_tcp, key_len); // reading the encrypted symmetric key used by the server
 
 	if ( ctrl != key_len ) {
-		log_error("Attempted to read %llu bytes, got %d.\n", key_len, ctrl);
+		log_error("Attempted to read %" PRIu64 " bytes, got %d.\n", key_len, ctrl);
 		close(socket);
 		return;
 	}
@@ -831,7 +833,7 @@ void sec_session_client(int socket)
 		ctrl = read(socket, server_talk + 8, sz_send);
 
 		if ( ctrl != sz_send ) {
-			log_error("Attempted to read %llu bytes, got %d.\n", sz_send, ctrl);
+			log_error("Attempted to read %" PRIu64 " bytes, got %d.\n", sz_send, ctrl);
 			free(sym_key_of_peer);
 			close(socket);
 			return;
@@ -878,7 +880,7 @@ void sec_session_client(int socket)
 			ctrl = read(socket, server_talk + KEY_PADDING, sz_send);
 
 			if ( ctrl != sz_send ) {
-				log_error("Attempted to read %llu bytes, got %d.\n", sz_send, ctrl);
+				log_error("Attempted to read %" PRIu64 " bytes, got %d.\n", sz_send, ctrl);
 				free(sym_key_of_peer);
 				close(socket);
 				return;
