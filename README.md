@@ -1,5 +1,6 @@
+I want to become a better programmer so I develop server running on my raspberry pi.
+
 # Website
-I want to become a better programmer so I set up a web server on my raspberry pi.
 
 The website includes different stuff. 
 For now it can be used as a cipher, play games or 
