@@ -2,9 +2,12 @@ I want to become a better programmer so I develop server running on my raspberry
 
 # Website
 
-The website includes different stuff. 
-For now it can be used as a cipher, play games or 
-some sort of coffee monitor I haven't figured out what to do with yet..
+The website includes different random stuff. 
+But it is also were friendly for front end developers to further develop
+and extend functionality as I have set up a way to write CGI scripts in python or bash. 
+In that case just keep in mind that GET / requests map to the "index.html" file.
+It is the main entry point. All other files except them under etc/ src/ or log/ are 
+outputted with http content-type header field set according to the file extension.
 
 # Remote Shell
 This server will host an encrypted remote shell on port 8081 that one can use 
