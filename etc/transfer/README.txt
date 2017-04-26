@@ -1,5 +1,5 @@
-This is a directory containing a program that is intended to be run 
-by the client. The are two programs here that can communicate with the server.
+This is a directory containing programs that are intended to be run 
+by a client. The are two programs here that can communicate with the server.
 The write program can set up a TCP connection and transfer a file using my own 
 FTP protocol. The session program can set up a TCP connection and use my own SSH
 protocol implemented on the server side.
