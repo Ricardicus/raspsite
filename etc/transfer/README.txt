@@ -16,4 +16,4 @@ Session program:
 [file name]: The name of the file you want to send (argument will be passed to ’fopen’)
 [received file name]: What the name shall be on the server. It will be placed under the directory ”downloads” on the server. If a file with the same name exists it will be overwritten. 
 
-If the server is responding than you can transfer files with this one! :) 
+If the server is responding then you can transfer files with this one! :) 
