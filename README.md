@@ -1,9 +1,10 @@
-# Website
-I want to become a better programmer so I set up a web server on my raspberry pi.
+I want to become a better programmer so I develop server running on my raspberry pi.
 
-The website includes different stuff. 
-For now it can be used as a cipher, play games or 
-some sort of coffee monitor I haven't figured out what to do with yet..
+# Website
+
+The website includes different random stuff. 
+But it is also were friendly for front end developers to further develop
+and extend functionality as I have set up a way to write CGI scripts in python or bash. 
 
 # Remote Shell
 This server will host an encrypted remote shell on port 8081 that one can use 
@@ -43,7 +44,9 @@ The server is now running for as long as possible, recovering from whatever caus
 
 The first thing it will do is map "/" to the file "index.html".
 With that in mind please feel free to include you own files and write your own pages!
-Every file that exists will be outputted with corresponding headers (at least .js and .html, feel free to include more by digging into the code of http.c), except files under /etc/, /src/, /log/, and paths including '~' or '..'. 
+Every file that exists, except files under /etc/, /src/, /log/, and paths including '~' or '..'., 
+will be outputted with corresponding http content-type field set according to their file extension. 
+Feel free to include more features by digging into the code of http.c. 
 
 You can also write you own cgi's under the directory '/cgi/'. For now it only supports cgi's written in Python and Bash, 
 but I might extend it to Perl and other interpreted languages in the future! 

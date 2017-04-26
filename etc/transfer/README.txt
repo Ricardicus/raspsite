@@ -1,8 +1,9 @@
-This is a directory containing a program that is intended to be run 
-by the client. The are two programs here that can communicate with the server.
+This is a directory containing programs that are intended to be run 
+by a client. The are two programs here that can communicate with the server.
 The write program can set up a TCP connection and transfer a file using my own 
-FTP protocol. The session program can set up a TCP connection and use my own SSH
-protocol implemented on the server side.
+FTP protocol (RFTP, as in Ricardicus Fantastic Transfer Protocol). 
+The session program can set up a TCP connection and use my own SSH
+protocol (RSSH, as in RSSH not Secure Shell) implemented on the server side.
 
 Set up:
 	Compile the program with the command ”make” in this directory.
@@ -15,4 +16,4 @@ Session program:
 [file name]: The name of the file you want to send (argument will be passed to ’fopen’)
 [received file name]: What the name shall be on the server. It will be placed under the directory ”downloads” on the server. If a file with the same name exists it will be overwritten. 
 
-If the server is responding than you can transfer files with this one! :) 
+If the server is responding then you can transfer files with this one! :) 
