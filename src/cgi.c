@@ -8,10 +8,15 @@ void cgi_py(int socket, hashtable_t* params, const char * cgi_path)
 {
 	FILE *fp,*process;
 	char *extension,buffer[1024];
+	int n;
 
 	memset(buffer, '\0', sizeof(buffer));
 
 	fp = fopen("cgi/python.cgi", "w");
+	if ( fp == NULL ) {
+		printf("fp is null\n");
+		return;
+	}
 	fprintf(fp, "import os\n");
 
 	write_table_as_python_os_environ(params, fp);
@@ -28,11 +33,21 @@ void cgi_py(int socket, hashtable_t* params, const char * cgi_path)
 
 	process = popen("python cgi/python.cgi", "r");
 
-	while ( fgets(buffer, sizeof(buffer)-1, process) != NULL ){
-		write(socket, buffer, strlen(buffer));
+	if ( process == NULL ) {
+		printf("process is null..\n");
+		return;
 	}
 
-	fclose(process);
+	while ( fgets(buffer, sizeof(buffer)-1, process) != NULL ){
+		n = write(socket, buffer, strlen(buffer));
+		if ( n < 0 ){
+			pclose(process);
+			return;
+		}
+		memset(buffer, '\0', sizeof buffer);
+	}
+
+	pclose(process);
 }
 
 
@@ -40,6 +55,7 @@ void cgi_sh(int socket, hashtable_t* params, const char * cgi_path)
 {
 	FILE *fp,*process;
 	char *extension,buffer[1024];
+	int n;
 
 	memset(buffer, '\0', sizeof(buffer));
 
@@ -57,12 +73,21 @@ void cgi_sh(int socket, hashtable_t* params, const char * cgi_path)
 
 	fclose(fp);
 
-	system("chmod ugo+x cgi/bash.cgi");			
-	process = popen("./cgi/bash.cgi", "r");
-
-	while ( fgets(buffer, sizeof(buffer), process) != NULL ){
-		write(socket, buffer, strlen(buffer));
+	if ( !access("cgi/bash.cgi", X_OK) ) {
+		system("chmod ugo+x cgi/bash.cgi");	
 	}
 
-	fclose(process);
+		
+	process = popen("./cgi/bash.cgi", "r");
+
+	while ( fgets(buffer, sizeof(buffer) - 1, process) != NULL ){
+		n = write(socket, buffer, strlen(buffer));
+		if ( n < 0 ){
+			pclose(process);
+			return;
+		}
+		memset(buffer, '\0', sizeof buffer);
+	}
+
+	pclose(process);
 }

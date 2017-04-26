@@ -7,37 +7,44 @@ static pthread_mutex_t pthread_sync;
 * A bunch of functions that output meta data
 */ 
 // ----------------------------------------- //
-void output_js_headers(int socket)
+int output_js_headers(int socket)
 {
-	char * msg = "HTTP/1.1 200 OK\r\n";
-   	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-	write(socket,msg, strlen(msg));
-   	msg = "Content-Type: application/javascript; charset=utf-8\r\n\r\n";
-   	write(socket,msg, strlen(msg));
+	size_t ctrl;
+	char *msg;
+	size_t sz;
+
+	msg = "HTTP/1.1 200 OK\r\n\
+Cache-Control: no-cache, no-store, must-revalidate\r\n\
+Pragma: no-cache\r\n\
+Expires: 0\r\n\
+Content-Type: application/javascript; charset=utf-8\r\n\r\n";
+	sz = strlen(msg);
+
+   	ctrl = write(socket,msg, sz);
+   	
+   	return  ctrl != sz;
 }
 
-void output_authenticate_headers(int socket)
+int output_authenticate_headers(int socket)
 {
-	char * msg = "HTTP/1.1 401 Unauthorized\r\n";
-   	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "WWW-Authenticate: Basic realm=\"private\"\r\n";
-	write(socket,msg, strlen(msg));
-   	msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
-   	write(socket,msg, strlen(msg));
 
-   	msg = "<!DOCTYPE html><body><pre>Authorization required.</pre></body></html>";
-   	write(socket,msg, strlen(msg));
+	size_t ctrl;
+	char *msg;
+	size_t sz;
+
+	msg = "HTTP/1.1 401 Unauthorized\r\n\
+Cache-Control: no-cache, no-store, must-revalidate\r\n\
+Pragma: no-cache\r\n\
+Expires: 0\r\n\
+WWW-Authenticate: Basic realm=\"private\"\r\n\
+Content-Type: text/html; charset=utf-8\r\n\r\n\
+<!DOCTYPE html><body><pre>Authorization required.</pre></body></html>";
+	sz = strlen(msg);
+
+   	ctrl = write(socket,msg, sz);
+   	
+   	return  ctrl != sz;
+
 }
 
 void output_file_transfer_headers(int socket, char *file)
@@ -84,87 +91,112 @@ void output_file_transfer_headers(int socket, char *file)
    	write(socket,http_line, strlen(http_line));
 }
 
-void output_txt_headers(int socket)
+int output_txt_headers(int socket)
 {
-	char * msg = "HTTP/1.1 200 OK\r\n";
-   	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-	write(socket,msg, strlen(msg));
-   	msg = "Content-Type: text/plain; charset=utf-8\r\n\r\n";
-   	write(socket,msg, strlen(msg));
+	size_t ctrl;
+	char *msg;
+	size_t sz;
+
+	msg = "HTTP/1.1 200 OK\r\n\
+Cache-Control: no-cache, no-store, must-revalidate\r\n\
+Pragma: no-cache\r\n\
+Expires: 0\r\n\
+Content-Type: text/plain; charset=utf-8\r\n\r\n";
+	sz = strlen(msg);
+
+   	ctrl = write(socket,msg, sz);
+   	
+   	return  ctrl != sz;
 }
 
-void output_json_headers(int socket)
+int output_json_headers(int socket)
 {
-	char * msg = "HTTP/1.1 200 OK\r\n";
-   	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-   	msg = "Content-Type: application/json; charset=utf-8\r\n\r\n";
-   	write(socket,msg, strlen(msg));
+	size_t ctrl;
+	char *msg;
+	size_t sz;
+
+	msg = "HTTP/1.1 200 OK\r\n\
+Cache-Control: no-cache, no-store, must-revalidate\r\n\
+Pragma: no-cache\r\n\
+Expires: 0\r\n\
+Content-Type: application/json; charset=utf-8\r\n\r\n";
+	sz = strlen(msg);
+
+   	ctrl = write(socket,msg, sz);
+   	
+   	return  ctrl != sz;
 }
 
-void output_jpg_headers(int socket)
+int output_jpg_headers(int socket)
 {
-	char * msg = "HTTP/1.1 200 OK\r\n";
-   	write(socket,msg,strlen(msg));
-	msg = "Content-Description: File Transfer\r\n";
-   	write(socket,msg, strlen(msg));	
-   	msg = "Content-Transfer-Encoding: binary\r\n";
-   	write(socket,msg, strlen(msg));	
-   	msg = "Content-Disposition: attachment; filename=\"image.jpg\"\r\n";
-   	write(socket,msg, strlen(msg));	
-	msg = "Content-Type: image/jpeg\r\n\r\n";
-  	write(socket,msg, strlen(msg));
+	ssize_t ctrl;
+	char *msg;
+	size_t sz;
+
+	msg = "HTTP/1.1 200 OK\r\n\
+Content-Description: File Transfer\r\n\
+Content-Transfer-Encoding: binary\r\n\
+Content-Disposition: attachment; filename=\"image.jpg\"\r\n\
+Content-Type: image/jpeg\r\n\r\n";
+	sz = strlen(msg);
+
+   	ctrl = write(socket,msg, sz);
+   	
+   	return  ctrl != sz;
 }
 
-void output_png_headers(int socket)
+int output_png_headers(int socket)
 {
-	char * msg = "HTTP/1.1 200 OK\r\n";
-   	write(socket,msg,strlen(msg));
-	msg = "Content-Description: File Transfer\r\n";
-   	write(socket,msg, strlen(msg));	
-   	msg = "Content-Transfer-Encoding: binary\r\n";
-   	write(socket,msg, strlen(msg));	
-   	msg = "Content-Disposition: attachment; filename=\"image.jpg\"\r\n";
-   	write(socket,msg, strlen(msg));	
-	msg = "Content-Type: image/png\r\n\r\n";
-  	write(socket,msg, strlen(msg));
+	ssize_t ctrl;
+	char *msg;
+	size_t sz;
+
+	msg = "HTTP/1.1 200 OK\r\n\
+Content-Description: File Transfer\r\n\
+Content-Transfer-Encoding: binary\r\n\
+Content-Disposition: attachment; filename=\"image.jpg\"\r\n\
+Content-Type: image/png\r\n\r\n";
+	sz = strlen(msg);
+
+   	ctrl = write(socket,msg, sz);
+   	
+   	return  ctrl != sz;
 }
 
-void output_css_headers(int socket)
+int output_css_headers(int socket)
 {
-	char * msg = "HTTP/1.1 200 OK\r\n";
-   	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Content-Type: text/css; charset=utf-8\r\n\r\n";
-   	write(socket,msg, strlen(msg));
+	ssize_t ctrl;
+	char *msg;
+	size_t sz;
+
+	msg = "HTTP/1.1 200 OK\r\n\
+Cache-Control: no-cache, no-store, must-revalidate\r\n\
+Pragma: no-cache\r\n\
+Expires: 0\r\n\
+Content-Type: text/css; charset=utf-8\r\n\r\n";
+	sz = strlen(msg);
+
+   	ctrl = write(socket,msg, sz);
+   	
+   	return  ctrl != sz;
 }
 
-void output_html_headers(int socket)
+int output_html_headers(int socket)
 {
-	char * msg = "HTTP/1.1 200 OK\r\n";
-   	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-	write(socket,msg, strlen(msg));
-   	msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
-   	write(socket,msg, strlen(msg));
+	ssize_t ctrl;
+	char *msg;
+	size_t sz;
+
+	msg = "HTTP/1.1 200 OK\r\n\
+Cache-Control: no-cache, no-store, must-revalidate\r\n\
+Pragma: no-cache\r\n\
+Expires: 0\r\n\
+Content-Type: text/html; charset=utf-8\r\n\r\n";
+	sz = strlen(msg);
+
+   	ctrl = write(socket,msg, sz);
+
+   	return  ctrl != sz;
 }
 
 // ----------------------------------------- //
@@ -187,24 +219,26 @@ void free_http_data(http_data_t ** http_data)
 void output_file_not_found(int socket)
 {
 	unsigned sz;
+	ssize_t ctrl;
+	size_t send_sz;
 	int fd;
 	char *data;
 	struct stat st;
 
-	char * msg = "HTTP/1.1 404 Not Found\r\n";
-   	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-	write(socket,msg, strlen(msg));
-   	msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
-   	write(socket,msg, strlen(msg));
+	char * msg = "HTTP/1.1 404 Not Found\r\n\
+Cache-Control: no-cache, no-store, must-revalidate\r\n\
+Pragma: no-cache\r\n\
+Expires: 0\r\n\
+Content-Type: text/html; charset=utf-8\r\n\r\n\
+<!DOCTYPE html><body><pre>";
+	send_sz = strlen(msg);
 
-   	msg = "<!DOCTYPE html><body><pre>";
-   	write(socket,msg, strlen(msg));
-   	
+   	ctrl = write(socket,msg, send_sz);
+   
+   	if ( send_sz != ctrl ){
+   		return;
+   	}
+
    	fd = open("etc/404.txt", O_RDONLY);
 
 	stat("etc/404.txt", &st);
@@ -222,49 +256,55 @@ void output_file_not_found(int socket)
 	data = malloc(sz+1);
 	if ( data == NULL ){
 		msg = "Memory error + Bad path.";
-   		write(socket,msg, strlen(msg));
+		send_sz = strlen(msg);
+   		ctrl = write(socket,msg, send_sz);
 		close(fd);
-		msg = "</pre></body></html>";
-   		write(socket,msg, strlen(msg));
+
+		if ( ctrl == send_sz ){
+			// send the rest also..
+			msg = "</pre></body></html>";
+   			write(socket,msg, strlen(msg));
+		}
+
 		return;
 	}
 
 	data[sz] = '\0';
 
 	read( fd, data, sz );
-	write(socket, data, sz);
+	ctrl = write(socket, data, sz);
 
 	close(fd);
 	free(data);
 
-	msg = "</pre></body></html>";
-   	write(socket,msg, strlen(msg));
+	if ( ctrl == sz ) {
+		msg = "</pre></body></html>";
+   		write(socket,msg, strlen(msg));
+	}
+
 	return;
 
 }
 
-void output_internal_server_error(int socket)
+int output_internal_server_error(int socket)
 {
-	char * msg = "HTTP/1.1 500 Internal server error\r\n";
-   	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-	write(socket,msg, strlen(msg));
-   	msg = "Content-Type: text/html; charset=utf-8\r\n\r\n";
-   	write(socket,msg, strlen(msg));
+	int ctrl;
+	char *msg;
+	size_t sz;
 
-   	msg = "<!DOCTYPE html><body><pre>";
-   	write(socket,msg, strlen(msg));
-   	
-	msg = "Internal server error.";
-   	write(socket,msg, strlen(msg));
+	msg = "HTTP/1.1 500 Internal server error\r\n\
+Cache-Control: no-cache, no-store, must-revalidate\r\n\
+Pragma: no-cache\r\n\
+Expires: 0\r\n\
+Content-Type: text/html; charset=utf-8\r\n\r\n\
+<!DOCTYPE html><body><pre>\
+Internal server error.\
+</pre></body></html>";
+	sz = strlen(msg);
 
-	msg = "</pre></body></html>";
-   	write(socket,msg, strlen(msg));
-	return;
+   	ctrl = write(socket,msg, sz);
+
+   	return  ctrl != sz;
 }
 
 /*
@@ -281,8 +321,9 @@ void output_path(int socket, const char * path)
 	http_header_callback_t callback;
 	char *msg, *data; 
 	long int sz;
+	size_t msg_sz;
 	const char * file_type;
-	int fd;
+	int fd, ctrl;
 	struct stat st;
 
 	// Mapping '/' to the file 'index.html'
@@ -408,16 +449,35 @@ void output_path(int socket, const char * path)
 	read( fd, data, sz );
 
 	if ( callback != NULL ){
-		callback(socket);
+		if ( callback(socket) ) {
+			// Something went wrong, not all bytes were sent.
+			close(fd);
+			free(data);
+			return;
+		}
    		write(socket, data, sz);
    		close(fd);
 	} else {
-		// Outputting a simple html page 
+		// Outputting as a simple html page ( the extension of the file is not represented in the table )
 		((http_header_callback_t) get(headers_callback, "html"))(socket);
 
 		msg = "<!DOCTYPE html><body><pre>";
-		write(socket,msg, strlen(msg));
-		write(socket, data, sz);
+		msg_sz = strlen(msg);
+
+		ctrl = write(socket,msg, msg_sz);
+		if ( ctrl != msg_sz ){
+			close(fd);
+			free(data);
+			return;
+		}
+		
+		ctrl = write(socket, data, sz);
+		if ( ctrl != sz ) {
+			close(fd);
+			free(data);
+			return;
+		}
+
 		close(fd);
 		msg = "</pre></body></html>";
 		write(socket,msg, strlen(msg));
@@ -583,16 +643,23 @@ void interpret_and_output(int socket, char * first_line)
 
 		put(header_params, strdup("path"), strdup(path));
 
-		buffer = calloc(1024*5, 1);
+		buffer = calloc(1024*3 + 1, 1);
 
 		pthread_mutex_unlock(&pthread_sync);	
 
 		n = read(socket, buffer, 1024*3);
 
+		if ( n < 0 ) {
+			free(buffer);
+			free_hashtable(header_params);
+			return;
+		}
+
 		parse_http_headers(header_params, buffer);
 
 		if ( strstr(path, "cgi/") != NULL && strstr(path, ".py") != NULL ){
 
+			pthread_mutex_lock(&pthread_sync);
 			tmp = calloc(strlen(path)+1,1);
 			strcpy(tmp, path);
 			cleaner = strstr(tmp, "?");
@@ -604,11 +671,14 @@ void interpret_and_output(int socket, char * first_line)
 			if ( fp != NULL ){
 
 				fclose(fp);
+				
 				cgi_py(socket, header_params, path); // Leaving it to the cgi writer to make sense!
 
-			} else {
+			} else { 
 				output_file_not_found(socket);
 			}
+
+			pthread_mutex_unlock(&pthread_sync);
 
 			free(tmp);
 		} else if ( strstr(path, "cgi/") != NULL && strstr(path, ".sh") != NULL ){
@@ -624,6 +694,7 @@ void interpret_and_output(int socket, char * first_line)
 			if ( fp != NULL ){
 
 				fclose(fp);
+
 				cgi_sh(socket, header_params, path); // Leaving it to the cgi writer to make sense!
 
 			} else {
@@ -787,8 +858,15 @@ void interpret_and_output(int socket, char * first_line)
 
 		put(params, strdup("path"), strdup(path));
 
-		buffer = calloc(1024*5, 1);
+		buffer = calloc(1024*3 + 1, 1);
 		n = read(socket, buffer, 1024*3);
+
+		if ( n < 0 ) {
+			free(buffer);
+			free_hashtable(params);
+			pthread_mutex_unlock(&pthread_sync);
+			return;
+		}
 
 		parse_http_headers(params, buffer);
 		parse_http_post_data(params, buffer);
@@ -840,6 +918,7 @@ void * http_callback(void * http_data_ptr)
 	http_data_t * http_data = (http_data_t *) http_data_ptr;
 	int socket = (int) *http_data->socket, found = 0;
 	unsigned long count = 0;
+	size_t ctrl;
 	char *client_ip = http_data->client_ip, *time = http_data->accept_time;
 
 	char first_line[BACKEND_MAX_BUFFER_SIZE], buffer[BACKEND_MAX_BUFFER_SIZE]; 
@@ -847,7 +926,9 @@ void * http_callback(void * http_data_ptr)
 	memset(first_line, '\0', BACKEND_MAX_BUFFER_SIZE); memset(buffer, '\0', BACKEND_MAX_BUFFER_SIZE);
 
 	while ( count < BACKEND_MAX_BUFFER_SIZE && !found ) {
-		read(socket, &buffer[count], 1);
+		ctrl = read(socket, &buffer[count], 1);
+		if ( ctrl == 0 )
+			return NULL;
 		if ( buffer[count] == '\n' ||buffer[count] == '\r' ){
 			// end of first line (in time)
 			found = 1;

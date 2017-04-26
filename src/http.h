@@ -39,7 +39,7 @@ typedef struct http_data_s {
 	char * accept_time;
 } http_data_t;
 
-typedef void (*http_header_callback_t) (int);
+typedef int (*http_header_callback_t) (int);
 
 void http_init(void);
 void http_quit(void);
@@ -55,14 +55,14 @@ void urldecode2(char *, const char *);
 
 /* HTTP-Headers */
 void output_file_not_found(int);
-void output_internal_server_error(int);
-void output_html_headers(int);
-void output_css_headers(int);
-void output_jpg_headers(int);
-void output_json_headers(int);
+int output_internal_server_error(int);
+int output_html_headers(int);
+int output_css_headers(int);
+int output_jpg_headers(int);
+int output_json_headers(int);
 void output_file_transfer_headers(int,char*);
-void output_js_headers(int);
-void output_txt_headers(int);
+int output_js_headers(int);
+int output_txt_headers(int);
 
 #endif
 
