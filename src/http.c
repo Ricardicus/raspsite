@@ -671,8 +671,10 @@ void interpret_and_output(int socket, char * first_line)
 			if ( fp != NULL ){
 
 				fclose(fp);
-				
+
+				pthread_mutex_lock(&pthread_sync);
 				cgi_py(socket, header_params, path); // Leaving it to the cgi writer to make sense!
+				pthread_mutex_unlock(&pthread_sync);	
 
 			} else { 
 				output_file_not_found(socket);
@@ -694,8 +696,10 @@ void interpret_and_output(int socket, char * first_line)
 			if ( fp != NULL ){
 
 				fclose(fp);
-
+				
+				pthread_mutex_lock(&pthread_sync);
 				cgi_sh(socket, header_params, path); // Leaving it to the cgi writer to make sense!
+				pthread_mutex_unlock(&pthread_sync);
 
 			} else {
 				output_file_not_found(socket);
