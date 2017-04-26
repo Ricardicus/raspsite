@@ -1,8 +1,9 @@
 This is a directory containing programs that are intended to be run 
 by a client. The are two programs here that can communicate with the server.
 The write program can set up a TCP connection and transfer a file using my own 
-FTP protocol. The session program can set up a TCP connection and use my own SSH
-protocol implemented on the server side.
+FTP protocol (RFTP, as in Ricardicus Fantastic Transfer Protocol). 
+The session program can set up a TCP connection and use my own SSH
+protocol (RSSH, as in RSSH not Secure Shell) implemented on the server side.
 
 Set up:
 	Compile the program with the command ”make” in this directory.
