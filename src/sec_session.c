@@ -245,11 +245,10 @@ void sec_session_server(int socket)
 			printf("[%s].%d Interrupted session!\n", __func__, __LINE__);
 			free(sym_key_of_peer);
 			return;
-			goto end;
 		} else if ( ctrl != KEY_PADDING ) {
 			printf("[%s].%d Interrupted session!\n", __func__, __LINE__);
-			log_error("Attempted to read %d bytes, got %d.\n", KEY_PADDING, ctrl);
-			goto end;
+			free(sym_key_of_peer);
+			return;
 		}
 
 		symmetric_key_crypto(sym_key_of_peer, peer_sym_key_len, server_talk, KEY_PADDING, DECRYPT);

@@ -58,7 +58,7 @@ function list(path) {
 					var url = "/";
 					for ( var n = 1; n < doms.length - 2; n++) {
 						url += doms[n];
-						if ( n != doms.length - 3) 
+						if ( n != doms.length - 2) 
 							url += "/";
 					}
 					
@@ -73,6 +73,8 @@ function list(path) {
 					doubleDotStat["size"] = data[4];
 					doubleDotStat["disp"] = data[data.length - 1];
 					doubleDotStat["path"] = url;
+
+					console.log("url for .. set to: " + url);
 
 				}
 
