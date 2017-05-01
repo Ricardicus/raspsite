@@ -44,7 +44,6 @@ void * file_receiver_thread_callback(void * data)
 		return NULL;
 	}
 
- 
     timeout.tv_sec = 120;
     timeout.tv_usec = 0;
 
@@ -60,15 +59,11 @@ void * file_receiver_thread_callback(void * data)
 		return NULL;
     }
 
-
 	bzero((char *) &serv_addr, sizeof(serv_addr));
 	portno = FILE_RECEIVE_PORT;
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
 	serv_addr.sin_port = htons(portno);
-
-
-
 
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
 		log_error("%s ERROR on file receive binding\n", __func__);
@@ -89,6 +84,11 @@ void * file_receiver_thread_callback(void * data)
 		tcp_receive_operation_t * op = calloc(sizeof(tcp_receive_operation_t),1);
 		op->socket = newsockfd_stack;
 		strcpy(op->client_ip, client_IP);
+
+		if ( strstr(op->client_ip, "0.0.0.0") != NULL ) {
+			// Result of a timeout
+			continue;
+		}
 		
 		pthread_create(&callback_thread, NULL, tcp_reader_writer_cb, op);
 
