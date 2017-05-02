@@ -244,6 +244,7 @@ void sec_session_server(int socket)
 		if ( ctrl == 0 ) {
 			printf("[%s].%d Interrupted session!\n", __func__, __LINE__);
 			free(sym_key_of_peer);
+
 			return;
 		} else if ( ctrl != KEY_PADDING ) {
 			printf("[%s].%d Interrupted session!\n", __func__, __LINE__);

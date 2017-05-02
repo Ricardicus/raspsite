@@ -14,6 +14,16 @@ extern "C" {
 */
 #define STANDARD_USER_PASSWORD "admin:password"
 
+/* 
+* Login and other information for sending mails from the raspberry pi
+* must be set to a valid gmail account in order for the mail feature
+* to function. 
+*/
+#define GMAIL_USER		"username@gmail.com"
+#define GAMIL_PASSWORD	"dummypassword"
+#define GMAIL_LOGGING	"dummymail@gmail.com"
+#define GMAIL_NICE_NAME	"Rickards RaspberryPi" 
+
 #endif 
 
 #ifdef __cplusplus

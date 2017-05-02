@@ -1,5 +1,7 @@
 #include "tcp_reader_writer.h"
 
+static char base_wd[256];
+
 void * tcp_reader_writer_cb(void * data)
 {
 	char command;
@@ -16,6 +18,7 @@ void * tcp_reader_writer_cb(void * data)
 	break;
 	case SEC_SESSION:
 		sec_session_server(op->socket);
+		chdir(base_wd);
 	default:
 	// more to come..
 	break;
@@ -71,6 +74,11 @@ void * file_receiver_thread_callback(void * data)
 	}
 
 	clilen = sizeof(cli_addr);
+
+	if ( strstr(base_wd, "raspsite") == NULL ) {
+		memset(base_wd, '\0', sizeof base_wd);
+		snprintf(base_wd, sizeof base_wd, "%s", getenv("PWD")); // To be restored
+	}
 
 	while ( run_this_server_please_mister ){
 		pthread_t callback_thread;
