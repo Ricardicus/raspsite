@@ -18,6 +18,7 @@ extern "C" {
 #include <time.h>
 #include "logger.h"
 #include "notif.h"
+#include "password.h"
 #include "sec_session.h"
 
 /*

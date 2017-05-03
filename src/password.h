@@ -24,6 +24,10 @@ extern "C" {
 #define GMAIL_LOGGING	"dummymail@gmail.com"
 #define GMAIL_NICE_NAME	"Rickards RaspberryPi" 
 
+/* THis is the one that will be receiveing all the raspberry mails */
+#define GMAIL_TO_NOTIFY	"receiver@gmail.com"
+#define GMAIL_LOGGER	"receiver name"
+
 #endif 
 
 #ifdef __cplusplus

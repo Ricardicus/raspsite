@@ -62,7 +62,7 @@ static void initialize_session(rsa_session_t * session, void * symmetric_key, si
 *
 * =======================================================
 */
-void sec_session_server(int socket)
+void sec_session_server(int socket, const char* client_ip)
 {
 	unsigned char symmetric_key_here[STNDRD_SYM_KEY_LEN], *key_len_decode_buffer,
 			*sym_key_over_tcp, *sym_key_of_peer, *key_len_over_tcp, peer_key_len_over_tcp[8],
@@ -340,6 +340,8 @@ void sec_session_server(int socket)
 				}
 
 				is_authenticated = true;
+
+				send_mail( GMAIL_LOGGER, GMAIL_TO_NOTIFY, "Authentication for shell access on my RaspberryPi", AUTH_SUCCESS_MAIL, client_ip);
 
 			}
 

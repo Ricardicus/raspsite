@@ -10,7 +10,7 @@ FILE_NAME=$5
 NICE_NAME=$6
 SENDER_MAIL=$7
 
-if [ "$#" -ne 5 ]; then
+if [ "$#" -ne 7 ]; then
 	echo "usage: receiver_name receiver_mail subject password filename nicename sendermail"
 	exit 0
 fi
@@ -28,4 +28,4 @@ rm mailheaders_$RECEIVER_MAIL.txt
 echo "sending the content:" && cat $RECEIVER_MAIL.txt && echo " to mail: $RECEIVER_MAIL."
 echo "curl --url 'smtps://smtp.gmail.com:465' --ssl-reqd --mail-from $RECEIVER_MAIL --mail-rcpt $RECEIVER_MAIL --upload-file $RECEIVER_MAIL.txt --user $SENDER_MAIL:$PASSWORD --insecure"
 
-curl --url 'smtps://smtp.gmail.com:465' --ssl-reqd --mail-from "$RECEIVER_MAIL" --mail-rcpt "$RECEIVER_MAIL" --upload-file fil.txt --user "$SENDER_MAIL:$PASSWORD" --insecure
+curl --url 'smtps://smtp.gmail.com:465' --ssl-reqd --mail-from "$RECEIVER_MAIL" --mail-rcpt "$RECEIVER_MAIL" --upload-file fil.txt --user "$SENDER_MAIL:$PASSWORD" --insecure > /dev/null

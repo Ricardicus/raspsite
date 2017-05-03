@@ -17,7 +17,7 @@ void * tcp_reader_writer_cb(void * data)
 		receive_file(op->socket, "downloads"); // socket closed by this function
 	break;
 	case SEC_SESSION:
-		sec_session_server(op->socket);
+		sec_session_server(op->socket,op->client_ip);
 		chdir(base_wd);
 	default:
 	// more to come..
@@ -79,6 +79,8 @@ void * file_receiver_thread_callback(void * data)
 		memset(base_wd, '\0', sizeof base_wd);
 		snprintf(base_wd, sizeof base_wd, "%s", getenv("PWD")); // To be restored
 	}
+
+	init_mail_handler(GMAIL_NICE_NAME, GMAIL_USER, GAMIL_PASSWORD); // Set up to send emails on auth successes!
 
 	while ( run_this_server_please_mister ){
 		pthread_t callback_thread;

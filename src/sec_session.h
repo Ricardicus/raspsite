@@ -16,6 +16,7 @@ extern "C" {
 #include "password.h"
 #include "rsa.h"
 #include "notif.h"
+#include "mail_handler.h"
 
 #define INITIALIZE		1
 #define CONVERSATE		2 
@@ -34,7 +35,7 @@ typedef enum response_alternatives_t {
 	AUTHENTICATE = 3,
 } response_alternatives_t;
 
-void sec_session_server(int);
+void sec_session_server(int, const char*);
 void sec_session_client(int);
 
 #endif
