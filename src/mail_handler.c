@@ -76,7 +76,7 @@ void send_mail(const char* receiver_name, const char* receiver_mail, const char*
 		argv[6] = this_name;
 		argv[7] = this_mail;
 
-		exev(file_to_execute, argv);
+		execv(file_to_execute, argv);
 
 	} else {
 		int status;
