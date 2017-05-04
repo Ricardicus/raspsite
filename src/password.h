@@ -19,14 +19,13 @@ extern "C" {
 * must be set to a valid gmail account in order for the mail feature
 * to function. 
 */
-#define GMAIL_USER		"username@gmail.com"
-#define GAMIL_PASSWORD	"dummypassword"
-#define GMAIL_LOGGING	"dummymail@gmail.com"
-#define GMAIL_NICE_NAME	"Rickards RaspberryPi" 
+#define GMAIL_USER		"username@domain.com"
+#define GAMIL_PASSWORD	"password"
+#define GMAIL_NICE_NAME	"The name of the sender" 
 
 /* THis is the one that will be receiveing all the raspberry mails */
-#define GMAIL_TO_NOTIFY	"receiver@gmail.com"
-#define GMAIL_LOGGER	"receiver name"
+#define GMAIL_TO_NOTIFY	"username@domain.com"
+#define GMAIL_LOGGER	"The name of the receiver"
 
 #endif 
 
