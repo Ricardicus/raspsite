@@ -8,6 +8,7 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define SCRIPT_SEND_PATH		"/etc/mail/send_mail.sh"
 #define SCRIPT_STATUS_PATH		"/etc/mail/status.sh"
