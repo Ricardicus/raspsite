@@ -11,19 +11,20 @@ extern "C" {
 * may be changed to something else than what is displayed here.. 
 * You can also add more passwords, but make sure that you also
 * enter more 'strcmp' statements where necessary in 'http.c'.
+* Choose this password with care!
 */
 #define STANDARD_USER_PASSWORD "admin:password"
 
 /* 
 * Login and other information for sending mails from the raspberry pi
 * must be set to a valid gmail account in order for the mail feature
-* to function. 
+* to function. I have a gmail account specifically created for this purpose only.
 */
 #define GMAIL_USER		"username@domain.com"
 #define GAMIL_PASSWORD	"password"
 #define GMAIL_NICE_NAME	"The name of the sender" 
 
-/* THis is the one that will be receiveing all the raspberry mails */
+/* This is the one that will be receiveing all the raspberry mails */
 #define GMAIL_TO_NOTIFY	"username@domain.com"
 #define GMAIL_LOGGER	"The name of the receiver"
 
