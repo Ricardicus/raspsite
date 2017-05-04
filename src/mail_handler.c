@@ -67,7 +67,7 @@ void send_mail(const char* receiver_name, const char* receiver_mail, const char*
 
 		argv[8] = NULL;
 
-		argv[0] = "send_mail.sh"
+		argv[0] = "send_mail.sh";
 		argv[1] = receiver_name;
 		argv[2] = receiver_mail;
 		argv[3] = subject_line;
