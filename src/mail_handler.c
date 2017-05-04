@@ -76,12 +76,12 @@ void send_mail(const char* receiver_name, const char* receiver_mail, const char*
 		argv[6] = this_name;
 		argv[7] = this_mail;
 
-		exevce(file_to_execute, argv);
+		exev(file_to_execute, argv);
 
 	} else {
 		int status;
 
-		wait(pid, &status, 0);
+		waitpid(pid, &status, 0);
 
 		if ( WIFEXITED(status) ) {
 			printf("send_mail.sh termination ok.\n");
