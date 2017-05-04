@@ -20,8 +20,8 @@ void init_mail_handler(const char* sender_name,const char* sender_mail,const cha
 
 }
 
-void send_mail(const char* receiver_name, const char* receiver_mail, const char* subject_line, 
-	int type, const char * data)
+void send_mail(char* receiver_name, char* receiver_mail, char* subject_line, 
+	int type, char * data)
 {
 	char *command;
 	char file_name[256];
@@ -49,11 +49,7 @@ void send_mail(const char* receiver_name, const char* receiver_mail, const char*
 			break;
 	}
 
-
-
-	snprintf(command, 2056, "%s%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" &", \
-		base_wd, SCRIPT_SEND_PATH, receiver_name, receiver_mail, subject_line, this_password, \
-		file_name, this_name, this_mail );
+	free(command);
 
 	pid = fork();
 
@@ -78,7 +74,10 @@ void send_mail(const char* receiver_name, const char* receiver_mail, const char*
 
 		execv(file_to_execute, argv);
 
+
+
 	} else {
+
 		int status;
 
 		waitpid(pid, &status, 0);
@@ -91,7 +90,4 @@ void send_mail(const char* receiver_name, const char* receiver_mail, const char*
 
 	}
 
-	system(command);
-
-	free(command);
 }
