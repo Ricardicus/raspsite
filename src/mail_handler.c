@@ -21,7 +21,7 @@ void init_mail_handler(const char* sender_name,const char* sender_mail,const cha
 }
 
 void send_mail(char* receiver_name, char* receiver_mail, char* subject_line, 
-	int type, char * data)
+	int type, const char * data)
 {
 	char *command;
 	char file_name[256];

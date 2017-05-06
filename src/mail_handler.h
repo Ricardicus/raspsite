@@ -23,7 +23,7 @@ extern "C" {
 #define STATUS_MAIL			1
 
 void init_mail_handler(const char*,const char*,const char*);
-void send_mail(char*,char*,char*, int, char*);
+void send_mail(char*,char*,char*, int, const char*);
 
 #endif 
 
