@@ -77,17 +77,7 @@ void send_mail(char* receiver_name, char* receiver_mail, char* subject_line,
 
 
 	} else {
-
-		int status;
-
-		waitpid(pid, &status, 0);
-
-		if ( WIFEXITED(status) ) {
-			printf("send_mail.sh termination ok.\n");
-		} else {
-			printf("send_mail.sh terminated unsuccessfully.\n");
-		}
-
+		// There will be no waiting performed by the parent
 	}
 
 }
