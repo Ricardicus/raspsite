@@ -1,4 +1,4 @@
-I want to become a better programmer so I develop server running on my raspberry pi.
+I want to become a better programmer so I develop a server running on my raspberry pi.
 
 # Website
 
@@ -15,7 +15,7 @@ for further instructions!
 
 1. SSH into the raspberry pi
 2. Clone this repo
-3. type: "chmod ugo+x build.sh"
+3. type: "chmod a+x build.sh"
 4. Build the program: "./build.sh" 
 5. Start a tmux session (so that the server may run even after the ssh session is over): "tmux"
 6. Type: "./backend 8080" - now the website will respond on port 8080
@@ -34,7 +34,7 @@ And the server is stopped.
 To keep the server running for as long as possible do the following instead of step 6:
 
 1. Create a file called 'keep-alive.txt' under the directory 'etc': 'echo "For the watchdog." > etc/keep-alive.txt' 
-2. Type: 'chmod ugo+x watchdog.sh'
+2. Type: 'chmod a+x watchdog.sh'
 3. Launch the server through the watchdog: "./watchdog.sh 8080"
 
 Continue on with step 7 in the previously described set of steps.
