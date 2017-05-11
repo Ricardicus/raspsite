@@ -1,4 +1,4 @@
-I want to become a better programmer so I develop server running on my raspberry pi.
+I want to become a better programmer so I develop a server running on my raspberry pi.
 
 # Website
 
