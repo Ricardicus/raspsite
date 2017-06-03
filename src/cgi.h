@@ -17,6 +17,7 @@ extern "C" {
 #include <errno.h>
 #include <pthread.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <sys/stat.h>
 #include "hashtable.h"
 #include "logger.h"

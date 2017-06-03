@@ -477,7 +477,7 @@ void sec_session_server(int socket, const char* client_ip)
 					setenv("OLDPWD", getenv("PWD"), 1);
 					char pwd_string[MAX_DATA_LEN];
 					memset(pwd_string, 0, sizeof pwd_string);
-					getwd(pwd_string);
+					getcwd(pwd_string, MAX_DATA_LEN-1);
 					setenv("PWD", pwd_string, 1);
 				} else {
 					cd_error = 1;
@@ -787,7 +787,7 @@ void sec_session_client(int socket)
 	free(sym_key_over_tcp);
 
 	if ( ctrl != sizeof(symmetric_key_here) * KEY_PADDING ) {
-		log_error("Attempted to write %lu bytes, got %d.\n", sizeof(symmetric_key_here) * KEY_PADDING , ctrl);
+		log_error("Attempted to write %u bytes, got %d.\n", sizeof(symmetric_key_here) * KEY_PADDING , ctrl);
 		free(sym_key_of_peer);
 		close(socket);
 		return;
