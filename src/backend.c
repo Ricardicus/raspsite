@@ -26,6 +26,8 @@ int main(int argc, char *argv[])
 	char client_IP[INET_ADDRSTRLEN];
 	pthread_t input_reader_thread, file_reader_thread;
 	struct sockaddr_in serv_addr, cli_addr;
+	char * time_heap, * client_ip_heap;
+	int * newsockfd;
 
 	if (argc < 2) {
 		log_error("ERROR, no port provided\n");
@@ -64,7 +66,7 @@ int main(int argc, char *argv[])
 	log("Backend v.%s, c. %s %s\n",str(VERSION),__DATE__,__TIME__);
 	while ( run_this_server_please_mister ){
 		pthread_t callback_thread;
-		listen(sockfd,5); int newsockfd_stack;
+		listen(sockfd,20); int newsockfd_stack;
 		newsockfd_stack = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
 
 		// Getting time info
@@ -83,13 +85,13 @@ int main(int argc, char *argv[])
 		inet_ntop(AF_INET, &cli_addr.sin_addr ,client_IP, INET_ADDRSTRLEN);
 
 		// heap allocated time
-		char * time_heap = calloc(strlen(time)+1, 1);
+		time_heap = calloc(strlen(time)+1, 1);
 		strcpy(time_heap, time);
 		// heap allocated client ip
-		char * client_ip_heap = calloc(strlen(client_IP)+1, 1);
+		client_ip_heap = calloc(strlen(client_IP)+1, 1);
 		strcpy(client_ip_heap, client_IP);
 		// sending socket info to newsockfd;
-		int * newsockfd = malloc(sizeof(int));
+		newsockfd = malloc(sizeof(int));
 		*newsockfd = newsockfd_stack;
 
 		http_data_t * http_data = calloc(1, sizeof(http_data_t));

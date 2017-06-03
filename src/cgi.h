@@ -17,10 +17,13 @@ extern "C" {
 #include <errno.h>
 #include <pthread.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include "hashtable.h"
+#include "logger.h"
 
 void	cgi_py(int, hashtable_t*, const char*);
 void	cgi_sh(int, hashtable_t*, const char*);
+char*	traverse_path_to_find(const char*);
 
 #endif
 

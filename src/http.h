@@ -29,9 +29,12 @@ extern "C" {
 #define CGI_PATH		data.cgi
 
 #define BACKEND_MAX_BUFFER_SIZE			300
+#define HTTP_MAX_BUFER_SIZE				4096
 #define BACKEND_MAX_NBR_OF_ARGS			20
 #define BACKEND_MAX_ARRAY_SIZE			100
 #define VERSION							1
+#define MAXIMUM_READ_SIZE				(1<<22)
+#define BUFFER_INCREMENT				(1<<10)
 
 typedef struct http_data_s {
 	int * socket;

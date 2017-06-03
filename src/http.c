@@ -527,9 +527,9 @@ int get_next_line(char * buffer, int buffer_size, int socket)
 * buffer - data to the http datagram
 */
 void parse_http_headers(hashtable_t * params, char * buffer){
-	char *args, *c;
+	char *args, *c, *end_ptr, temp, *new_arg, *new_key;
 
-	args = c = buffer;
+	args = c = strstr(buffer,"\r\n") + 2;
 
 	while ( strstr(args, ": ") != NULL ){
 		args = strstr(args, ": ");
@@ -537,13 +537,13 @@ void parse_http_headers(hashtable_t * params, char * buffer){
 		while ( *c != '\n' && *c!='\r' && *c && c != buffer){
 			c--;
 		}
-		char * end_ptr = args;
+		end_ptr = args;
 		while ( *end_ptr && *end_ptr != '\n' && *end_ptr != '\r'){
 			end_ptr++;
 		}
-		char temp = *end_ptr;
+		temp = *end_ptr;
 		*end_ptr = '\0';
-		char * new_arg = strdup(args+2);
+		new_arg = strdup(args+2);
 		*end_ptr = temp;
 		end_ptr = c+1;
 		while ( *end_ptr && *end_ptr != ':'){
@@ -551,7 +551,7 @@ void parse_http_headers(hashtable_t * params, char * buffer){
 		}
 		temp = *end_ptr;
 		*end_ptr = '\0';
-		char * new_key = strdup(c+1);
+		new_key = strdup(c+1);
 		*end_ptr = temp;
 
 		put(params, new_key, new_arg);
@@ -601,30 +601,45 @@ void parse_http_get_headers_and_arguments(hashtable_t * params, char * buffer)
 * socket - read/write data stream descriptor in the tcp/ip API
 * first_line - the first line of the GET request
 */
-void interpret_and_output(int socket, char * first_line)
+void interpret_and_output(int socket, char * data)
 {
 
 	char *c, *args, *command, *path, 
 		*cleaner, *buffer, *tmp;
-	int cc,n;
+	int cc;
 	hashtable_t * params, *header_params;
 	FILE *fp;
 
+	char first_line[BACKEND_MAX_BUFFER_SIZE]; 
+	memset(first_line, '\0', sizeof first_line);
+
+	c = strchr(data, '\r');
+	if ( c != NULL )
+		*c = '\0';
+
+	snprintf(first_line, BACKEND_MAX_BUFFER_SIZE-1,"%s", data);
+
+	if ( c != NULL )
+		*c = '\r';
+
 	// Getting the HTTP command and path!
-	c = first_line;
+	c = strchr(first_line, ' ');
 	path = NULL;
 
-	while (*c){
-		if ( *c == ' '){
-			*c = '\0';
-			if ( path == NULL ) {
-				path = &c[1]; 
-			}
-		}
-		++c;
+	if ( c != NULL ) {
+		*c = '\0';
+		if ( path == NULL ) {
+			path = &c[1]; 
+
+			c = strchr(path, ' ');
+			if ( c != NULL )
+				*c = '\0';
+		}	
 	}
 
 	command = first_line;
+
+	buffer = data;
 
 	if ( !strcmp(command, "GET") ){
 		// We have recieved a 'GET' request!
@@ -633,6 +648,7 @@ void interpret_and_output(int socket, char * first_line)
 
 		pthread_mutex_lock(&pthread_sync);
 		header_params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
+		pthread_mutex_unlock(&pthread_sync);
 		header_params->data_also = 1;
 
 		// Preparing the params to be casted to the post handler
@@ -643,29 +659,19 @@ void interpret_and_output(int socket, char * first_line)
 
 		put(header_params, strdup("path"), strdup(path));
 
-		buffer = calloc(1024*3 + 1, 1);
-
-		pthread_mutex_unlock(&pthread_sync);	
-
-		n = read(socket, buffer, 1024*3);
-
-		if ( n < 0 ) {
-			free(buffer);
-			free_hashtable(header_params);
-			return;
-		}
-
 		parse_http_headers(header_params, buffer);
 
 		if ( strstr(path, "cgi/") != NULL && strstr(path, ".py") != NULL ){
 
 			pthread_mutex_lock(&pthread_sync);
 			tmp = calloc(strlen(path)+1,1);
+			pthread_mutex_unlock(&pthread_sync);
+			
 			strcpy(tmp, path);
 			cleaner = strstr(tmp, "?");
-			if ( cleaner != NULL ){
+
+			if ( cleaner != NULL )
 				*cleaner = '\0';
-			}
 
 			fp = fopen(tmp+1, "r");
 			if ( fp != NULL ){
@@ -680,17 +686,17 @@ void interpret_and_output(int socket, char * first_line)
 				output_file_not_found(socket);
 			}
 
-			pthread_mutex_unlock(&pthread_sync);
-
 			free(tmp);
 		} else if ( strstr(path, "cgi/") != NULL && strstr(path, ".sh") != NULL ){
 
+			pthread_mutex_lock(&pthread_sync);
 			tmp = calloc(strlen(path)+1,1);
+			pthread_mutex_unlock(&pthread_sync);
+
 			strcpy(tmp, path);
 			cleaner = strstr(tmp, "?");
-			if ( cleaner != NULL ){
+			if ( cleaner != NULL )
 				*cleaner = '\0';
-			}
 
 			fp = fopen(tmp+1, "r");
 			if ( fp != NULL ){
@@ -750,6 +756,7 @@ void interpret_and_output(int socket, char * first_line)
 
 				if ( msg == NULL ){
 					output_path(socket, path+1);
+					free_hashtable(header_params);
 					return;
 				}
 
@@ -797,7 +804,6 @@ void interpret_and_output(int socket, char * first_line)
 			auth = (char*) get(header_params, "Authorization");
 			if ( auth == NULL ) {
 				output_authenticate_headers(socket);			
-				free(buffer);
 				free_hashtable(header_params);
 				return;
 			} 
@@ -808,7 +814,6 @@ void interpret_and_output(int socket, char * first_line)
 			if ( strcmp((char*)auth_decoded, STANDARD_USER_PASSWORD) ){
 				// Wrong user or password or both given!
 				output_authenticate_headers(socket);
-				free(buffer);
 				free_hashtable(header_params);
 				free(auth_decoded);
 				base64_cleanup(); 
@@ -823,6 +828,7 @@ void interpret_and_output(int socket, char * first_line)
 
 			if ( strstr(path, "path=") == NULL ||strstr(path, "action=") == NULL ||strchr(path, '&') == NULL ){
 				output_file_not_found(socket);
+				free_hashtable(header_params);
 				return;
 			} 
 
@@ -844,54 +850,32 @@ void interpret_and_output(int socket, char * first_line)
 
 		}
 
-		free(buffer);
 		free_hashtable(header_params);
 
 	} else if ( !strcmp(command, "POST") ){
 		// This is interesting. Now i will read all arguments and parameters
 		pthread_mutex_lock(&pthread_sync);
-
 		params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
+		pthread_mutex_unlock(&pthread_sync);
+		
 		params->data_also = 1;
 
 		// Preparing the params to be casted to the post handler
 
-		/*
-		* To be continued
-		*/ 
-
 		put(params, strdup("path"), strdup(path));
 
-		buffer = calloc(1024*3 + 1, 1);
-		n = read(socket, buffer, 1024*3);
-
-		if ( n < 0 ) {
-			free(buffer);
-			free_hashtable(params);
-			pthread_mutex_unlock(&pthread_sync);
-			return;
-		}
+		buffer = data;
 
 		parse_http_headers(params, buffer);
 		parse_http_post_data(params, buffer);
 
-//		print_table_as_chars(params);
-
-		if ( strstr(path, "game.cgi") != NULL ){
-			
-			printf("Cookie: %s\n",(char*) get(params,"Cookie"));
+		if ( strstr(path, "game.cgi") != NULL )
 			snake_callback(socket, params);
-
-		}
-
-//		print_table_as_chars(params);
 
 		output_txt_headers(socket);
 		write(socket, "Yes", 3);
-		free(buffer);
 		free_hashtable(params);
 
-		pthread_mutex_unlock(&pthread_sync);
 	}
 	
 }
@@ -920,44 +904,60 @@ void * http_callback(void * http_data_ptr)
 {
 
 	http_data_t * http_data = (http_data_t *) http_data_ptr;
-	int socket = (int) *http_data->socket, found = 0;
-	unsigned long count = 0;
-	size_t ctrl;
+	int socket = (int) *http_data->socket;
 	char *client_ip = http_data->client_ip, *time = http_data->accept_time;
+	size_t read_sz = 0, buffer_size = BUFFER_INCREMENT;
 
-	char first_line[BACKEND_MAX_BUFFER_SIZE], buffer[BACKEND_MAX_BUFFER_SIZE]; 
+	char * buffer = calloc(buffer_size, 1), *first_line, *c;
 
-	memset(first_line, '\0', BACKEND_MAX_BUFFER_SIZE); memset(buffer, '\0', BACKEND_MAX_BUFFER_SIZE);
+	if ( buffer == NULL ){
+		log_error("%s.%d Failed to allocate %zu bytes.\n", __func__, __LINE__, buffer_size);
+		goto end2;
+	}
 
-	while ( count < BACKEND_MAX_BUFFER_SIZE && !found ) {
-		ctrl = read(socket, &buffer[count], 1);
-		if ( ctrl == 0 )
-			return NULL;
-		if ( buffer[count] == '\n' ||buffer[count] == '\r' ){
-			// end of first line (in time)
-			found = 1;
-		} else {
-			first_line[count] = buffer[count];
+	read_sz = read(socket, buffer, buffer_size);
+
+	if ( read_sz == 0 )
+		goto end1;
+
+	while ( read_sz == buffer_size && read_sz < MAXIMUM_READ_SIZE ) {
+
+		buffer_size += BUFFER_INCREMENT;
+
+		buffer = realloc(buffer, buffer_size);
+
+		memset(buffer + read_sz, '\0', BUFFER_INCREMENT);
+
+		if ( buffer == NULL ){
+			log_error("%s.%d Failed to allocate %zu bytes.\n", __func__, __LINE__, buffer_size);
+			goto end2;
 		}
-		++count;
+
+		read_sz += read(socket, buffer + read_sz, BUFFER_INCREMENT);
+
 	}
 
-	// Getting the first line of the input
-	if ( found == 0 ){
-		// disregard this.
-		log("[%s] %s: %s [DISREGARDED]\n", time, client_ip, first_line);
-   		free_http_data(&http_data);
-		return NULL;
-	}
+	c = strchr(buffer, '\r');
+	if ( c != NULL ) 
+		*c = '\0';
+
+	first_line = buffer;
 
 	log("[%s] %s: %s\n", time, client_ip, first_line);
 
+	if ( c != NULL )
+		*c = '\r';
+
 	// look at the first line of 'buffer' and do what you got to do..
-	interpret_and_output(socket, first_line);
-   
+	interpret_and_output(socket, buffer);
+end1:
+   	free(buffer);
+end2:  
    	close(socket);
 
    	free_http_data(&http_data);
 
    	return NULL;
+
 }
+
