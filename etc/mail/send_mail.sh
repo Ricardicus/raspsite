@@ -25,6 +25,6 @@ Subject: $SUBJECT_LINE
 cat mailheaders_$RECEIVER_MAIL.txt $FILE_NAME > fil.txt
 
 # Sending the mail using curl
-curl --url 'smtps://smtp.gmail.com:465' --ssl-reqd --mail-from "$RECEIVER_MAIL" --mail-rcpt "$RECEIVER_MAIL" --upload-file fil.txt --user "$SENDER_MAIL:$PASSWORD" --insecure > /dev/null
+curl --url 'smtps://smtp.gmail.com:465' --ssl-reqd --mail-from "$RECEIVER_MAIL" --mail-rcpt "$RECEIVER_MAIL" --upload-file fil.txt --user "$SENDER_MAIL:$PASSWORD" --insecure > /dev/null &
 
 rm mailheaders_$RECEIVER_MAIL.txt

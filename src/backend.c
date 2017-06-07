@@ -19,14 +19,14 @@ void * input_reader_callback(void * data)
 
 int main(int argc, char *argv[])
 {
-	int sockfd, portno;
+	int sockfd, portno, newsockfd_stack;
 	socklen_t clilen; 
 	time_t raw_time;
 	struct tm * time_info;
 	char client_IP[INET_ADDRSTRLEN];
 	pthread_t input_reader_thread, file_reader_thread;
 	struct sockaddr_in serv_addr, cli_addr;
-	char * time_heap, * client_ip_heap;
+	char * time_heap, * client_ip_heap, *time_c, *c_ptr;
 	int * newsockfd;
 
 	if (argc < 2) {
@@ -66,27 +66,24 @@ int main(int argc, char *argv[])
 	log("Backend v.%s, c. %s %s\n",str(VERSION),__DATE__,__TIME__);
 	while ( run_this_server_please_mister ){
 		pthread_t callback_thread;
-		listen(sockfd,20); int newsockfd_stack;
+		listen(sockfd,20);
 		newsockfd_stack = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
 
 		// Getting time info
 		time ( &raw_time);
 		time_info = localtime( &raw_time );
-		char * time = asctime(time_info);
-		char * c_ptr = time;
+		time_c = asctime(time_info);
+		c_ptr = strchr(time_c, '\n');
 		/* the time contains a '\n'.. */
-		while (*c_ptr){
-			if ( *c_ptr == '\n')
-				*c_ptr = '\0';
-			c_ptr++;
-		}
+		if (c_ptr != NULL )
+			*c_ptr = '\0';
 
 		// get client IP
 		inet_ntop(AF_INET, &cli_addr.sin_addr ,client_IP, INET_ADDRSTRLEN);
 
 		// heap allocated time
-		time_heap = calloc(strlen(time)+1, 1);
-		strcpy(time_heap, time);
+		time_heap = calloc(strlen(time_c)+1, 1);
+		strcpy(time_heap, time_c);
 		// heap allocated client ip
 		client_ip_heap = calloc(strlen(client_IP)+1, 1);
 		strcpy(client_ip_heap, client_IP);
