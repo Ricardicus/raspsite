@@ -63,6 +63,7 @@ int output_html_headers(int);
 int output_css_headers(int);
 int output_jpg_headers(int);
 int output_json_headers(int);
+int output_woff2_headers(int);
 void output_file_transfer_headers(int,char*);
 int output_js_headers(int);
 int output_txt_headers(int);

@@ -181,6 +181,24 @@ Content-Type: text/css; charset=utf-8\r\n\r\n";
    	return  ctrl != sz;
 }
 
+int output_woff2_headers(int socket)
+{
+	ssize_t ctrl;
+	char *msg;
+	size_t sz;
+
+	msg = "HTTP/1.1 200 OK\r\n\
+Cache-Control: no-cache, no-store, must-revalidate\r\n\
+Pragma: no-cache\r\n\
+Expires: 0\r\n\
+Content-Type: application/font-woff2; charset=utf-8\r\n\r\n";
+	sz = strlen(msg);
+
+   	ctrl = write(socket,msg, sz);
+   	
+   	return  ctrl != sz;
+}
+
 int output_html_headers(int socket)
 {
 	ssize_t ctrl;
@@ -893,6 +911,7 @@ void http_init()
 	put(headers_callback, "jpeg", output_jpg_headers);
 	put(headers_callback, "gif", output_jpg_headers);
 	put(headers_callback, "ico", output_jpg_headers);
+	put(headers_callback, "woff2", output_woff2_headers);
 }
 
 void http_quit()
