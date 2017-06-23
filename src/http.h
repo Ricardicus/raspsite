@@ -35,6 +35,8 @@ extern "C" {
 #define VERSION							1
 #define MAXIMUM_READ_SIZE				(1<<22)
 #define BUFFER_INCREMENT				(1<<10)
+#define STACK_BUFFER_SIZE	1024
+#define MAX_LINE_SIZE		256
 
 typedef struct http_data_s {
 	int * socket;
@@ -47,11 +49,11 @@ typedef int (*http_header_callback_t) (int);
 void http_init(void);
 void http_quit(void);
 void free_http_data(http_data_t **);
-void interpret_and_output(int, char*);
+void interpret_and_output(int, char*, size_t);
 void * http_callback(void *);
 void output_path(int, const char *);
 int get_next_line(char *, int, int);
-void parse_http_get_headers_and_arguments(hashtable_t*, char*);
+void parse_http_get_headers_and_arguments(hashtable_t*, char*, size_t);
 void parse_http_post_data(hashtable_t *, char *);
 void parse_http_headers(hashtable_t *, char *);
 void urldecode2(char *, const char *);

@@ -37,7 +37,7 @@ void cgi_py(int socket, hashtable_t* params, const char * cgi_path)
 	extension = strstr(cgi_path, ".py");
 	*extension = '\0';
 
-	fprintf(fp, "import %s", strstr(cgi_path+1,"/")+1);
+	fprintf(fp, "import %s", strstr(cgi_path,"/")+1);
 
 	fclose(fp);
 	
@@ -169,7 +169,7 @@ void cgi_sh(int socket, hashtable_t* params, const char * cgi_path)
 	extension = strstr(cgi_path, ".sh");
 	*extension = '\0';
 
-	fprintf(fp, ". cgi/%s.sh", strstr(cgi_path+1,"/")+1);
+	fprintf(fp, ". cgi/%s.sh", strstr(cgi_path,"/")+1);
 
 	fclose(fp);
 	

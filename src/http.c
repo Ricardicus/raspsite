@@ -377,8 +377,6 @@ void output_path(int socket, const char * path)
 		return;
 	}
 
-	++path; // The paths should not be directed to the root '/' directory as base.. 
-
 	// if someone asks for the icon, i placed it under etc 
 	// so I need to add this little exception..
 	if ( strstr(path, "favicon.ico") != NULL ){
@@ -602,14 +600,176 @@ void parse_http_post_data(hashtable_t * params, char * buffer){
 }
 
 /*
-* Parsing the body part of the http post data
+* Parsing the data from a http request
 *
 * params - hash containg all keys relevant for the request
 * buffer - data to the http datagram
 */
-void parse_http_get_headers_and_arguments(hashtable_t * params, char * buffer)
+void parse_http_get_headers_and_arguments(hashtable_t * params, char * buffer, size_t size)
 {
+	char line_buffer[MAX_LINE_SIZE], *end, *start, *c, *url, *path,
+			*args_start, *args_end, *version;
+	int first = 1;
 
+	memset(line_buffer, '\0', MAX_LINE_SIZE);
+	start = buffer;
+	end = strchr(start, '\n');
+
+	while ( end != NULL ) {
+		*end = '\0';
+
+		snprintf(line_buffer, sizeof(line_buffer) - 1, "%s", start);
+
+		if ( first ) {
+			// Assumes: GET /resource.type?arg1=value1&arg2=value2 HTTP/1.1 
+			// The command (GET/POST/HEAD) will get passed env. variable: COMMAND
+			// The URL to the env. variable: URL
+			// Arguments will be passed as is, but with capital letters and they will be
+			// expanded to their values respectively, e.g. ARG1=value1.. 
+			// HTTP/1.1 will be loaded to VERSION, e.g. VERSION=HTTP/1.1
+			// * Exception:
+			//		when path only is '/' as URL, it will be translated into 'index.html'.
+
+			c = strchr(line_buffer, ' ');
+			if ( c != NULL ) {
+				*c = '\0';
+				put(params, strdup("COMMAND"), strdup(line_buffer));
+
+				*c = ' ';
+				++c;
+
+				url = c;
+				version = strchr(c, ' ');
+
+				if ( *c != '\0' && (c = strchr(c, ' ')) != NULL ) {
+
+					*c = '\0';
+
+					put(params, strdup("URL"), strdup(url));
+
+					*c = ' ';
+					++c;
+
+					path = url;
+
+					if ( (c = strchr(path, '?')) != NULL ) {
+
+						*c = '\0';
+
+						if ( !strncmp(path, "/ ", 2) ) {
+							put(params, strdup("PATH"), strdup("index.html"));
+						} else {
+							put(params, strdup("PATH"), strdup(path+1));
+						}
+
+						// Continue with parsing the arguments
+						*c = '?';
+						c++; // now it points to the start of arg=value[&args=values..]
+
+						args_start = c;
+						args_end = strchr(args_start, '&');
+
+						if ( args_end != NULL ) {
+
+							while ( args_end != NULL ) {
+
+								*args_end = '\0';
+
+								c = strchr(args_start, '=');
+								if ( c != NULL ) {
+									*c = '\0';
+
+									put( params, strdup(args_start), strdup(c+1) );
+
+								}
+
+								*args_end = '&';
+
+								args_start = args_end+1;
+								args_end = strchr(args_start, '&');
+
+								if ( args_end == NULL ) {
+
+									if ( (c = strchr(args_start, '=')) != NULL ) {
+
+										*c = '\0';
+
+										char * p = strchr(c+1, ' ');
+										if ( p != NULL )
+											*p = '\0';
+
+										put(params, strdup(args_start), strdup(c+1) );
+
+										if ( p != NULL )
+											*p = ' ';
+
+									}	
+
+								} 
+
+							}
+
+						} else if ( (c = strchr(args_start, '=')) != NULL ) {
+
+							*c = '\0';
+							char * p = strchr(c+1, ' ');
+							if ( p != NULL )
+								*p = '\0';
+
+							put(params, strdup(args_start), strdup(c+1) );
+
+							if ( p != NULL )
+								*p = ' ';
+
+						}
+
+
+					} else if ( (c = strchr(path, ' ')) != NULL ) {
+
+						*c = '\0';
+						if ( !strncmp(path, "/", 2) ) {
+							put(params, strdup("PATH"), strdup("index.html"));
+						} else {
+							put(params, strdup("PATH"), strdup(path+1));
+						}
+
+					}
+
+				}
+
+				if ( version != NULL ) {
+
+					++version;
+
+					put(params, strdup("VERSION"), strdup(version));
+
+				}
+
+			}
+
+			first = 0;
+		
+		} else {
+
+			if ( ( c = strchr(line_buffer, ':') ) != NULL ) {
+				*c = '\0';
+				char * clean;
+				if ( (clean=strchr(c+2, '\r')) != NULL )
+					*clean = '\0';
+				if ( (clean=strchr(c+2, '\n')) != NULL )
+					*clean = '\0';
+
+				put( params, strdup(line_buffer), strdup(c+2) );
+			}
+
+		}
+
+		end++;
+		start = end;
+		end = strchr(end, '\n');
+
+		memset(line_buffer, '\0', sizeof line_buffer);
+	}
 }
 
 /*
@@ -619,162 +779,76 @@ void parse_http_get_headers_and_arguments(hashtable_t * params, char * buffer)
 * socket - read/write data stream descriptor in the tcp/ip API
 * first_line - the first line of the GET request
 */
-void interpret_and_output(int socket, char * data)
+void interpret_and_output(int socket, char * data, size_t size)
 {
 
-	char *c, *args, *command, *path, 
-		*cleaner, *buffer, *tmp;
+	char *command, *path, *buffer;
 	int cc;
-	hashtable_t * params, *header_params;
+	hashtable_t * params;
 	FILE *fp;
 
-	char first_line[BACKEND_MAX_BUFFER_SIZE]; 
-	memset(first_line, '\0', sizeof first_line);
+	params = new_hashtable(30, 0.8);
+	params->data_also = 1;
 
-	c = strchr(data, '\r');
-	if ( c != NULL )
-		*c = '\0';
+	parse_http_get_headers_and_arguments(params, data, size);
 
-	snprintf(first_line, BACKEND_MAX_BUFFER_SIZE-1,"%s", data);
+	path = get(params, "PATH");
 
-	if ( c != NULL )
-		*c = '\r';
-
-	// Getting the HTTP command and path!
-	c = strchr(first_line, ' ');
-	path = NULL;
-
-	if ( c != NULL ) {
-		*c = '\0';
-		if ( path == NULL ) {
-			path = &c[1]; 
-
-			c = strchr(path, ' ');
-			if ( c != NULL )
-				*c = '\0';
-		}	
-	}
-
-	command = first_line;
-
-	buffer = data;
-
-	if ( !strcmp(command, "GET") ){
+	if ( !strcmp( get(params, "COMMAND") , "GET") ){
 		// We have recieved a 'GET' request!
 		// Will only be looking at the first line, restfully.. 
 		// Reading the last part of the request so that the connection is not reset..
 
-		pthread_mutex_lock(&pthread_sync);
-		header_params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
-		pthread_mutex_unlock(&pthread_sync);
-		header_params->data_also = 1;
-
-		// Preparing the params to be casted to the post handler
-
-		/*
-		* To be continued
-		*/ 
-
-		put(header_params, strdup("path"), strdup(path));
-
-		parse_http_headers(header_params, buffer);
-
 		if ( strstr(path, "cgi/") != NULL && strstr(path, ".py") != NULL ){
 
-			pthread_mutex_lock(&pthread_sync);
-			tmp = calloc(strlen(path)+1,1);
-			pthread_mutex_unlock(&pthread_sync);
-			
-			strcpy(tmp, path);
-			cleaner = strstr(tmp, "?");
-
-			if ( cleaner != NULL )
-				*cleaner = '\0';
-
-			fp = fopen(tmp+1, "r");
+			fp = fopen(path, "r");
 			if ( fp != NULL ){
 
 				fclose(fp);
 
-				pthread_mutex_lock(&pthread_sync);
-				cgi_py(socket, header_params, path); // Leaving it to the cgi writer to make sense!
-				pthread_mutex_unlock(&pthread_sync);	
+				cgi_py(socket, params, path); // Leaving it to the cgi writer to make sense!	
 
 			} else { 
 				output_file_not_found(socket);
 			}
 
-			free(tmp);
 		} else if ( strstr(path, "cgi/") != NULL && strstr(path, ".sh") != NULL ){
 
-			pthread_mutex_lock(&pthread_sync);
-			tmp = calloc(strlen(path)+1,1);
-			pthread_mutex_unlock(&pthread_sync);
-
-			strcpy(tmp, path);
-			cleaner = strstr(tmp, "?");
-			if ( cleaner != NULL )
-				*cleaner = '\0';
-
-			fp = fopen(tmp+1, "r");
+			fp = fopen(path, "r");
 			if ( fp != NULL ){
 
 				fclose(fp);
 				
-				pthread_mutex_lock(&pthread_sync);
-				cgi_sh(socket, header_params, path); // Leaving it to the cgi writer to make sense!
-				pthread_mutex_unlock(&pthread_sync);
+				cgi_sh(socket, params, path); // Leaving it to the cgi writer to make sense!
 
 			} else {
 				output_file_not_found(socket);
 			}
 
-			free(tmp);
 		} else if ( strstr(path, "coffee.cgi") != NULL ){
 			/*
 			* the coffe.cgi. Args: action
 			*/ 
 
-		 	params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
+			output_coffee_action(socket, get(params, "action"));
 
-			args = strstr(path, "action=");
-			cleaner = path;
-			while ( *cleaner ){
-				if ( *cleaner == '&'){
-					*cleaner = '\0';
-				}
-				++cleaner;
-			}
-
-			output_coffee_action(socket, args + 7);
-
-			free_hashtable(params);
 		} else if ( strstr(path, "game.cgi") != NULL ){
 			/*
 			* the game.cgi, args: action=[post_score|get_highscore], name=[*], score=[*]
 			*/ 
 
-			params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
-
-			args = strstr(path, "action=");
-			if ( args != NULL ) {
-				put(params, "action", args+7);
-			}
-
 			snake_callback(socket, params);
 
-			free_hashtable(params);
 		} else if ( strstr(path, "index.cgi") != NULL ) {
 
 			char *msg, *c;
 			FILE *fp;
 
-			if ( strstr(path, "action=set") != NULL ){
-				msg = strstr(path, "message=");
+			if ( !strncmp(get(params, "action"), "set",3) ){
+				msg = get(params, "message");
 
 				if ( msg == NULL ){
-					output_path(socket, path+1);
-					free_hashtable(header_params);
+					output_path(socket, path);
 					return;
 				}
 
@@ -788,13 +862,13 @@ void interpret_and_output(int socket, char * data)
 					++c;
 				}
 				
-				fprintf(fp, "%s\n", msg+8);
+				fprintf(fp, "%s\n", msg);
 
 				fclose(fp);
 
-				output_path(socket, path+1);
+				output_path(socket, path);
 
-			} else if ( strstr(path, "action=get") != NULL ){
+			} else if ( !strcmp( get(params, "action"), "get") ){
 
 				output_txt_headers(socket);
 
@@ -811,18 +885,16 @@ void interpret_and_output(int socket, char * data)
 
 			}
 
-		} else if ( strstr(path, "list.cgi" ) ) {
+		} else if ( !strcmp(path, "list.cgi" ) ) {
 			char *list_action_cgi, *list_path_cgi, auth_info[100], *auth;
 			unsigned char *auth_decoded;
 			size_t out_len;
-			hashtable_t *display_parameters;
 
 			memset(auth_info, '\0', sizeof auth_info);
 
-			auth = (char*) get(header_params, "Authorization");
+			auth = (char*) get(params, "Authorization");
 			if ( auth == NULL ) {
 				output_authenticate_headers(socket);			
-				free_hashtable(header_params);
 				return;
 			} 
 
@@ -832,7 +904,6 @@ void interpret_and_output(int socket, char * data)
 			if ( strcmp((char*)auth_decoded, STANDARD_USER_PASSWORD) ){
 				// Wrong user or password or both given!
 				output_authenticate_headers(socket);
-				free_hashtable(header_params);
 				free(auth_decoded);
 				base64_cleanup(); 
 				return;
@@ -841,34 +912,21 @@ void interpret_and_output(int socket, char * data)
 			free(auth_decoded);
 			base64_cleanup(); 
 
-			display_parameters = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
-			display_parameters->data_also = 1;
-
-			if ( strstr(path, "path=") == NULL ||strstr(path, "action=") == NULL ||strchr(path, '&') == NULL ){
+			if ( get(params, "path") == NULL || get(params, "action") == NULL ){
 				output_file_not_found(socket);
-				free_hashtable(header_params);
 				return;
 			} 
 
-			list_path_cgi = strstr(path, "path=") + 5;
-			list_action_cgi = strstr(path, "action=") + 7;
+			list_path_cgi = get(params, "path");
+			list_action_cgi = get(params, "action");
 
-			*(strchr(path, '&')) = '\0'; // This is already included
-
-			put(display_parameters, strdup("path"), strdup(list_path_cgi));
-			put(display_parameters, strdup("action"), strdup(list_action_cgi));
-
-			file_display_cgi(socket, display_parameters);
-
-			free_hashtable(display_parameters);
+			file_display_cgi(socket, params);
 
 		} else {
 			
 			output_path(socket, path);
 
 		}
-
-		free_hashtable(header_params);
 
 	} else if ( !strcmp(command, "POST") ){
 		// This is interesting. Now i will read all arguments and parameters
@@ -968,7 +1026,7 @@ void * http_callback(void * http_data_ptr)
 		*c = '\r';
 
 	// look at the first line of 'buffer' and do what you got to do..
-	interpret_and_output(socket, buffer);
+	interpret_and_output(socket, buffer, buffer_size);
 end1:
    	free(buffer);
 end2:  
