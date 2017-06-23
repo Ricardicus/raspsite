@@ -6,6 +6,9 @@
 hashtable_t * new_hashtable(int size, float load)
 {
 	hashtable_t * hashtable = malloc(sizeof(hashtable_t));
+	if ( hashtable == NULL )
+		return NULL;
+
 	hashtable->size = size;
 	hashtable->ocupied = 0;
 	hashtable->data_also = 0; // to be modified by user
@@ -62,6 +65,27 @@ void free_hashtable_table(hashtable_t * hash)
 				free(ptr2->key);
 			}
 			free(ptr2);
+		}
+		i++;
+	}
+	free(hash->table);
+}
+
+void for_each_pair(hashtable_t * hash, void (*callback)(void*,void*) )
+{
+	int size = hash->size;
+	int i = 0;
+	struct key_val_pair * ptr1;
+	struct key_val_pair * ptr2;
+	while(i<size)
+	{
+		ptr1 = hash->table[i];
+		while(ptr1!=NULL)
+		{
+			ptr2 = ptr1;
+			ptr1 = ptr1->next;
+
+			callback(ptr2->key, ptr2->data);
 		}
 		i++;
 	}

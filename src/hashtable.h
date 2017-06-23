@@ -46,6 +46,7 @@ void print_table_callbacks(hashtable_t*);
 void print_table_as_chars(hashtable_t*);
 void write_table_as_python_os_environ(hashtable_t*,FILE*);
 void write_table_as_bash_variables(hashtable_t*,FILE*);
+void for_each_pair(hashtable_t * hash, void (*callback)(void*,void*) );
 
 #endif
 
