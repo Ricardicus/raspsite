@@ -1,7 +1,6 @@
 #include "http.h"
 
 static hashtable_t * headers_callback;
-static pthread_mutex_t pthread_sync;
 
 /*
 * A bunch of functions that output meta data
@@ -56,15 +55,11 @@ void output_file_transfer_headers(int socket, char *file)
 	struct stat st;
 	char http_line[200], *msg, *ch, *slash;
 	
-	msg = "HTTP/1.1 200 OK\r\n";
-   	write(socket,msg,strlen(msg));
-   	msg = "Cache-Control: no-cache, no-store, must-revalidate\r\n";
-   	write(socket,msg, strlen(msg));
-   	msg = "Pragma: no-cache\r\n";
-	write(socket,msg, strlen(msg));
-	msg = "Expires: 0\r\n";
-	write(socket,msg, strlen(msg));
-   	msg = "Content-Type: application/octet-stream\r\n";
+	msg = "HTTP/1.1 200 OK\r\n\
+Cache-Control: no-cache, no-store, must-revalidate\r\n\
+Pragma: no-cache\r\n\
+Expires: 0\r\n\
+Content-Type: application/octet-stream\r\n";
    	write(socket,msg, strlen(msg));
 
    	stat(file, &st);
@@ -537,46 +532,6 @@ int get_next_line(char * buffer, int buffer_size, int socket)
 }
 
 /*
-* Parsing the header part of the http post data
-*
-* params - hash containg all keys relevant for the request
-* buffer - data to the http datagram
-*/
-void parse_http_headers(hashtable_t * params, char * buffer){
-	char *args, *c, *end_ptr, temp, *new_arg, *new_key;
-
-	args = c = strstr(buffer,"\r\n") + 2;
-
-	while ( strstr(args, ": ") != NULL ){
-		args = strstr(args, ": ");
-		c = args;
-		while ( *c != '\n' && *c!='\r' && *c && c != buffer){
-			c--;
-		}
-		end_ptr = args;
-		while ( *end_ptr && *end_ptr != '\n' && *end_ptr != '\r'){
-			end_ptr++;
-		}
-		temp = *end_ptr;
-		*end_ptr = '\0';
-		new_arg = strdup(args+2);
-		*end_ptr = temp;
-		end_ptr = c+1;
-		while ( *end_ptr && *end_ptr != ':'){
-			end_ptr++;
-		}
-		temp = *end_ptr;
-		*end_ptr = '\0';
-		new_key = strdup(c+1);
-		*end_ptr = temp;
-
-		put(params, new_key, new_arg);
-		args += 2;
-
-	}
-}
-
-/*
 * Parsing the body part of the http post data
 *
 * params - hash containg all keys relevant for the request
@@ -781,11 +736,13 @@ void parse_http_get_headers_and_arguments(hashtable_t * params, char * buffer, s
 */
 void interpret_and_output(int socket, char * data, size_t size)
 {
-
-	char *command, *path, *buffer;
+	char *command, *path, *msg, *c,
+		*list_action_cgi, *list_path_cgi, auth_info[100], *auth;
+	unsigned char *auth_decoded;
 	int cc;
 	hashtable_t * params;
 	FILE *fp;
+	size_t out_len;
 
 	params = new_hashtable(30, 0.8);
 	params->data_also = 1;
@@ -841,9 +798,6 @@ void interpret_and_output(int socket, char * data, size_t size)
 
 		} else if ( strstr(path, "index.cgi") != NULL ) {
 
-			char *msg, *c;
-			FILE *fp;
-
 			if ( !strncmp(get(params, "action"), "set",3) ){
 				msg = get(params, "message");
 
@@ -886,9 +840,6 @@ void interpret_and_output(int socket, char * data, size_t size)
 			}
 
 		} else if ( !strcmp(path, "list.cgi" ) ) {
-			char *list_action_cgi, *list_path_cgi, auth_info[100], *auth;
-			unsigned char *auth_decoded;
-			size_t out_len;
 
 			memset(auth_info, '\0', sizeof auth_info);
 
@@ -930,20 +881,7 @@ void interpret_and_output(int socket, char * data, size_t size)
 
 	} else if ( !strcmp(command, "POST") ){
 		// This is interesting. Now i will read all arguments and parameters
-		pthread_mutex_lock(&pthread_sync);
-		params = new_hashtable(BACKEND_MAX_NBR_OF_ARGS, 0.8);
-		pthread_mutex_unlock(&pthread_sync);
-		
-		params->data_also = 1;
-
 		// Preparing the params to be casted to the post handler
-
-		put(params, strdup("path"), strdup(path));
-
-		buffer = data;
-
-		parse_http_headers(params, buffer);
-		parse_http_post_data(params, buffer);
 
 		if ( strstr(path, "game.cgi") != NULL )
 			snake_callback(socket, params);
