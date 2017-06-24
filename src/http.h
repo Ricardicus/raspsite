@@ -35,8 +35,8 @@ extern "C" {
 #define VERSION							1
 #define MAXIMUM_READ_SIZE				(1<<22)
 #define BUFFER_INCREMENT				(1<<10)
-#define STACK_BUFFER_SIZE	1024
-#define MAX_LINE_SIZE		256
+#define STACK_BUFFER_SIZE	(1<<12)
+#define MAX_LINE_SIZE		(512)
 
 typedef struct http_data_s {
 	int * socket;

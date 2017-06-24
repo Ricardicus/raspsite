@@ -213,6 +213,7 @@ void write_table_as_python_os_environ(hashtable_t * hashtable, FILE * fp)
 {
 	int i = 0;
 	int size = hashtable->size;
+	char * c;
 	struct key_val_pair * ptr;
 
 	while(i<size)
@@ -222,7 +223,15 @@ void write_table_as_python_os_environ(hashtable_t * hashtable, FILE * fp)
 			ptr = hashtable->table[i];
 			while(ptr!=NULL)
 			{
-				fprintf(fp,"os.environ[\"%s\"] = \"%s\"\n",ptr->key,(char*)ptr->data);
+				fprintf(fp,"os.environ[\"");
+				c = ptr->key;
+				while ( *c ){
+					if ( *c != '-') {
+						fputc(toupper(*c), fp);
+					}
+					++c;
+				}
+				fprintf(fp,"\"]=\"%s\"\n",(char*)ptr->data);
 				ptr=ptr->next;
 			}
 		}

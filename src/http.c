@@ -695,7 +695,9 @@ void parse_http_get_headers_and_arguments(hashtable_t * params, char * buffer, s
 				if ( version != NULL ) {
 
 					++version;
-
+					if ( ( c = strchr(version, '\r') ) != NULL )
+						*c = '\0';
+					
 					put(params, strdup("VERSION"), strdup(version));
 
 				}
