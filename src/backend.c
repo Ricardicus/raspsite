@@ -83,20 +83,60 @@ int main(int argc, char *argv[])
 
 		// heap allocated time
 		time_heap = calloc(strlen(time_c)+1, 1);
+		
+		if (time_heap == NULL) {
+			log_error("%s.%d calloc failed",__func__, __LINE__);
+			close(newsockfd_stack);
+			continue;
+		}
+
 		strcpy(time_heap, time_c);
 		// heap allocated client ip
 		client_ip_heap = calloc(strlen(client_IP)+1, 1);
+
+		if ( client_ip_heap == NULL ) {
+			log_error("%s.%d calloc failed", __func__, __LINE__);
+			free(time_heap);
+			close(newsockfd_stack);
+			continue;
+		}
+
 		strcpy(client_ip_heap, client_IP);
 		// sending socket info to newsockfd;
 		newsockfd = malloc(sizeof(int));
+
+		if ( newsockfd == NULL ) {
+			log_error("%s.%d malloc failed", __func__, __LINE__);
+			free(time_heap);
+			free(client_ip_heap);
+			close(newsockfd_stack);			
+			continue;
+		}
+
 		*newsockfd = newsockfd_stack;
 
 		http_data_t * http_data = calloc(1, sizeof(http_data_t));
+
+		if ( http_data == NULL ) {
+			log_error("%s.%d calloc failed", __func__, __LINE__);
+			free(time_heap);
+			free(client_ip_heap);
+			free(newsockfd);
+			close(newsockfd_stack);
+			continue;
+		}
+
 		http_data->client_ip = client_ip_heap;
 		http_data->accept_time = time_heap;
 		http_data->socket = newsockfd;
 
-		pthread_create(&callback_thread, NULL, http_callback, (void*)http_data);
+		if ( pthread_create(&callback_thread, NULL, http_callback, (void*)http_data) ) {
+			log_error("%s.%d pthread_create failed", __func__, __LINE__);
+			free_http_data(&http_data);
+			continue;
+		}
+
+		pthread_detach(callback_thread);
 
 	}
 
