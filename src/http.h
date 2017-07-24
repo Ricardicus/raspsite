@@ -38,6 +38,8 @@ extern "C" {
 #define STACK_BUFFER_SIZE	(1<<12)
 #define MAX_LINE_SIZE		(512)
 
+#define INDEX_INFO_FILE		"etc/index.txt"
+
 typedef struct http_data_s {
 	int * socket;
 	char * client_ip;

@@ -16,6 +16,7 @@ An HTTP Classic
 <img src="style/snake.gif" id="snakegif" onclick="window.open('snake.html')">
 <img src="style/smallbluegoat.jpg" id="goatgif" onclick="window.open('krypt.html')">
 <img src="style/download.png" id="goatgif" onclick="window.open('list.html')">
+<p id="visits"></p>
 </center>
 <script>
 
@@ -57,9 +58,10 @@ $(document).ready(function(){
 	$.ajax({
 		
 		url:"index.cgi?action=get", 
-		dataType: "text", 
-		success: function(msg) {
-			$("#greeting").html(msg);
+		dataType: "json", 
+		success: function(response) {
+			$("#greeting").html(response["message"]);
+			$("#visits").html("visits: " + response["visits"]);
 //			dummy_cookie(dummy_post);
 		},
 		error: function(){

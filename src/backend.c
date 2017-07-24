@@ -133,6 +133,7 @@ int main(int argc, char *argv[])
 		if ( pthread_create(&callback_thread, NULL, http_callback, (void*)http_data) ) {
 			log_error("%s.%d pthread_create failed", __func__, __LINE__);
 			free_http_data(&http_data);
+			close(newsockfd);
 			continue;
 		}
 

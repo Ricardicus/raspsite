@@ -1,6 +1,7 @@
 #include "http.h"
 
 static hashtable_t * headers_callback;
+static volatile unsigned index_output_count = 0;
 
 /*
 * A bunch of functions that output meta data
@@ -339,38 +340,9 @@ void output_path(int socket, const char * path)
 	int fd, ctrl;
 	struct stat st;
 
-	// Mapping '/' to the file 'index.html'
- 	if ( ! strncmp(path, "/", 2) ){
-
-		output_html_headers(socket);
-		stat("index.html", &st);
-		sz = st.st_size;
-
-	   	fd = open("index.html", O_RDONLY);
-	   	
-	   	if ( fd < 0 ){
-			// sending a signal that it is no file with that name present.
-			output_file_not_found(socket);
-			return;
-		}
-
-		data = malloc(sz+1);
-		if ( data == NULL ){
-			printf("NO DATA!!!!!!\n");
-			output_file_not_found(socket);
-			close(fd);
-			return;
-		}
-
-		data[sz] = '\0';
-
-		read( fd, data, sz );
-   		write(socket, data, sz);
-
-		close(fd);
-		free(data);
-		return;
-	}
+	// Updating the count'
+ 	if ( ! strncmp(path, "index.html", 11) )
+		index_output_count++;
 
 	// if someone asks for the icon, i placed it under etc 
 	// so I need to add this little exception..
@@ -738,8 +710,8 @@ void parse_http_get_headers_and_arguments(hashtable_t * params, char * buffer, s
 */
 void interpret_and_output(int socket, char * data, size_t size)
 {
-	char *command, *path, *msg, *c,
-		*list_action_cgi, *list_path_cgi, auth_info[100], *auth;
+	char *command, *path, *msg, *c, buffer[128],
+		auth_info[100], *auth;
 	unsigned char *auth_decoded;
 	int cc;
 	hashtable_t * params;
@@ -753,7 +725,9 @@ void interpret_and_output(int socket, char * data, size_t size)
 
 	path = get(params, "PATH");
 
-	if ( !strcmp( get(params, "COMMAND") , "GET") ){
+	command = get(params, "COMMAND");
+
+	if ( !strcmp( command , "GET") ){
 		// We have recieved a 'GET' request!
 		// Will only be looking at the first line, restfully.. 
 		// Reading the last part of the request so that the connection is not reset..
@@ -808,7 +782,7 @@ void interpret_and_output(int socket, char * data, size_t size)
 					return;
 				}
 
-				fp = fopen("etc/index.txt", "w");
+				fp = fopen(INDEX_INFO_FILE, "w");
 
 				c = msg;
 				
@@ -818,17 +792,20 @@ void interpret_and_output(int socket, char * data, size_t size)
 					++c;
 				}
 				
-				fprintf(fp, "%s\n", msg);
+				fprintf(fp, "%s", msg);
 
 				fclose(fp);
 
 				output_path(socket, path);
 
 			} else if ( !strcmp( get(params, "action"), "get") ){
+				memset(buffer, '\0', sizeof buffer);
+				output_json_headers(socket);
 
-				output_txt_headers(socket);
+				snprintf(buffer, sizeof buffer, "{\"message\":\"");
+				write(socket, buffer, strlen(buffer));
 
-				fp = fopen("etc/index.txt", "r");
+				fp = fopen(INDEX_INFO_FILE, "r");
 
 				if ( fp == NULL ){
 					write(socket,"Hej", 3);
@@ -838,6 +815,9 @@ void interpret_and_output(int socket, char * data, size_t size)
 					}
 					fclose(fp);
 				}
+				memset(buffer, '\0', sizeof buffer);
+				snprintf(buffer, sizeof buffer, "\",\"visits\":\"%u\"}", index_output_count);
+				write(socket, buffer, strlen(buffer));
 
 			}
 
@@ -870,18 +850,16 @@ void interpret_and_output(int socket, char * data, size_t size)
 				return;
 			} 
 
-			list_path_cgi = get(params, "path");
-			list_action_cgi = get(params, "action");
-
 			file_display_cgi(socket, params);
 
 		} else {
+			
 			
 			output_path(socket, path);
 
 		}
 
-	} else if ( !strcmp(command, "POST") ){
+	} else if ( !strcmp( command, "POST") ){
 		// This is interesting. Now i will read all arguments and parameters
 		// Preparing the params to be casted to the post handler
 
