@@ -63,6 +63,12 @@ int main(int argc, char *argv[])
 	pthread_create(&input_reader_thread, NULL, input_reader_callback, NULL);
 	pthread_create(&file_reader_thread, NULL, file_receiver_thread_callback, NULL);
 
+	if ( ! listen(sockfd, 20 ) {
+		log_error("Error on listen");
+		scores_quit();
+		return EXIT_FAILURE;
+	}
+
 	log("Backend v.%s, c. %s %s\n",str(VERSION),__DATE__,__TIME__);
 	while ( run_this_server_please_mister ){
 		pthread_t callback_thread;
@@ -101,6 +107,15 @@ int main(int argc, char *argv[])
 			continue;
 		}
 
+                if ( strstr(client_ip_heap, "0.0.0.0") != NULL ) {
+                        // Result of a timeout
+			free(client_ip_heap);
+			free(time_heap);
+			if ( new_sockfd_stack >= 0 )
+				close(new_sockfd_stack);
+                        continue;
+                }
+   
 		strcpy(client_ip_heap, client_IP);
 		// sending socket info to newsockfd;
 		newsockfd = malloc(sizeof(int));
