@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 	pthread_create(&input_reader_thread, NULL, input_reader_callback, NULL);
 	pthread_create(&file_reader_thread, NULL, file_receiver_thread_callback, NULL);
 
-	if ( ! listen(sockfd, 20 ) {
+	if ( listen(sockfd, 20 ) ) {
 		log_error("Error on listen");
 		scores_quit();
 		return EXIT_FAILURE;
@@ -74,6 +74,9 @@ int main(int argc, char *argv[])
 		pthread_t callback_thread;
 		listen(sockfd,20);
 		newsockfd_stack = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
+
+		if ( newsockfd_stack < 0 ) 
+			return EXIT_FAILURE;
 
 		// Getting time info
 		time ( &raw_time);
@@ -93,7 +96,7 @@ int main(int argc, char *argv[])
 		if (time_heap == NULL) {
 			log_error("%s.%d calloc failed",__func__, __LINE__);
 			close(newsockfd_stack);
-			continue;
+			return EXIT_FAILURE;
 		}
 
 		strcpy(time_heap, time_c);
@@ -104,15 +107,15 @@ int main(int argc, char *argv[])
 			log_error("%s.%d calloc failed", __func__, __LINE__);
 			free(time_heap);
 			close(newsockfd_stack);
-			continue;
+			return EXIT_FAILURE;
 		}
 
                 if ( strstr(client_ip_heap, "0.0.0.0") != NULL ) {
                         // Result of a timeout
 			free(client_ip_heap);
 			free(time_heap);
-			if ( new_sockfd_stack >= 0 )
-				close(new_sockfd_stack);
+			if ( newsockfd_stack >= 0 )
+				close(newsockfd_stack);
                         continue;
                 }
    
@@ -125,7 +128,7 @@ int main(int argc, char *argv[])
 			free(time_heap);
 			free(client_ip_heap);
 			close(newsockfd_stack);			
-			continue;
+			return EXIT_FAILURE;
 		}
 
 		*newsockfd = newsockfd_stack;
@@ -138,7 +141,7 @@ int main(int argc, char *argv[])
 			free(client_ip_heap);
 			free(newsockfd);
 			close(newsockfd_stack);
-			continue;
+			return EXIT_FAILURE;
 		}
 
 		http_data->client_ip = client_ip_heap;
@@ -148,8 +151,8 @@ int main(int argc, char *argv[])
 		if ( pthread_create(&callback_thread, NULL, http_callback, (void*)http_data) ) {
 			log_error("%s.%d pthread_create failed", __func__, __LINE__);
 			free_http_data(&http_data);
-			close(newsockfd);
-			continue;
+			close(*newsockfd);
+			return EXIT_FAILURE;
 		}
 
 		pthread_detach(callback_thread);
