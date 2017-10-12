@@ -919,7 +919,7 @@ void * http_callback(void * http_data_ptr)
 
 		buffer_size += BUFFER_INCREMENT;
 
-		buffer = realloc(buffer, buffer_size);
+		buffer = reallocf(buffer, buffer_size);
 
 		memset(buffer + read_sz, '\0', BUFFER_INCREMENT);
 
