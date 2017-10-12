@@ -921,12 +921,12 @@ void * http_callback(void * http_data_ptr)
 
 		buffer = reallocf(buffer, buffer_size);
 
-		memset(buffer + read_sz, '\0', BUFFER_INCREMENT);
-
 		if ( buffer == NULL ){
 			log_error("%s.%d Failed to allocate %zu bytes.\n", __func__, __LINE__, buffer_size);
 			goto end2;
 		}
+
+		memset(buffer + read_sz, '\0', BUFFER_INCREMENT);
 
 		read_sz += read(socket, buffer + read_sz, BUFFER_INCREMENT);
 
