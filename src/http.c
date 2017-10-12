@@ -944,7 +944,7 @@ void * http_callback(void * http_data_ptr)
 		*c = '\r';
 
 	// look at the first line of 'buffer' and do what you got to do..
-	interpret_and_output(socket, buffer, buffer_size);
+	interpret_and_output(socket, buffer, read_sz);
 end1:
    	free(buffer);
 end2:  
