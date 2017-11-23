@@ -1,5 +1,5 @@
 I want to become a better programmer so I develop a server running on my raspberry pi.
-The backend part is implemented in C for UNIX systems. Wait, what? A server in pure C? Yes my friend!
+The backend part is implemented in C for UNIX systems. _Wait, what?_ A server in pure C? Yes my friend!
 
 # Website
 
