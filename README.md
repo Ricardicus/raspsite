@@ -1,5 +1,8 @@
+# What is this?
+
+This is a project I have been working on. 
 I want to become a better programmer so I develop a server running on my raspberry pi.
-The backend part is implemented in C for UNIX systems. Wait, what? A server in pure C? Yes my friend!
+The backend part is implemented in C for UNIX systems. A server in pure C, super portable!
 
 # Website
 
